@@ -1,0 +1,34 @@
+springboot-camp/HELP.md
+springboot-camp/target/
+!springboot-camp/.mvn/wrapper/maven-wrapper.jar
+!springboot-camp/**/src/main/**
+!springboot-camp/**/src/test/**
+
+### STS ###
+springboot-camp/.apt_generated
+springboot-camp/.classpath
+springboot-camp/.factorypath
+springboot-camp/.project
+springboot-camp/.settings
+springboot-camp/.springBeans
+springboot-camp/.sts4-cache
+
+### IntelliJ IDEA ###
+springboot-camp/.idea
+springboot-camp/*.iws
+springboot-camp/*.iml
+springboot-camp/*.ipr
+
+### NetBeans ###
+springboot-camp/nbproject/private/
+springboot-camp/nbbuild/
+springboot-camp/dist/
+springboot-camp/nbdist/
+springboot-camp/.nb-gradle/
+springboot-camp/build/
+
+### VS Code ###
+springboot-camp/.vscode/
+
+### Vue Code ###
+uniapp-camp/unpackage/
