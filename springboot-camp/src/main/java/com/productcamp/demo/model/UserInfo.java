@@ -28,8 +28,8 @@ public class UserInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO,
-            generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
+            generator = "user_gen")
+    @GenericGenerator(name = "user_gen", strategy = "native")
     private Long id;
 
     @Column(name = "username", nullable = false, length = 40)

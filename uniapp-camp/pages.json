@@ -4,7 +4,7 @@
 			"path": "pages/index/index",
 			"style": {
 				"app-plus": {
-					"titleNView": false
+					"titleNView": true
 				},
 				"enablePullDownRefresh": true //开启单页面下拉刷新功能
 			}
@@ -24,16 +24,17 @@
 				"navigationBarBackgroundColor": "#FFD655"
 			}
 		}, {
-			"path": "pages/movie/movie",
+			"path": "pages/product/product",
 			"style": {
 				"app-plus": {
 					"titleNView": {
-						"type": "transparent",
 						"buttons": [{
 							"type": "share"
 						}]
 					}
 				}
+				// "navigationBarTextStyle": "black",
+				// "navigationBarBackgroundColor": "#F8F8F8"
 			}
 		},
 		{
@@ -83,8 +84,8 @@
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "NEXT超英预告",
-		"navigationBarBackgroundColor": "#F8F8F8",
+		"navigationBarTitleText": "RD产品训练营",
+		"navigationBarBackgroundColor": "#BBBBBB",
 		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
@@ -94,21 +95,21 @@
 		"backgroundColor": "#ffffff",
 		"list": [{
 				"pagePath": "pages/index/index",
-				"text": "首页",
-				"iconPath": "static/tabBarIco/index.png",
-				"selectedIconPath": "static/tabBarIco/index_sel.png"
+				"text": "产品中心",
+				"iconPath": "static/tabBarIco/product.png",
+				"selectedIconPath": "static/tabBarIco/product-active.png"
 			},
 			{
 				"pagePath": "pages/search/search",
-				"text": "搜索",
-				"iconPath": "static/tabBarIco/search.png",
-				"selectedIconPath": "static/tabBarIco/search_sel.png"
+				"text": "在线考试",
+				"iconPath": "static/tabBarIco/test.png",
+				"selectedIconPath": "static/tabBarIco/test-active.png"
 			},
 			{
 				"pagePath": "pages/me/me",
-				"text": "我",
+				"text": "我的",
 				"iconPath": "static/tabBarIco/me.png",
-				"selectedIconPath": "static/tabBarIco/me_sel.png"
+				"selectedIconPath": "static/tabBarIco/me-active.png"
 			}
 		]
 	}

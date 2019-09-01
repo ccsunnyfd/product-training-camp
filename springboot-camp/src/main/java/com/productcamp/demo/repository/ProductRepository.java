@@ -1,14 +1,14 @@
 package com.productcamp.demo.repository;
 
-import com.productcamp.demo.model.MovieInfo;
+import com.productcamp.demo.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * MovieInfoRepository
+ * ProductRepository
  *
  * @version 1.0
  */
-public interface MovieInfoRepository extends JpaRepository<MovieInfo, String>, JpaSpecificationExecutor {
+public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor {
 
 }

@@ -2,14 +2,27 @@
 	<view class="page">
 		<!-- 轮播图 start -->
 		<swiper :indicator-dots="true" :autoplay="true" class="carousel">
-			<swiper-item v-for="item in carouselList" :key=item.id>
+			<swiper-item v-for="item in carouselList" :key="`carousel_${item.id}`">
 				<image :src="item.image" class="carousel"></image>
 			</swiper-item>
 		</swiper>
 		<!-- 轮播图 end -->
 
+		<!-- 九宫格 start -->
+		<view class="page-block" style="margin-top: 20upx;">
+			<uni-grid :column="3" :show-border="false" :square="false">
+				<uni-grid-item class="grid-shadow" v-for="item in productList" :key="`pdList_${item.id}`">
+					<view class="grid-item-wrapper" :data-prodId="item.id" @click="showProduct">
+						<image :src="item.favicon" class="grid-item-favicon"></image>
+						<text class="grid-item-text">{{item.name}}</text>
+					</view>
+				</uni-grid-item>
+			</uni-grid>
+		</view>
+		<!-- 九宫格 end -->
+
 		<!-- 热门超英 start -->
-		<view class="page-block hot-area">
+		<!-- 		<view class="page-block hot-area">
 			<view class="hot-title-wrapper">
 				<image src="../../static/icos/hot.png" class="hot-ico"></image>
 				<view class="hot-title">
@@ -25,11 +38,11 @@
 					</view>
 				</view>
 			</scroll-view>
-		</view>
+		</view> -->
 		<!-- 热门超英 end -->
 
 		<!-- 热门预告片 start -->
-		<view class="page-block hot-area">
+		<!-- 	<view class="page-block hot-area">
 			<view class="hot-title-wrapper">
 				<image src="../../static/icos/108x108.png" class="hot-ico"></image>
 				<view class="hot-title">
@@ -40,11 +53,11 @@
 				<video :id="movie.id" :data-playingIndex="movie.id" @play="iAmPlaying" v-for="movie in hotTrailerList" :key="movie.id"
 				 :src="movie.trailer" :poster="movie.poster" controls class="trailer"></video>
 			</view>
-		</view>
+		</view> -->
 		<!-- 热门预告片 end -->
 
 		<!-- 猜你喜欢 start -->
-		<view class="page-block guess-area">
+		<!-- 	<view class="page-block guess-area">
 			<view class="hot-title-wrapper">
 				<image src="../../static/icos/guess-u-like.png" class="hot-ico"></image>
 				<view class="hot-title">
@@ -75,13 +88,15 @@
 					</view>
 				</view>
 			</view>
-		</view>
+		</view> -->
 		<!-- 猜你喜欢 end -->
 
 	</view>
 </template>
 
 <script>
+	import uniGrid from "@/components/uni-grid/uni-grid.vue"
+	import uniGridItem from "@/components/uni-grid-item/uni-grid-item.vue"
 	// import common from "../../common/common.js";
 	import trailerStars from "../../components/trailerStars.vue";
 
@@ -89,23 +104,26 @@
 		data() {
 			return {
 				carouselList: [],
-				hotSuperHeroList: [],
-				hotTrailerList: [],
-				guessULike: [],
-				animationData: {},
-				animationDataArr: [{}, {}, {}, {}, {}],
-				pics: [] // 放大预览的图片数组
+				productList: []
+				// hotSuperHeroList: [],
+				// hotTrailerList: [],
+				// guessULike: [],
+				// animationData: {},
+				// animationDataArr: [{}, {}, {}, {}, {}],
+				// pics: [] // 放大预览的图片数组
 			}
 		},
 		components: {
-			trailerStars
+			// trailerStars,
+			uniGrid,
+			uniGridItem
 		},
 		onUnload() {
-			// #ifdef APP-PLUS || MP-WEIXIN
-			// 页面卸载的时候,清楚动画数据
-			this.animationData = {};
-			this.animationDataArr = [{}, {}, {}, {}, {}];
-			// #endif
+			// // #ifdef APP-PLUS || MP-WEIXIN
+			// // 页面卸载的时候,清楚动画数据
+			// this.animationData = {};
+			// this.animationDataArr = [{}, {}, {}, {}, {}];
+			// // #endif
 		},
 		onPullDownRefresh() {
 			this.refresh();
@@ -113,23 +131,23 @@
 		// #ifdef MP-WEIXIN
 		// 页面被隐藏的时候，暂停播放
 		onHide() {
-			if(this.videoContext) {
-				this.videoContext.pause();
-			}
+			// if(this.videoContext) {
+			// 	this.videoContext.pause();
+			// }
 		},
 		// #endif
 		onLoad() {
 
 			// #ifdef APP-PLUS || MP-WEIXIN
 			// 在页面创建的时候,创建一个临时动画对象
-			this.animation = uni.createAnimation();
+			// this.animation = uni.createAnimation();
 			// #endif
 
 			// var serverUrl = common.serverUrl;
 			var serverUrl = this.serverUrl;
 			// 请求轮播图数据
 			uni.request({
-				url: serverUrl + '/movieCarousel/list',
+				url: serverUrl + '/productCarousel/list',
 				method: 'POST',
 				data: {},
 				success: res => {
@@ -146,22 +164,22 @@
 			this.refresh();
 		},
 		methods: {
-			iAmPlaying(e) {
-				// 播放一个视频的时候,需要暂停其他正在播放的视频
-				var trailerId = "";
-				if (e) {
-					trailerId = e.currentTarget.dataset.playingindex;
-					this.videoContext = uni.createVideoContext(trailerId);
-				}
-				var hotTrailerList = this.hotTrailerList;
-				for (var i = 0; i < hotTrailerList.length; i ++) {
-					var tempId = hotTrailerList[i].id;
-					if (tempId != trailerId) {
-						uni.createVideoContext(tempId).pause();
-					}
-				}
-			}
-			,
+			// iAmPlaying(e) {
+			// 	// 播放一个视频的时候,需要暂停其他正在播放的视频
+			// 	var trailerId = "";
+			// 	if (e) {
+			// 		trailerId = e.currentTarget.dataset.playingindex;
+			// 		this.videoContext = uni.createVideoContext(trailerId);
+			// 	}
+			// 	var hotTrailerList = this.hotTrailerList;
+			// 	for (var i = 0; i < hotTrailerList.length; i ++) {
+			// 		var tempId = hotTrailerList[i].id;
+			// 		if (tempId != trailerId) {
+			// 			uni.createVideoContext(tempId).pause();
+			// 		}
+			// 	}
+			// }
+			// ,
 			refresh() {
 				uni.showLoading({
 					mask: true
@@ -171,24 +189,24 @@
 				var serverUrl = this.serverUrl;
 				// 请求电影信息
 				uni.request({
-					url: serverUrl + '/movieInfo/list',
+					url: serverUrl + '/product/list',
 					method: 'POST',
 					data: {},
 					success: res => {
 						// 获取真实数据之前,务必判断状态为success
 						if (res.data.status === "success") {
 							var retData = res.data.data;
-							// 热门超英电影海报信息
-							this.hotSuperHeroList = retData;
+							// 产品信息
+							this.productList = retData;
 							// 采集放大预览图片数组
-							this.pics = retData.map(x => {
-								return x.cover
-							});
+							// this.pics = retData.map(x => {
+							// 	return x.cover
+							// });
 
-							// 热门超英电影预告信息
-							this.hotTrailerList = retData.slice(8, 10);
-							// 猜你喜欢电影信息
-							this.guessULike = retData.slice(3, 8);
+							// // 热门超英电影预告信息
+							// this.hotTrailerList = retData.slice(8, 10);
+							// // 猜你喜欢电影信息
+							// this.guessULike = retData.slice(3, 8);
 						}
 
 					},
@@ -198,6 +216,17 @@
 						uni.hideLoading();
 						uni.stopPullDownRefresh();
 					}
+				});
+			},
+			
+			// 点击九宫格跳转到对应产品详情页
+			showProduct(e) {
+				var prodId = e.currentTarget.dataset.prodid;
+				uni.navigateTo({
+					url: '../product/product?prodId=' + prodId, 
+					success: res => {},
+					fail: () => {},
+					complete: () => {}
 				});
 			},
 

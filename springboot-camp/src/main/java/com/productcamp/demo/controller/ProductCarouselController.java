@@ -1,8 +1,8 @@
 package com.productcamp.demo.controller;
 
-import com.productcamp.demo.model.MovieCarousel;
+import com.productcamp.demo.model.ProductCarousel;
 import com.productcamp.demo.model.RespBean;
-import com.productcamp.demo.service.MovieCarouselService;
+import com.productcamp.demo.service.ProductCarouselService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,29 +16,29 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * MovieCarouselController
+ * ProductCarouselController
  *
  * @version 1.0
  */
 @RestController
-@RequestMapping(value = "api/movieCarousel")
-@Api(value = "电影轮播图的api接口")
-public class MovieCarouselController {
-    private MovieCarouselService movieCarouselService;
+@RequestMapping(value = "api/productCarousel")
+@Api(value = "轮播图的api接口", tags={"轮播图相关"})
+public class ProductCarouselController {
+    private ProductCarouselService ProductCarouselService;
 
     @Autowired
-    public void setMovieCarouselService(MovieCarouselService movieCarouselService) {
-        this.movieCarouselService = movieCarouselService;
+    public void setProductCarouselService(ProductCarouselService ProductCarouselService) {
+        this.ProductCarouselService = ProductCarouselService;
     }
 
     @PostMapping("list")
     @ApiOperation(value = "获取所有轮播图信息列表")
-    public Map<String, Object> getMovieCarousel() {
+    public Map<String, Object> getProductCarousel() {
         Map<String, Object> map = new HashMap<>();
-        List<MovieCarousel> res = null;
+        List<ProductCarousel> res = null;
         RespBean respBean = null;
         try {
-            res = movieCarouselService.getMovieCarousel();
+            res = ProductCarouselService.getProductCarousel();
             respBean = new RespBean("success", "获取轮播图信息列表成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,8 +53,8 @@ public class MovieCarouselController {
 
     @PostMapping("add")
     @ApiOperation(value = "添加新的轮播图信息")
-    public RespBean addNewCarousel(@RequestBody MovieCarousel movieCarousel) {
-        Long newId = movieCarouselService.addNewCarousel(movieCarousel);
+    public RespBean addNewCarousel(@RequestBody ProductCarousel ProductCarousel) {
+        Long newId = ProductCarouselService.addNewCarousel(ProductCarousel);
         if (newId != null) {
             return new RespBean("success", newId + "");
         } else {

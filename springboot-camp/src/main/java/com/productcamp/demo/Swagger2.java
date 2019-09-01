@@ -30,7 +30,7 @@ public class Swagger2 {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.nexthero.demo.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.productcamp.demo.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -43,7 +43,7 @@ public class Swagger2 {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Spring Boot中使用Swaggers构建RESTful APIs")
-                .description("NextHero Restful api")
+                .description("ProductCamp Restful api")
                 .termsOfServiceUrl("https://localhost:8080")
                 .contact("tiger")
                 .version("1.0")

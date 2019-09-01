@@ -2,26 +2,25 @@ package com.productcamp.demo.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
 /**
- * MovieCarousel
+ * ProductCarousel
  *
  * @version 1.0
  */
 @Getter
 @Setter
 @Entity
-public class MovieCarousel {
+public class ProductCarousel {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "carousel_gen")
+    @GenericGenerator(name = "carousel_gen", strategy = "native")
     private Long id;
 
-    @Column(name = "movieId", nullable = false, length = 30)
-    private String movieId;
-
-    @Column(name = "image", nullable = false, length = 200)
+    @Column(name = "image", nullable = false, length = 500)
     private String image;
 
     @Column(name = "sort", nullable = false, length = 10)
