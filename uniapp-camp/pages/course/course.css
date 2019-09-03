@@ -1,0 +1,110 @@
+/* 顶部蓝色导航栏 start */
+.top-nav-wrapper {
+	width: 100%;
+	height: 50upx;
+	margin-top: 0upx;
+	position: fixed;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 10upx;
+	background: #27a9e6;
+	z-index: 100;
+}
+
+.top-nav-title-wrapper {
+	padding: 5upx;
+}
+
+.top-nav-title {
+	margin-left: 15upx;
+	font-size: 14px;
+	color: white;
+	font-weight: bold;
+}
+
+/* 顶部蓝色导航栏 end */
+
+/* 课程详情页video start */
+.player {
+	padding-top: 50upx;
+	display: flex;
+	justify-content: center;
+	background: black;
+}
+
+.movie {
+	width: 100%;
+	height: 440upx;
+}
+
+/* 课程详情页video end */
+
+/* 标签页 start */
+.text-orange {
+	color: #f37b1d
+}
+
+.tabContent-wrapper {
+	color: #333333;
+	background-color: #ffffff;
+	padding: 30upx;
+	margin: 10upx;
+}
+/* 标签页 end */
+
+/* 课程信息 end */
+.prod-lesson-wrapper {
+	display: flex;
+	flex-direction: column;
+	margin-top: 15upx;
+}
+.prod-lesson-item-wrapper {
+	display: flex;
+	flex-direction: row;
+	padding-top: 20upx;
+	padding-bottom: 20upx;
+}
+.chart-wrapper {
+	margin-top: 10upx;
+	line-height: 20upx;
+}
+.prod-lesson-item-title {
+	margin-left: 45upx;
+	line-height: 40upx;
+	font-size: 14px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.chapter-chosen {
+	background: #e6dabbb0;
+}
+/* 课程信息 end */
+
+/* 应用实例 start */
+.prod-example-wrapper {
+	display: flex;
+	flex-direction: column;
+	padding: 15upx;
+}
+.prod-example-item-wrapper {
+	display: flex;
+	flex-direction: column;
+	padding-top: 15upx;
+	padding-bottom: 15upx;
+}
+.prod-example-title {
+	font-size: 14px;
+	font-weight: bold;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.prod-example-content {
+	margin-top: 20upx;
+	font-size: 14px;
+	line-height: 35upx;
+	text-indent: 30px;
+}
+/* 应用实例 end */

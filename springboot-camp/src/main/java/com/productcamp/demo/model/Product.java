@@ -30,10 +30,18 @@ public class Product {
     @Column(name = "scenario", nullable = false, length = 550)
     private String scenario;
 
-    @Column(name = "favicon", length = 500)
+    @Column(name = "favicon", length = 1000)
     private String favicon;
 
-    @Column(name = "poster", insertable = false, columnDefinition = "varchar(500) default 'https://172.16.70.2:9000/product-camp/test/justice.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ZWHVQOKYOVTXSU9WH3CW%2F20190829%2F%2Fs3%2Faws4_request&X-Amz-Date=20190829T075745Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=728e73a94e917744cdd176e4c8d20e23b4c7f8c8a559c73681a4110143432300'")
+//    iconfont的图标class
+    @Column(name = "icon_type", length = 100)
+    private String iconType;
+
+//    产品详情页图片
+    @Column(name = "prod_img", length = 1000)
+    private String prodImg;
+
+    @Column(name = "poster", insertable = false, columnDefinition = "varchar(1000) default 'https://172.16.70.2:9000/product-camp/test/favicon/BCM.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ZWHVQOKYOVTXSU9WH3CW%2F20190901%2F%2Fs3%2Faws4_request&X-Amz-Date=20190901T111711Z&X-Amz-Expires=432000&X-Amz-SignedHeaders=host&X-Amz-Signature=d80417e01f3857dc1b15edaebb06c8aedd374d8ef4fdecf2a0e166fe1b605738'")
     private String poster;
 
 }

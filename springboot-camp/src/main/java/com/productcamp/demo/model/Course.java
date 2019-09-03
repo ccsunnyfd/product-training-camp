@@ -7,7 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 /**
- * Example
+ * Course
  *
  * @version 1.0
  */
@@ -15,21 +15,21 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(indexes = {@Index(columnList = "productId")})
-public class Example {
+public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO,
-            generator = "ex_gen")
-    @GenericGenerator(name = "ex_gen", strategy = "native")
+            generator = "course_gen")
+    @GenericGenerator(name = "course_gen", strategy = "native")
     private Long id;
 
     @Column(name = "title", nullable = false, length = 100)
     private String title;
 
-    @Column(name = "htmlContent", columnDefinition = "TEXT")
-    private String htmlContent;
+    @Column(name = "videoTrail", nullable = false, length = 1000)
+    private String videoTrail;
 
-    @Column(name = "plainContent", columnDefinition = "TEXT")
-    private String plainContent;
+    @Column(name = "chapterNum", nullable = false)
+    private Long chapterNum;
 
     @Column(name = "productId", nullable = false)
     private Long productId;

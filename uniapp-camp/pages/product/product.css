@@ -64,6 +64,19 @@
 }
 /* 顶部蓝色导航栏 end */
 
+/* 产品详情页图片 start */
+.prod-img-wrapper {
+	padding-top: 50upx;
+	display: flex;
+	justify-content: center;
+	background: black;
+}
+.prod-img {
+	width: 100%;
+	height: 440upx;
+}
+/* 产品详情页图片 end */
+
 /* 预告片video start */
 .player {
 	padding-top: 50upx;
@@ -79,7 +92,7 @@
 
 /* 预告片video end */
 
-/* 影片信息start */
+/* 产品信息start */
 .productInfo {
 	display: flex;
 	flex-direction: column;
@@ -158,6 +171,7 @@
 	line-height: 35upx;
 	text-indent: 30px;
 }
+/* 产品信息 end */
 
 .cover {
 	width: 280upx;

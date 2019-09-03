@@ -36,8 +36,14 @@
 				// "navigationBarTextStyle": "black",
 				// "navigationBarBackgroundColor": "#F8F8F8"
 			}
-		},
-		{
+		},{
+			"path": "pages/course/course",
+			"style": {
+				"app-plus": {
+					// "titleNView": false
+				}
+			}
+		},{
 			"path": "pages/cover/cover",
 			"style": {}
 		}, {
