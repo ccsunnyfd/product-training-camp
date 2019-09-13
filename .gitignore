@@ -32,3 +32,35 @@ springboot-camp/.vscode/
 
 ### Vue Code ###
 uniapp-camp/unpackage/
+
+
+iView-camp/.DS_Store
+iView-camp/node_modules
+iView-camp//dist
+iView-camp/
+iView-camp//tests/e2e/videos/
+iView-camp//tests/e2e/screenshots/
+iView-camp/
+
+# local env files
+iView-camp/.env.local
+iView-camp/.env.*.local
+iView-camp/
+
+# Log files
+iView-camp/npm-debug.log*
+iView-camp/yarn-debug.log*
+iView-camp/yarn-error.log*
+iView-camp/
+
+# Editor directories and files
+iView-camp/.idea
+iView-camp/.vscode
+iView-camp/*.suo
+iView-camp/*.ntvs*
+iView-camp/*.njsproj
+iView-camp/*.sln
+iView-camp/*.sw*
+iView-camp/
+iView-camp/build/env.js
+iView-camp/
