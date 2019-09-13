@@ -27,3 +27,9 @@ server:
     enabled: true
     key-store-password: 123456
     key-store-type: JKS
+minio:
+  baseUrl: http://172.16.70.2:9000
+  accessKey: ZWHVQOKYOVTXSU9WH3CW
+  secretKey: tuZNErRlYeAafY4zLrnJYKNfE+ZIMIOVDZtqaM1U
+  bucketName: product-camp
+  filePath: test
