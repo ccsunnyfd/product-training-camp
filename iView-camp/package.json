@@ -1,5 +1,5 @@
 {
-  "name": "iview-admin",
+  "name": "productcamp-admin",
   "version": "2.0.0",
   "author": "Lison<lison.modern@gmail.com>",
   "private": false,
@@ -27,6 +27,7 @@
     "tree-table-vue": "^1.1.0",
     "v-org-tree": "^1.0.6",
     "vue": "^2.5.10",
+    "vue-cropper": "^0.4.9",
     "vue-i18n": "^7.8.0",
     "vue-router": "^3.0.1",
     "vuedraggable": "^2.16.0",

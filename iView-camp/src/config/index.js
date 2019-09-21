@@ -2,7 +2,7 @@ export default {
   /**
    * @description 配置显示在浏览器标签的title
    */
-  title: 'iView-admin',
+  title: 'ProductCamp-admin',
   /**
    * @description token在Cookie中存储的天数，默认1天
    */
@@ -17,7 +17,7 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: 'https://www.easy-mock.com/mock/5add9213ce4d0e69998a6f51/iview-admin/',
+    dev: 'https://localhost:8080/api/',
     pro: 'https://produce.com'
   },
   /**
@@ -32,5 +32,62 @@ export default {
       showInHeader: true, // 设为false后不会在顶部显示错误日志徽标
       developmentOff: true // 设为true后在开发环境不会收集错误信息，方便开发中排查错误
     }
-  }
+  },
+  iconsForChosen: [
+    'icon-yuncunchu',
+    'icon-cunchushebei',
+    'icon-yidongyunkongzhitaiicon06',
+    'icon-exam',
+    'icon-chart14',
+    'icon-chart18',
+    'icon-chart34',
+    'icon-chart38',
+    'icon-circle',
+    'icon-chart12',
+    'icon-chart58',
+    'icon-chart78',
+    'icon-fenbushicunchu',
+    'icon-fangdajing',
+    'icon-Box',
+    'icon-fenbushicunchu1',
+    'icon-shouye',
+    'icon-wenhao',
+    'icon-jindudengdai',
+    'icon-rongzaitubiao',
+    'icon-m_user_setting',
+    'icon-mulu',
+    'icon-duixiangcunchu',
+    'icon--',
+    'icon-kaoshi',
+    'icon--1',
+    'icon-jjj',
+    'icon-lieshicunchu',
+    'icon-chaorongheshujuzhongxin',
+    'icon-jjj1',
+    'icon-jjj2',
+    'icon-chengji',
+    'icon-iconfontyoujiantou',
+    'icon-rongzaidengji',
+    'icon-yunzhuomian',
+    'icon-chengji1',
+    'icon-ziyuan',
+    'icon-chengji2',
+    'icon-fenbushicunchu2',
+    'icon-wodedangxuan',
+    'icon-yunwei',
+    'icon-rongzaibeifen',
+    'icon-Database_maintain',
+    'icon-chengji3',
+    'icon-chengji4',
+    'icon-settingswindow',
+    'icon-chanpinguanli',
+    'icon-chengji5',
+    'icon-kaoshi2',
+    'icon-rongzai',
+    'icon-fenbushicunchu3',
+    'icon-wodedangxuan-copy',
+    'icon-yunrongzaiInCDR',
+    'icon-daohang_jiantou_zuo_dingbu',
+    'icon-productManage-copy'
+  ]
 }

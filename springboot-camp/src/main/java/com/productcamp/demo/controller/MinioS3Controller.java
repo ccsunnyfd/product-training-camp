@@ -57,11 +57,15 @@ public class MinioS3Controller {
 
     @PostMapping("removeObject")
     @ApiOperation(value = "删除对象")
-    public Map<String, Object> removeObject(@RequestParam("url") String objectName) {
+    public Map<String, Object> removeObject(@RequestParam("object") String objectName) {
         Map<String, Object> map = new HashMap<>();
         RespBean respBean;
         String bucketName = minioConfig.getMINIO_BUCKET_NAME();
-        objectName = objectName.replaceAll("%2F", "/");
+//            try {
+//                objectName = java.net.URLDecoder.decode(objectName, "UTF-8");
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+//            }
         Boolean ret = minioS3Service.removeObject(bucketName, objectName);
         if (!ret) {
             respBean = new RespBean("failure", "删除对象失败！");

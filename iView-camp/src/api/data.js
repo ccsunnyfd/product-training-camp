@@ -31,8 +31,27 @@ export const saveErrorLogger = info => {
 
 export const uploadImg = formData => {
   return axios.request({
-    url: 'image/upload',
-    data: formData
+    url: 'minioS3/uploadStream',
+    data: formData,
+    method: 'post'
+  })
+}
+
+export const removeObject = objectName => {
+  return axios.request({
+    url: 'minioS3/removeObject',
+    method: 'post',
+    params: {
+      object: objectName
+    }
+  })
+}
+
+export const submitBasicInfo = basicInfo => {
+  return axios.request({
+    url: 'product/add',
+    method: 'post',
+    data: basicInfo
   })
 }
 
