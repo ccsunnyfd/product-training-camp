@@ -1,12 +1,13 @@
 <template>
   <Card>
-    <!-- 步骤条 -->
+    <!-- 步骤条start -->
     <Steps class="margin-left-80" :current="currentStep">
       <Step v-for="item in stepList" :key="item.key" :title="item.title" :content="item.content"></Step>
     </Steps>
+    <!-- 步骤条end -->
 
-    <!-- 表单 -->
-    <i-form class="margin-top-40 padding-40" ref='basicInfo' :model="basicInfo" :rules="ruleValidate" :label-width="130">
+    <!-- basicInfo表单start -->
+    <i-form v-show="currentStep === 0" class="margin-top-40 padding-40" ref='basicInfo' :model="basicInfo" :rules="basicInfoRule" :label-width="130">
       <Form-item label="产品名称" prop="name">
         <i-input v-model="basicInfo.name" placeholder="不少于2个字，最多20个字"></i-input>
       </Form-item>
@@ -34,57 +35,73 @@
           </Form-item>
         </i-col>
       </Row>
-
-      <!-- <Form-item>
-        <i-button type="primary" @click="handleSubmit('basicInfo')">提交</i-button>
-      </Form-item> -->
     </i-form>
-    <!-- 下一步及提交按钮 -->
+    <!-- basicInfo表单end -->
+
+    <!-- example富文本编辑start -->
+    <i-form v-show="currentStep === 1" class="margin-top-40 padding-40" ref='applicationEx' :model="example" :rules="exampleRule" :label-width="130">
+      <Form-item label="应用案例标题" prop="title">
+        <i-input v-model="example.title" placeholder="最多40个字"></i-input>
+      </Form-item>
+      <Form-item label="案例内容" prop="htmlContent">
+        <div id="editor">
+          <editor ref="editor" :value="example.htmlContent" @on-change="handleChange"/>
+        </div>
+      </Form-item>
+    </i-form>
+    <!-- example富文本编辑end -->
+
+    <!-- 下一步及提交按钮start -->
     <div style="text-align: center;">
       <Button type="primary" :disabled="nextStepButton.disabled" @click="next" :loading="loading">{{nextStepButton.value}}</Button>
     </div>
+    <!-- 下一步及提交按钮end -->
   </Card>
 </template>
 
 <script>
 import Cavatar from '_c/cAvatar'
 import CchooseIcon from '_c/cChooseIcon'
-import { submitBasicInfo } from '@/api/data.js'
+import Editor from '_c/editor'
+import { submitBasicInfo, submitExample } from '@/api/data.js'
 export default {
   name: 'product_release_page',
   components: {
     Cavatar,
-    CchooseIcon
+    CchooseIcon,
+    Editor
   },
   data () {
     return {
-      currentStep: 0,
+      productId: 0, // 当前发布产品得id号
+      currentStep: 0, // 当前操作步骤条的步骤号，从0开始
+      loading: false, // 下一步/提交按钮上的loading效果
       nextStepButton: {
         disabled: false,
         value: '下一步'
-      },
+      }, // 下一步/提交按钮上的使能和文字状态
       stepList: [
         {
-          key: 'step_0',
+          key: 'basicInfo',
           title: '进行中',
           content: '基本信息'
         },
         {
-          key: 'step_1',
+          key: 'applicationEx',
           title: '待进行',
           content: '应用实例'
         },
         {
-          key: 'step_2',
+          key: 'courseUpload',
           title: '待进行',
           content: '课程上传'
         },
         {
-          key: 'step_3',
+          key: 'examRelated',
           title: '待进行',
           content: '关联考试'
         }
-      ],
+      ], // 步骤条的内容
       basicInfo: {
         name: '',
         description: '',
@@ -92,8 +109,8 @@ export default {
         favicon: '',
         iconType: '',
         prodImg: ''
-      },
-      ruleValidate: {
+      }, // 基本信息的数据集
+      basicInfoRule: {
         name: [
           { required: true, message: '请输入产品名称', trigger: 'blur' },
           { min: 2, message: '介绍不能少于2个字', trigger: 'blur' },
@@ -116,8 +133,26 @@ export default {
         prodImg: [
           { required: true, message: '请选择产品详情页图片', trigger: 'change' }
         ]
-      },
-      loading: false
+      }, // 基本信息的校验规则
+      example: {
+        title: '',
+        htmlContent: '',
+        productId: 0
+      }, // 应用案例的数据集
+      exampleRule: {
+        title: [
+          { required: true, message: '请输入标题', trigger: 'blur' },
+          { max: 40, message: '标题不能多于40字', trigger: 'blur' }
+        ],
+        htmlContent: [
+          { required: true, message: '请输入应用场景', trigger: 'blur' }
+        ]
+      } // 应用案例的校验规则
+    }
+  },
+  watch: {
+    productId () {
+      this.example.productId = this.productId
     }
   },
   methods: {
@@ -130,11 +165,7 @@ export default {
     handleIconUpdate (iconType) {
       this.basicInfo.iconType = iconType
     },
-    next () {
-      const submitRes = this.handleSubmit('basicInfo')
-      if (!submitRes) {
-        return
-      }
+    changeStepStatus () {
       this.stepList[this.currentStep].title = '已完成'
       if (this.currentStep === 2) {
         this.nextStepButton.value = '提交'
@@ -146,32 +177,61 @@ export default {
         this.stepList[this.currentStep].title = '进行中'
       }
     },
+    next () {
+      this.handleSubmit(this.stepList[this.currentStep].key)
+    },
+    handleBasicInfoSubmit (basicInfo) {
+      submitBasicInfo(basicInfo).then((resp) => {
+        if (resp.data.status === 'success') {
+          this.loading = false
+          this.$Message.success('提交成功~', 3)
+          this.productId = resp.data.newId
+          this.changeStepStatus()
+        } else {
+          this.$Message.warning('提交失败，请联系管理员~', 3)
+          this.loading = false
+        }
+      }).catch(err => {
+        this.$Message.warning('提交失败，请联系管理员~' + err, 5)
+        this.loading = false
+      })
+    },
+    handleExampleSubmit (example) {
+      // 提交前先从S3中删除已经在编辑器中delete的图片
+      this.$refs.editor.removeDeletedImg()
+      // 提交后要如果不是当前产品ID，要清空localStorage
+      submitExample(example).then((resp) => {
+        if (resp.data.status === 'success') {
+          this.loading = false
+          this.$Message.success('提交成功~', 3)
+          localStorage.clear()
+          this.changeStepStatus()
+        } else {
+          this.$Message.warning('提交失败，请联系管理员~', 3)
+          this.loading = false
+        }
+      }).catch(err => {
+        this.$Message.warning('提交失败，请联系管理员~' + err, 5)
+        this.loading = false
+      })
+    },
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.loading = true
-          submitBasicInfo(this.basicInfo).then((resp) => {
-            if (resp.data.status === 'success') {
-              this.loading = false
-              this.$Message.success('提交成功~', 3)
-            } else {
-              this.$Message.warning('提交失败，请联系管理员~', 3)
-              this.loading = false
-            }
-          }).catch(err => {
-            this.$Message.warning('提交失败，请联系管理员~' + err, 5)
-            this.loading = false
-          })
-          return true
+          if (name === 'basicInfo') {
+            this.handleBasicInfoSubmit(this.basicInfo)
+          } else if (name === 'applicationEx') {
+            this.handleExampleSubmit(this.example)
+          }
         } else {
           this.$Message.error('表单验证失败!', 3)
-          return false
         }
       })
+    },
+    handleChange (html, text) {
+      this.example.htmlContent = html
     }
-    // handleReset (name) {
-    //   this.$refs[name].resetFields()
-    // }
   },
   mounted () {
   }

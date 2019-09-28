@@ -55,6 +55,14 @@ export const submitBasicInfo = basicInfo => {
   })
 }
 
+export const submitExample = example => {
+  return axios.request({
+    url: 'example/add',
+    method: 'post',
+    data: example
+  })
+}
+
 export const getOrgData = () => {
   return axios.request({
     url: 'get_org_data',

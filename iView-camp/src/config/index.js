@@ -21,6 +21,13 @@ export default {
     pro: 'https://produce.com'
   },
   /**
+   * @description api请求基础路径
+   */
+  s3Url: {
+    dev: 'http://172.16.70.2:9000/',
+    pro: 'https://oss.aliyun.com/'
+  },
+  /**
    * @description 默认打开的首页的路由name值，默认为home
    */
   homeName: 'home',

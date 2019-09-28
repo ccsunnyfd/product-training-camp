@@ -99,12 +99,18 @@ public class ProductController {
 
     @PostMapping("add")
     @ApiOperation(value = "添加新的产品信息")
-    public RespBean addNewProduct(@RequestBody Product product) {
+    public Map<String, Object> addNewProduct(@RequestBody Product product) {
+        Map<String, Object> map = new HashMap<>();
+        RespBean respBean = null;
         Long newId = productService.addNewProduct(product);
         if (newId != null) {
-            return new RespBean("success", "添加产品信息成功");
+            respBean = new RespBean("success", "添加产品信息成功");
         } else {
-            return new RespBean("error", "添加产品信息失败");
+            respBean = new RespBean("error", "添加产品信息失败");
         }
+        map.put("status", respBean.getStatus());
+        map.put("msg", respBean.getMsg());
+        map.put("newId", newId);
+        return map;
     }
 }
