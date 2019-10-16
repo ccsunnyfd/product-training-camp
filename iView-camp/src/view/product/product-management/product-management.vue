@@ -3,26 +3,26 @@
 </template>
 <script>
 export default {
-  name: 'product_management_page',
-  data () {
+  name: 'ProductManagementPage',
+  data() {
     return {
-      label: (h) => {
+      label: h => {
         return h('div', [
           h('span', '未完成'),
           h('Badge', {
             props: {
-              count: 3
-            }
-          })
-        ])
-      }
-    }
+              count: 3,
+            },
+          }),
+        ]);
+      },
+    };
   },
   methods: {
     //
   },
-  mounted () {
+  mounted() {
     //
-  }
-}
+  },
+};
 </script>

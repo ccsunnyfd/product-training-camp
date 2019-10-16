@@ -18,14 +18,14 @@ export default {
    */
   baseUrl: {
     dev: 'https://localhost:8080/api/',
-    pro: 'https://produce.com'
+    pro: 'https://produce.com',
   },
   /**
    * @description api请求基础路径
    */
   s3Url: {
     dev: 'http://172.16.70.2:9000/',
-    pro: 'https://oss.aliyun.com/'
+    pro: 'https://oss.aliyun.com',
   },
   /**
    * @description 默认打开的首页的路由name值，默认为home
@@ -37,8 +37,8 @@ export default {
   plugin: {
     'error-store': {
       showInHeader: true, // 设为false后不会在顶部显示错误日志徽标
-      developmentOff: true // 设为true后在开发环境不会收集错误信息，方便开发中排查错误
-    }
+      developmentOff: true, // 设为true后在开发环境不会收集错误信息，方便开发中排查错误
+    },
   },
   iconsForChosen: [
     'icon-yuncunchu',
@@ -95,6 +95,6 @@ export default {
     'icon-wodedangxuan-copy',
     'icon-yunrongzaiInCDR',
     'icon-daohang_jiantou_zuo_dingbu',
-    'icon-productManage-copy'
-  ]
-}
+    'icon-productManage-copy',
+  ],
+};

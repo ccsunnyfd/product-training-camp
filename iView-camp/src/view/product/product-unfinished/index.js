@@ -1,2 +1,2 @@
-import ProductUnfinished from './product-unfinished.vue'
-export default ProductUnfinished
+import ProductUnfinished from './product-unfinished.vue';
+export default ProductUnfinished;

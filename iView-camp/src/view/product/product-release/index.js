@@ -1,2 +1,2 @@
-import ProductRelease from './product-release.vue'
-export default ProductRelease
+import ProductRelease from './product-release.vue';
+export default ProductRelease;

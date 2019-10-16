@@ -15,26 +15,26 @@
 </template>
 <script>
 export default {
-  name: 'product_page',
-  data () {
+  name: 'ProductPage',
+  data() {
     return {
-      label: (h) => {
+      label: h => {
         return h('div', [
           h('span', '未完成'),
           h('Badge', {
             props: {
-              count: 3
-            }
-          })
-        ])
-      }
-    }
+              count: 3,
+            },
+          }),
+        ]);
+      },
+    };
   },
   methods: {
     //
   },
-  mounted () {
-    this.$router.push('/product/product_page/product_tab_page')
-  }
-}
+  mounted() {
+    this.$router.push('/product/product_page/product_tab_page');
+  },
+};
 </script>

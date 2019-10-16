@@ -46,5 +46,5 @@ export default {
   product_page: '产品管理',
   exam_page: '考试管理',
   settings_page: '平台设置',
-  userManage_page: '用户管理'
-}
+  userManage_page: '用户管理',
+};

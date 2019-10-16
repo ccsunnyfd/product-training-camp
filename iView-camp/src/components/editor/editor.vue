@@ -93,7 +93,7 @@ export default {
       // 将记录的上传过的图片url数组和从编辑框获得的图片url数组相减，获得编辑删除的图片url
       let editorDeletedUrl = this.arrayMinus(localStorageImgUrl, editorImgUrl)
       // 过滤掉不是s3图片服务器地址的外域的url
-      const s3Url = this.$config.s3Url
+      const s3Url = process.env.NODE_ENV === 'development' ? this.$config.s3Url.dev : this.$config.s3Url.pro
       const s3Urlreg = new RegExp(s3Url)
       const serverUrlreg = /:\/\/(.*?)\/(.*?)\/(.*)/
       // 过滤掉并发起图片删除请求

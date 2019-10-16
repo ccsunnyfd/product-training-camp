@@ -58,3 +58,26 @@ iView-camp/*.njsproj
 iView-camp/*.sln
 iView-camp/*.sw*
 iView-camp/build/env.js
+
+
+antd-pro-camp/.DS_Store
+antd-pro-camp/node_modules
+antd-pro-camp/dist
+
+# local env files
+antd-pro-camp/.env.local
+antd-pro-camp/.env.*.local
+
+# Log files
+antd-pro-camp/npm-debug.log*
+antd-pro-camp/yarn-debug.log*
+antd-pro-camp/yarn-error.log*
+
+# Editor directories and files
+antd-pro-camp/.idea
+antd-pro-camp/.vscode
+antd-pro-camp/*.suo
+antd-pro-camp/*.ntvs*
+antd-pro-camp/*.njsproj
+antd-pro-camp/*.sln
+antd-pro-camp/*.sw*

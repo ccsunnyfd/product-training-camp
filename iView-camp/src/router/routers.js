@@ -1,7 +1,7 @@
-import Main from '@/components/main'
-import ProductRelease from '@/view/product/product-release'
-import ProductManagement from '@/view/product/product-management'
-import ProductUnfinished from '@/view/product/product-unfinished'
+import Main from '@/components/main';
+import ProductRelease from '@/view/product/product-release';
+import ProductManagement from '@/view/product/product-management';
+import ProductUnfinished from '@/view/product/product-unfinished';
 
 /**
  * iview-admin中meta除了原生参数外可配置的参数:
@@ -25,9 +25,9 @@ export default [
     name: 'login',
     meta: {
       title: 'Login - 登录',
-      hideInMenu: true
+      hideInMenu: true,
     },
-    component: () => import('@/view/login/login.vue')
+    component: () => import('@/view/login/login.vue'),
   },
   {
     path: '/',
@@ -36,7 +36,7 @@ export default [
     component: Main,
     meta: {
       hideInMenu: true,
-      notCache: true
+      notCache: true,
     },
     children: [
       {
@@ -46,11 +46,11 @@ export default [
           hideInMenu: true,
           title: '首页',
           notCache: true,
-          icon: 'md-home'
+          icon: 'md-home',
         },
-        component: () => import('@/view/single-page/home')
-      }
-    ]
+        component: () => import('@/view/single-page/home'),
+      },
+    ],
   },
   {
     path: '/product',
@@ -58,7 +58,7 @@ export default [
     component: Main,
     meta: {
       hideInBread: true,
-      notCache: true
+      notCache: true,
     },
     children: [
       {
@@ -66,7 +66,7 @@ export default [
         name: 'product_page',
         meta: {
           icon: 'icon-productManage-copy',
-          title: '产品管理'
+          title: '产品管理',
         },
         component: () => import('@/view/product/product.vue'),
         children: [
@@ -76,24 +76,24 @@ export default [
             meta: {
               hideInMenu: true,
               hideInBread: true,
-              title: '产品管理'
+              title: '产品管理',
             },
             components: {
               productRelease: ProductRelease,
               productManagement: ProductManagement,
-              productUnfinished: ProductUnfinished
-            }
-          }
-        ]
-      }
-    ]
+              productUnfinished: ProductUnfinished,
+            },
+          },
+        ],
+      },
+    ],
   },
   {
     path: '/exam',
     name: 'exam',
     component: Main,
     meta: {
-      hideInBread: true
+      hideInBread: true,
     },
     children: [
       {
@@ -101,18 +101,18 @@ export default [
         name: 'exam_page',
         meta: {
           icon: 'icon-exam',
-          title: '考试管理'
+          title: '考试管理',
         },
-        component: () => import('@/view/exam/exam.vue')
-      }
-    ]
+        component: () => import('@/view/exam/exam.vue'),
+      },
+    ],
   },
   {
     path: '/settings',
     name: 'settings',
     component: Main,
     meta: {
-      hideInBread: true
+      hideInBread: true,
     },
     children: [
       {
@@ -120,18 +120,18 @@ export default [
         name: 'settings_page',
         meta: {
           icon: 'icon-settingswindow',
-          title: '平台设置'
+          title: '平台设置',
         },
-        component: () => import('@/view/settings/settings.vue')
-      }
-    ]
+        component: () => import('@/view/settings/settings.vue'),
+      },
+    ],
   },
   {
     path: '/userManage',
     name: 'userManage',
     component: Main,
     meta: {
-      hideInBread: true
+      hideInBread: true,
     },
     children: [
       {
@@ -139,34 +139,34 @@ export default [
         name: 'userManage_page',
         meta: {
           icon: 'icon-m_user_setting',
-          title: '用户管理'
+          title: '用户管理',
         },
-        component: () => import('@/view/userManage/userManage.vue')
-      }
-    ]
+        component: () => import('@/view/userManage/userManage.vue'),
+      },
+    ],
   },
   {
     path: '/401',
     name: 'error_401',
     meta: {
-      hideInMenu: true
+      hideInMenu: true,
     },
-    component: () => import('@/view/error-page/401.vue')
+    component: () => import('@/view/error-page/401.vue'),
   },
   {
     path: '/500',
     name: 'error_500',
     meta: {
-      hideInMenu: true
+      hideInMenu: true,
     },
-    component: () => import('@/view/error-page/500.vue')
+    component: () => import('@/view/error-page/500.vue'),
   },
   {
     path: '*',
     name: 'error_404',
     meta: {
-      hideInMenu: true
+      hideInMenu: true,
     },
-    component: () => import('@/view/error-page/404.vue')
-  }
-]
+    component: () => import('@/view/error-page/404.vue'),
+  },
+];

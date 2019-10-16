@@ -1,8 +1,10 @@
 module.exports = {
   root: true,
-  'extends': [
-    'plugin:vue/essential',
-    '@vue/standard'
+  extends: [
+    // 'plugin:vue/essential',
+    // '@vue/standard'
+    'plugin:vue/strongly-recommended',
+    '@vue/prettier'
   ],
   rules: {
     // allow async-await
