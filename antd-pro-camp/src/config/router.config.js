@@ -11,6 +11,64 @@ export const asyncRouterMap = [
     meta: { title: '首页' },
     redirect: '/dashboard/workplace',
     children: [
+      // 产品管理
+      {
+        path: '/product',
+        name: 'product',
+        redirect: '/product/productInfo',
+        component: RouteView,
+        meta: { title: '产品管理', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        children: [
+          // 产品信息
+          {
+            path: '/product/productInfo',
+            name: 'ProductInfo',
+            component: () => import('@/views/product/productInfo/ProductInfo'),
+            meta: { title: '产品信息', keepAlive: false, permission: [ 'dashboard' ] }
+          },
+          // 新增产品
+          {
+            path: '/product/productAdd',
+            name: 'ProductAdd',
+            component: () => import('@/views/product/productAdd/ProductAdd'),
+            meta: { title: '新增产品', keepAlive: false, permission: [ 'dashboard' ] }
+          }
+        ]
+      },
+      // 考试管理
+      {
+        path: '/exam',
+        name: 'exam',
+        redirect: '/exam/examInfo',
+        component: RouteView,
+        meta: { title: '考试管理', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        children: [
+          // 考试信息
+          {
+            path: '/exam/examInfo',
+            name: 'ExamInfo',
+            component: () => import('@/views/exam/examInfo/ExamInfo'),
+            meta: { title: '考试信息', keepAlive: false, permission: [ 'dashboard' ] }
+          }
+        ]
+      },
+      // 平台设置
+      {
+        path: '/platform',
+        name: 'platform',
+        redirect: '/platform/settings',
+        component: RouteView,
+        meta: { title: '平台', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        children: [
+          // 平台设置
+          {
+            path: '/platform/settings',
+            name: 'PlatformSettings',
+            component: () => import('@/views/platform/Settings'),
+            meta: { title: '平台设置', keepAlive: false, permission: [ 'dashboard' ] }
+          }
+        ]
+      },
       // dashboard
       {
         path: '/dashboard',
