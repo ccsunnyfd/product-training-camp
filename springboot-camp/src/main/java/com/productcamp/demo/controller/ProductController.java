@@ -1,8 +1,14 @@
 package com.productcamp.demo.controller;
 
+import com.productcamp.demo.model.Course;
+import com.productcamp.demo.model.Example;
 import com.productcamp.demo.model.Product;
 import com.productcamp.demo.model.RespBean;
+import com.productcamp.demo.pojo.StepFormProductBO;
+import com.productcamp.demo.service.CourseService;
+import com.productcamp.demo.service.ExampleService;
 import com.productcamp.demo.service.ProductService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +26,30 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(value = "api/product")
-@Api(value = "产品信息的api接口", tags={"产品信息相关"})
+@Api(value = "产品信息的api接口", tags = {"产品信息相关"})
 public class ProductController {
     private ProductService productService;
+    private ExampleService exampleService;
+    private CourseService courseService;
 
     @Autowired
     public void setProductService(ProductService productService) {
         this.productService = productService;
     }
 
+    @Autowired
+    public void setExampleService(ExampleService exampleService) {
+        this.exampleService = exampleService;
+    }
+
+    @Autowired
+    public void setCourseService(CourseService courseService) {
+        this.courseService = courseService;
+    }
+
     @GetMapping("detail")
     @ApiOperation(value = "根据id获取产品信息")
-    public Map<String, Object> getProductById(@RequestParam(value = "prodId") Long prodId ) {
+    public Map<String, Object> getProductById(@RequestParam(value = "prodId") Long prodId) {
         Map<String, Object> map = new HashMap<>();
         Product res = null;
         RespBean respBean = null;
@@ -73,8 +91,8 @@ public class ProductController {
     @GetMapping("search/list")
     @ApiOperation(value = "获取产品搜索信息分页")
     public Map<String, Object> getProductByKeywords(@RequestParam(value = "keywords") String keywords,
-                                                  @RequestParam(value = "page", defaultValue = "1") Integer page,
-                                                  @RequestParam(value = "size", defaultValue = "9") Integer size) {
+                                                    @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                    @RequestParam(value = "size", defaultValue = "9") Integer size) {
         Map<String, Object> map = new HashMap<>();
         List<Product> products = null;
         RespBean respBean = null;
@@ -108,6 +126,59 @@ public class ProductController {
         } else {
             respBean = new RespBean("error", "添加产品信息失败");
         }
+        map.put("status", respBean.getStatus());
+        map.put("msg", respBean.getMsg());
+        map.put("newId", newId);
+        return map;
+    }
+
+    @PostMapping("addForm")
+    @ApiOperation(value = "根据分步式表单添加新的产品信息")
+    public Map<String, Object> addNewProductFromForm(@RequestBody StepFormProductBO proBO) {
+        Map<String, Object> map = new HashMap<>();
+        RespBean respBean = null;
+        Product newPro = new Product(
+                proBO.getName(),
+                proBO.getDescription(),
+                proBO.getScenario(),
+                proBO.getFavicon(),
+                proBO.getIconType(),
+                proBO.getProdImg());
+        Long newId = productService.addNewProduct(newPro);
+        if (newId == null) {
+            respBean = new RespBean("error", "添加产品信息失败");
+        } else {
+            Example[] newExampleList = proBO.getExampleList();
+            Boolean exFlag = true;
+            for (Example newExample : newExampleList
+            ) {
+                newExample.setProductId(newId);
+                Long newExId = exampleService.addNewExample(newExample);
+                if (newExId == null) {
+                    respBean = new RespBean("error", "添加应用案例失败");
+                    exFlag = false;
+                    break;
+                }
+            }
+            if (exFlag) {
+                Course[] newCourseList = proBO.getCourseList();
+                Boolean courseFlag = true;
+                for (Course newCourse : newCourseList
+                ) {
+                    newCourse.setProductId(newId);
+                    Long newCourseId = courseService.addNewCourse(newCourse);
+                    if (newCourseId == null) {
+                        respBean = new RespBean("error", "添加课程信息失败");
+                        courseFlag = false;
+                        break;
+                    }
+                }
+                if (courseFlag) {
+                    respBean = new RespBean("success", "添加产品信息成功");
+                }
+            }
+        }
+
         map.put("status", respBean.getStatus());
         map.put("msg", respBean.getMsg());
         map.put("newId", newId);

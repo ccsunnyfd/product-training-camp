@@ -8,8 +8,10 @@ const state = {
     favicon: '',
     prodImg: '',
     iconType: '',
-    exampleTitle: '',
-    exampleHtmlContent: '',
+    example: {
+      title: '',
+      htmlContent: ''
+    },
     course: {
       title: '',
       videoTrail: ''
@@ -20,7 +22,7 @@ const state = {
 const actions = {
   async submitStepForm ({ commit }, { payload }) {
     await axios.request({
-      url: '/api/productAddForm',
+      url: '/api/product/addForm',
       method: 'POST',
       data: payload
     })

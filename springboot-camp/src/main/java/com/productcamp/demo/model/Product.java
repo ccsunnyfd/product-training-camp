@@ -1,6 +1,7 @@
 package com.productcamp.demo.model;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -42,4 +43,13 @@ public class Product {
     @Column(name = "prod_img", length = 1000)
     private String prodImg;
 
+    // 构造函数
+    public Product(String name, String description, String scenario, String favicon, String iconType, String prodImg) {
+        this.name = name;
+        this.description = description;
+        this.scenario = scenario;
+        this.favicon = favicon;
+        this.iconType = iconType;
+        this.prodImg = prodImg;
+    }
 }

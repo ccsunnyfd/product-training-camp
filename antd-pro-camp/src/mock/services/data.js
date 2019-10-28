@@ -18,4 +18,4 @@ const productAddForm = {
 
 Mock.mock(/\/api\/uploadStream/, 'post', uploadStream)
 Mock.mock(/\/api\/removeObject/, 'post', removeObject)
-Mock.mock(/\/api\/productAddForm/, 'post', productAddForm)
+Mock.mock(/\/api\/product\/addForm/, 'post', productAddForm)

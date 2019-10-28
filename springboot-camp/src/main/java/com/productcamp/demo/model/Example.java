@@ -34,4 +34,9 @@ public class Example {
     @Column(name = "productId", nullable = false)
     private Long productId;
 
+    public Example(String title, String htmlContent, Long productId) {
+        this.title = title;
+        this.htmlContent = htmlContent;
+        this.productId = productId;
+    }
 }

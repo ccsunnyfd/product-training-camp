@@ -72,9 +72,9 @@ export default {
       this.$emit('prevStep')
     },
     checkVideoUpload (rule, value, callback) {
-      if (value.title === '') {
+      if (value.title === '' || value.title.length > 40) {
       // eslint-disable-next-line standard/no-callback-literal
-        callback('课时标题不能为空')
+        callback('课时标题不能为空且不能大于40个字')
         return
       } else if (value.videoTrail === '') {
       // eslint-disable-next-line standard/no-callback-literal
