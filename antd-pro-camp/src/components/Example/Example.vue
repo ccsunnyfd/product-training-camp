@@ -27,10 +27,14 @@ export default {
   components: {
     Teditor
   },
+  model: {
+    prop: 'value',
+    event: 'change'
+  },
   props: {
+    // eslint-disable-next-line vue/require-default-prop
     value: {
-      type: Object,
-      required: true
+      type: Object
     }
   },
   watch: {

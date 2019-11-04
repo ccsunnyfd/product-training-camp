@@ -1,43 +1,74 @@
 <template>
   <div>
-    <a-form :form="form" style="max-width: 500px; margin: 40px auto 0;">
-      <a-form-item
-        label="应用案例"
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-        class="stepFormText"
-      >
-        <Example
-          ref="editor"
-          v-decorator="[
-            'example',
-            {
-              initialValue: { title: step.example.title, htmlContent: step.example.htmlContent },
-              rules: [{ validator: checkExample }]
-            }
-          ]" />
-      </a-form-item>
+    <!-- 已添加应用案例列表 -->
+    <a-card style="max-width: 800px； margin: 40px auto 0;">
+      <span style="font-weight: bold">
+        已添加应用案例列表
+      </span>
+      <a-form :form="form">
+        <a-form-item>
+          <example-list
+            ref="example-list"
+            v-decorator="[
+              'exampleList',
+              {
+                initialValue: step.exampleList,
+                rules: [{ validator: checkExampleList }]
+              }
+            ]"
+          ></example-list>
+        </a-form-item>
+        <a-form-item :wrapperCol="{span: 19, offset: 5}">
+          <a-button type="primary" @click="nextStep">下一步</a-button>
+          <a-button style="margin-left: 8px" @click="prevStep">上一步</a-button>
+        </a-form-item>
+      </a-form>
+    </a-card>
+    <!-- 富文本编辑器 -->
+    <div style="max-width: 500px; margin: 40px auto 0;">
+      <span>案例编辑器</span>
+      <a-form :form="editorForm">
+        <a-form-item>
+          <example
+            ref="editor"
+            v-decorator="[
+              'exObj',
+              {
+                initialValue: { title: exObj.title, htmlContent: exObj.htmlContent },
+                rules: [{ validator: checkExample }]
+              }
+            ]"
+          ></example>
+        </a-form-item>
+        <a-form-item :wrapperCol="{span: 19, offset: 5}">
+          <a-button type="primary" @click="saveExample">保存案例</a-button>
+        </a-form-item>
+      </a-form>
+    </div>
 
-      <a-form-item :wrapperCol="{span: 19, offset: 5}">
-        <a-button type="primary" @click="nextStep">下一步</a-button>
-        <a-button style="margin-left: 8px" @click="prevStep">上一步</a-button>
-      </a-form-item>
-    </a-form>
   </div>
 </template>
 
 <script>
 import Example from '@/components/Example/Example'
+import ExampleList from '@/components/Example/ExampleList'
+let key = 1
 export default {
   name: 'Step2',
   components: {
-    Example
+    Example,
+    ExampleList
   },
   data () {
     this.form = this.$form.createForm(this)
+    this.editorForm = this.$form.createForm(this, { name: 'editorForm' })
     return {
       labelCol: { lg: { span: 5 }, sm: { span: 5 } },
-      wrapperCol: { lg: { span: 24 }, sm: { span: 24 } }
+      wrapperCol: { lg: { span: 24 }, sm: { span: 24 } },
+      exObj: {
+        title: '',
+        htmlContent: ''
+      }
     }
   },
   computed: {
@@ -52,7 +83,7 @@ export default {
       form.validateFields((err, values) => {
         if (!err) {
           // 向服务器请求删除delete掉的图片
-          this.$refs.editor.removeDeletedImg()
+          // this.$refs.editor.removeDeletedImg()
           $store.commit({
             type: 'form/saveStepFormData',
             payload: { ...step, ...values }
@@ -75,6 +106,27 @@ export default {
         return
       }
       callback()
+    },
+    checkExampleList (rule, value, callback) {
+      if (value.length < 1) {
+      // eslint-disable-next-line standard/no-callback-literal
+        callback('至少填写一个案例')
+        return
+      }
+      callback()
+    },
+    saveExample () {
+      const { editorForm, $store } = this
+      // 先校验，通过表单校验后，才进入下一步
+      editorForm.validateFields((err, values) => {
+        if (!err) {
+          const nextKey = key++
+          $store.commit({
+            type: 'form/pushExample',
+            payload: { ...values.exObj, key: nextKey }
+          })
+        }
+      })
     }
   }
 }
@@ -82,14 +134,10 @@ export default {
 
 <style lang="less" scoped>
 .stepFormText {
-  text-align: left;
-  font-weight: bold;
   margin-bottom: 24px;
 
-  .ant-form-item-label,
   .ant-form-item-control {
     line-height: 22px;
   }
 }
-
 </style>

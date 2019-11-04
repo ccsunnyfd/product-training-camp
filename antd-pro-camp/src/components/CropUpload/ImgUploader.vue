@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ minHeight: '180px' }">
+  <div :style="{ minHeight: '50px' }">
     <div class="ant-upload-preview" @click="modal.edit(id)" >
       <a-icon type="cloud-upload-o" class="upload-icon"/>
       <div class="mask">
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { removeObject } from '@/api/data.js'
 export default {
   name: 'ImgUploader',
   props: {
@@ -29,7 +30,21 @@ export default {
     }
   },
   watch: {
-    value (val) {
+    value (val, oldVal) {
+      if (oldVal === '/pleaseUpload.png') {
+        return
+      }
+      // 从s3上删除相应的图片资源
+      removeObject(oldVal).then((res) => {
+        // const res = response.data
+        if (res.status === 'success') {
+          this.$message.success('从s3删除图片成功~', 3)
+        } else {
+          this.$message.warning('从s3删除图片失败，请联系管理员~', 3)
+        }
+      }).catch((err) => {
+        this.$message.warning('从s3删除图片失败，请联系管理员~' + err, 10)
+      })
       this.$emit('change', val)
     }
   }

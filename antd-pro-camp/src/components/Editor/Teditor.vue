@@ -46,6 +46,11 @@ export default {
       postedImgList: []
     }
   },
+  // watch: {
+  //   value (val) {
+  //     this.setHtml(val)
+  //   }
+  // },
   computed: {
     editorId () {
       return `editor${this._uid}`

@@ -2,6 +2,7 @@ import { axios } from '@/utils/request'
 
 const api = {
   uploadImg: '/uploadStream',
+  uploadVideo: '/uploadVideo',
   removeObject: '/removeObject'
 }
 
@@ -12,6 +13,14 @@ export { api, s3Url }
 export function uploadImg (formData) {
   return axios.request({
     url: api.uploadImg,
+    data: formData,
+    method: 'post'
+  })
+}
+
+export function uploadVideo (formData) {
+  return axios.request({
+    url: api.uploadVideo,
     data: formData,
     method: 'post'
   })

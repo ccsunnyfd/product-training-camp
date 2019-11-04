@@ -8,14 +8,8 @@ const state = {
     favicon: '',
     prodImg: '',
     iconType: '',
-    example: {
-      title: '',
-      htmlContent: ''
-    },
-    course: {
-      title: '',
-      videoTrail: ''
-    }
+    exampleList: [],
+    courseList: []
   }
 }
 
@@ -26,11 +20,27 @@ const actions = {
       method: 'POST',
       data: payload
     })
-    commit('saveStepFormData', { payload })
+    // commit('saveStepFormData', payload)
+    commit('clearData')
   }
 }
 
 const mutations = {
+  pushExample (state, { payload }) {
+    state.step.exampleList.push(payload)
+  },
+  clearData (state) {
+    state.step = {
+      name: '',
+      description: '',
+      scenario: '',
+      favicon: '',
+      prodImg: '',
+      iconType: '',
+      exampleList: [],
+      courseList: []
+    }
+  },
   saveStepFormData (state, { payload }) {
     console.log(payload)
     state.step = {
