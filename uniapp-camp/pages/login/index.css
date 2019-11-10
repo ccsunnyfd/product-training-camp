@@ -1,3 +1,28 @@
+.login {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.logo-wrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin-top: 200upx;
+}
+.logo {
+	width: 200upx;
+	height: 200upx;
+}
+.button-wrapper {
+	margin-top: 100upx;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+.login-button {
+	width: 60%;
+}
+
 .body {
 	border-top: solid 1px #DBDBDA;
 	padding: 0 40upx;

@@ -1,15 +1,20 @@
 <script>
+	import { checkLoginStatus } from '@/api/request/login/checkLoginStatus.js'
 	export default {
-		// onLaunch: function() {
-		// 	console.log('App Launch')
+		// // app全局数据
+		// globalData: {
+		// 	userInfo: null
 		// },
-		// onShow: function() {
-		// 	console.log('App Show')
-		// },
-		// onHide: function() {
-		// 	console.log('App Hide')
-		// }
-	}
+		onLaunch: function() {
+			// #ifdef MP
+			//检查登录状态
+			checkLoginStatus()
+			// #endif
+		},
+		onShow: function() {
+			// console.log('App Show')
+		},
+}
 </script>
 
 <style>

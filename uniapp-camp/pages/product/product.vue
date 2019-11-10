@@ -12,7 +12,7 @@
 					</view>
 				</view>
 				<view class="left-nav-prodList-wrapper">
-					<uni-list v-for="item in productList" :key="`pdList_${item.id}`">
+					<uni-list v-for="item in productList" :key="item.id">
 						<view :data-prodId="item.id" @click="showProduct">
 							<uni-list-item class="left-nav-prodList-item" 
 							:title="item.name" 
@@ -78,7 +78,7 @@
 				<text class="prod-title">
 					课程章节
 				</text>
-				<view class="prod-lesson-wrapper" v-for="item in chapterList" :key="`chapter_${item.id}`">
+				<view class="prod-lesson-wrapper" v-for="item in chapterList" :key="item.id">
 					<!-- 分割线start -->
 					<view class="line-wrapper">
 						<view class="line"></view>
@@ -101,7 +101,7 @@
 				<text class="prod-title">
 					应用实例
 				</text>
-				<view class="prod-example-item-wrapper" v-for="(item, index) in exampleList" :key="`example_${item.id}`">
+				<view class="prod-example-item-wrapper" v-for="(item, index) in exampleList" :key="item.id">
 					<text class="prod-example-title" v-once>
 						案例{{index + 1}}: {{item.title}}
 					</text>
@@ -121,6 +121,7 @@
 	import uniDrawer from "@/components/uni-drawer/uni-drawer.vue"
 	import uniList from '@/components/uni-list/uni-list.vue'
 	import uniListItem from '@/components/uni-list-item/uni-list-item.vue'
+	import config from '@/config/config.js'
 
 	export default {
 		data() {
@@ -232,11 +233,10 @@
 			// 	backgroundColor: "#000000"
 			// })
 
-			var serverUrl = this.serverUrl;
 
 			// 请求产品列表
 			uni.request({
-				url: serverUrl + '/product/list',
+				url: config.getProductsUrl,
 				method: 'POST',
 				data: {},
 				success: res => {

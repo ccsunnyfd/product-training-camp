@@ -4,7 +4,9 @@ import "./common/iconfont.css"
 
 Vue.config.productionTip = false
 
-Vue.prototype.serverUrl = "https://localhost:8080/api";
+// const baseUrl = 'https://localhost:8080/'
+// Vue.prototype.baseUrl = baseUrl;
+// Vue.prototype.loginUrl = baseUrl + 'login';
 
 Vue.prototype.getGlobalUser = function(key) {
 	var userInfo = uni.getStorageSync(key);

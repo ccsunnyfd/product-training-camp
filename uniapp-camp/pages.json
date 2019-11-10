@@ -47,14 +47,15 @@
 			"path": "pages/cover/cover",
 			"style": {}
 		}, {
-			"path": "pages/registLogin/registLogin",
-			"style": {}
+			"path": "pages/login/index",
+			"style":  {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "登录",
+				"navigationBarBackgroundColor": "#FFD655"
+			}
 		}, {
 			"path": "pages/meInfo/meInfo",
 			"style": {
-				"navigationBarTextStyle": "white",
-				"navigationBarTitleText": "我的",
-				"navigationBarBackgroundColor": "#FFD655"
 			}
 		}, {
 			"path": "pages/meFace/meFace",
@@ -89,10 +90,11 @@
         }
     ],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "RD产品训练营",
-		"navigationBarBackgroundColor": "#BBBBBB",
-		"backgroundColor": "#F8F8F8"
+		"navigationStyle":"custom"
+		// "navigationBarTextStyle": "black",
+		// "navigationBarTitleText": "RD产品训练营",
+		// "navigationBarBackgroundColor": "#BBBBBB",
+		// "backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
 		"color": "#bfbfbf",

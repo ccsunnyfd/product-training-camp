@@ -1,7 +1,9 @@
 package com.productcamp.demo.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.productcamp.demo.model.UserInfo;
 import com.productcamp.demo.model.RespBean;
+import com.productcamp.demo.pojo.MPWXLoginBO;
 import com.productcamp.demo.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,68 +29,90 @@ public class UserInfoController {
         this.userInfoService = userInfoService;
     }
 
-    @PostMapping("registOrLogin")
-    @ApiOperation(value = "登录或注册用户")
-    public Map<String, Object> registOrLogin(@RequestBody UserInfo userInfo) {
+    @PostMapping("wxlogin")
+    @ApiOperation(value = "微信登录")
+    public Map<String, Object> wxlogin(@RequestBody MPWXLoginBO mpwxLoginBO) {
         Map<String, Object> map = new HashMap<>();
-        UserInfo res = null;
         RespBean respBean = null;
 
-        if (userInfo != null &&
-                (!"".equals(userInfo.getUsername().trim())) &&
-                (!"".equals(userInfo.getPassword().trim()))) {
-            // 判断用户是否已注册
-            UserInfo resUser = userInfoService.findByUsername(userInfo.getUsername());
-
-            if (resUser == null) {          //注册用户
-                res = userInfoService.register(userInfo);
-                res.setPassword("");
-                respBean = new RespBean("201", "已注册新用户");
-            } else {                // 用户登录
-                Boolean valid = userInfoService.validation(resUser, userInfo);
-                if (valid) {
-                    res = resUser;
-                    res.setPassword("");
-                    respBean = new RespBean("200", "登录成功");
-                } else {
-                    res = null;
-                    respBean = new RespBean("401", "密码不正确");
-                }
-            }
+        if (mpwxLoginBO != null &&
+                (!"".equals(mpwxLoginBO.getCode().trim())) &&
+                (!"".equals(mpwxLoginBO.getEncryptedData().trim())) &&
+                (!"".equals(mpwxLoginBO.getIv().trim()))) {
+            JSONObject res = userInfoService.wxAuth(mpwxLoginBO.getCode(), mpwxLoginBO.getEncryptedData(), mpwxLoginBO.getIv());
+            map.put("data", res);
+            respBean = new RespBean("201", "微信登录成功");
         } else {
-            respBean = new RespBean("500", "用户名密码不能为空");
+            respBean = new RespBean("500", "参数不全");
         }
 
         map.put("status", respBean.getStatus());
         map.put("msg", respBean.getMsg());
-        map.put("data", res);
         return map;
     }
 
+//    @PostMapping("registOrLogin")
+//    @ApiOperation(value = "登录或注册用户")
+//    public Map<String, Object> registOrLogin(@RequestBody UserInfo userInfo) {
+//        Map<String, Object> map = new HashMap<>();
+//        UserInfo res = null;
+//        RespBean respBean = null;
+//
+//        if (userInfo != null &&
+//                (!"".equals(userInfo.getUsername().trim())) &&
+//                (!"".equals(userInfo.getPassword().trim()))) {
+//            // 判断用户是否已注册
+//            UserInfo resUser = userInfoService.findByUsername(userInfo.getUsername());
+//
+//            if (resUser == null) {          //注册用户
+//                res = userInfoService.register(userInfo);
+//                res.setPassword("");
+//                respBean = new RespBean("201", "已注册新用户");
+//            } else {                // 用户登录
+//                Boolean valid = userInfoService.validation(resUser, userInfo);
+//                if (valid) {
+//                    res = resUser;
+//                    res.setPassword("");
+//                    respBean = new RespBean("200", "登录成功");
+//                } else {
+//                    res = null;
+//                    respBean = new RespBean("401", "密码不正确");
+//                }
+//            }
+//        } else {
+//            respBean = new RespBean("500", "用户名密码不能为空");
+//        }
+//
+//        map.put("status", respBean.getStatus());
+//        map.put("msg", respBean.getMsg());
+//        map.put("data", res);
+//        return map;
+//    }
 
-    @PostMapping("modifyUserInfo")
-    @ApiOperation(value = "修改用户昵称、生日、性别")
-    public Map<String, Object> modifyUserInfo(@RequestBody UserInfo userInfo) {
-        Map<String, Object> map = new HashMap<>();
-        UserInfo res;
-        RespBean respBean = null;
 
-        UserInfo resUser = userInfoService.modifyUserInfo(userInfo);
-
-        if (resUser == null) {          //没有找到用户
-            res = null;
-            respBean = new RespBean("401", "用户异常");
-        } else {                // 找到用户修改其信息
-
-            res = resUser;
-            respBean = new RespBean("200", "修改成功");
-        }
-
-        map.put("status", respBean.getStatus());
-        map.put("msg", respBean.getMsg());
-        map.put("data", res);
-        return map;
-    }
+//    @PostMapping("modifyUserInfo")
+//    @ApiOperation(value = "修改用户昵称、生日、性别")
+//    public Map<String, Object> modifyUserInfo(@RequestBody UserInfo userInfo) {
+//        Map<String, Object> map = new HashMap<>();
+//        UserInfo res;
+//        RespBean respBean = null;
+//
+//        UserInfo resUser = userInfoService.modifyUserInfo(userInfo);
+//
+//        if (resUser == null) {          //没有找到用户
+//            res = null;
+//            respBean = new RespBean("401", "用户异常");
+//        } else {                // 找到用户修改其信息
+//
+//            res = resUser;
+//            respBean = new RespBean("200", "修改成功");
+//        }
+//
+//        map.put("status", respBean.getStatus());
+//        map.put("msg", respBean.getMsg());
+//        map.put("data", res);
+//        return map;
+//    }
 
 
     @PostMapping("logout")

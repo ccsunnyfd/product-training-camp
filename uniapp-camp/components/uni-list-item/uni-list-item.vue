@@ -6,8 +6,8 @@
 				<image class="uni-list-cell__icon-img" :src="thumb"></image>
 			</view>
 			<view class="uni-list-cell__icon" v-else-if="showExtraIcon === true || showExtraIcon === 'true'">
-				<!-- <uni-icon :color="extraIcon.color" :size="extraIcon.size" :type="extraIcon.type"></uni-icon> -->
-				<i :class="`iconfont icon-${extraIcon.type}`"></i>
+				<uni-icon :color="extraIcon.color" :size="extraIcon.size" :type="extraIcon.type"></uni-icon>
+				<!-- <i :class="`iconfont icon-${extraIcon.type}`"></i> -->
 			</view>
 			<view class="uni-list-cell__content">
 				<view class="uni-list-cell__content-title">{{title}}</view>

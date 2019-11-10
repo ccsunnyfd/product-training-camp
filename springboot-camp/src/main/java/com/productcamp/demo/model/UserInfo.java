@@ -1,14 +1,15 @@
 package com.productcamp.demo.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * UserInfo
@@ -18,62 +19,43 @@ import java.sql.Date;
 @Getter
 @Setter
 @Entity
+//@EntityListeners(AuditingEntityListener.class)
 @ToString
 public class UserInfo {
-//    //没有password字段的视图
-//    public interface WithoutPasswordView {};
-//    //有password字段的视图
-//    public interface WithPasswordView extends WithoutPasswordView {};
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO,
             generator = "user_gen")
     @GenericGenerator(name = "user_gen", strategy = "native")
     private Long id;
 
-    @Column(name = "username", nullable = false, length = 40)
-    private String username;
+    @Column(name = "uid", columnDefinition = "varchar(128) default ''")
+    private String uid; // 用户openId
 
-    @Column(name = "password", length = 255)
-    private String password;
+    @Column(name = "uname", columnDefinition = "varchar(40) default ''")
+    private String uname; // 用户微信名
 
-    @Column(name = "nickname", nullable = false, length = 30)
-    private String nickname;
+    @Column(name = "ugender", length = 1, columnDefinition = "int default 0")
+    private Integer ugender;    // 用户性别 1: 男  0：女
 
-    @Column(name = "mpWxOpenId", length = 200)
-    private String mpWxOpenId;
+    @Column(name = "uaddress", columnDefinition = "varchar(128) default ''")
+    private String uaddress; // 用户地址
 
-    @Column(name = "appQqOpenId", length = 200)
-    private String appQqOpenId;
+    @Column(name = "uavatar", columnDefinition = "varchar(255) default ''")
+    private String uavatar; // 用户头像
 
-    @Column(name = "appWxOpenId", length = 200)
-    private String appWxOpenId;
+    @Column(name = "skey", columnDefinition = "varchar(128) default ''")
+    private String skey; // 用户登录态标识
 
-    @Column(name = "appWeiboUId", length = 200)
-    private String appWeiboUId;
-
-    @Column(name = "sex", length = 1)
-    private String sex;    // "m": male  "f": female
-
-    private Date birthday;
-
-    @Column(name = "birthday")
-    @JsonDeserialize(using = DateJsonDeserializer.class)
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    @Column(name = "faceImage", insertable = false, columnDefinition = "varchar(255) default 'http://122.152.205.72:88/group1/M00/00/05/CpoxxFw_8_qAIlFXAAAcIhVPdSg994.png'")
-    private String faceImage;
-
-    @Column(name = "isCertified", length = 1, insertable = false, columnDefinition = "int default 0")
-    private Integer isCertified;
+    @Column(name = "sessionkey", columnDefinition = "varchar(128) default ''")
+    private String sessionkey; // 微信登录态标识
 
     @CreatedDate
-    @Column(name = "registTime")
-    private Date registTime;
+//    @Column(name = "create_time")
+    @Column(name = "create_time",insertable = false,updatable = false,columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Date createTime; // 账号注册时间
 
-    @Column(name = "userUniqueToken", length = 40, nullable = false)
-    private String userUniqueToken;   // 使用UUID插入时生成
+    @LastModifiedDate
+//    @Column(name = "update_time")
+    @Column(name = "update_time",insertable = false,updatable = false,columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    private Date updateTime; // 用户最近登录时间
 }

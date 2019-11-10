@@ -2,7 +2,7 @@
 	<view class="page">
 		<!-- 轮播图 start -->
 		<swiper :indicator-dots="true" :autoplay="true" class="carousel">
-			<swiper-item v-for="item in carouselList" :key="`carousel_${item.id}`">
+			<swiper-item v-for="item in carouselList" :key="item.id">
 				<image :src="item.image" class="carousel"></image>
 			</swiper-item>
 		</swiper>
@@ -11,7 +11,7 @@
 		<!-- 九宫格 start -->
 		<view class="page-block" style="margin-top: 20upx;">
 			<uni-grid :column="3" :show-border="false" :square="false">
-				<uni-grid-item class="grid-shadow" v-for="item in productList" :key="`pdList_${item.id}`">
+				<uni-grid-item class="grid-shadow" v-for="item in productList" :key="item.id">
 					<view class="grid-item-wrapper" :data-prodId="item.id" @click="showProduct">
 						<image :src="item.favicon" class="grid-item-favicon"></image>
 						<text class="grid-item-text">{{item.name}}</text>
@@ -29,6 +29,7 @@
 	import uniGridItem from "@/components/uni-grid-item/uni-grid-item.vue"
 	// import common from "../../common/common.js";
 	import trailerStars from "../../components/trailerStars.vue";
+	import config from '@/config/config.js'
 
 	export default {
 		data() {
@@ -74,10 +75,10 @@
 			// #endif
 
 			// var serverUrl = common.serverUrl;
-			var serverUrl = this.serverUrl;
+			console.log(config.getProductsUrl)
 			// 请求轮播图数据
 			uni.request({
-				url: serverUrl + '/productCarousel/list',
+				url: config.getProductCarousel,
 				method: 'POST',
 				data: {},
 				success: res => {
@@ -116,10 +117,9 @@
 				});
 				uni.showNavigationBarLoading();
 
-				var serverUrl = this.serverUrl;
 				// 请求电影信息
 				uni.request({
-					url: serverUrl + '/product/list',
+					url: config.getProductsUrl,
 					method: 'POST',
 					data: {},
 					success: res => {

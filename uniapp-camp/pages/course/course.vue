@@ -20,7 +20,7 @@
 			<view :current="TabCur">
 				<!-- 课程章节 start -->
 				<view v-show="TabCur === 0" class="tabContent-wrapper">
-					<view class="prod-lesson-wrapper" v-for="item in chapterList" :key="`chapter_${item.id}`">
+					<view class="prod-lesson-wrapper" v-for="item in chapterList" :key="item.id">
 						<!-- 分割线start -->
 						<view class="line-wrapper">
 							<view class="line"></view>
@@ -40,7 +40,7 @@
 				
 				<!-- 应用实例 start -->
 				<view v-show="TabCur === 1" class="tabContent-wrapper">
-					<view class="prod-example-item-wrapper" v-for="(item, index) in exampleList" :key="`example_${item.id}`">
+					<view class="prod-example-item-wrapper" v-for="(item, index) in exampleList" :key="item.id">
 						<text class="prod-example-title" v-once>
 							案例{{index + 1}}: {{item.title}}
 						</text>

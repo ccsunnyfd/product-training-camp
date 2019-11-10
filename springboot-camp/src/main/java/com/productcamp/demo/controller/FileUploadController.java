@@ -57,32 +57,32 @@ public class FileUploadController {
 //                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
 //    }
 
-    @ApiOperation(value = "图片上传", notes = "图片上传", httpMethod = "POST")
-    @PostMapping("uploadFace")
-    public Map<String, Object> handleFileUpload(
-            HttpServletRequest httpServletRequest,
-            @RequestParam("file") MultipartFile file) {
-
-        String filename = storageService.store(file);
-        String relativePath = storageService.load(filename).toString().replaceAll("\\\\", "/");
-        String faceImg = httpServletRequest.getScheme()+"://"+ httpServletRequest.getServerName() + ":" + httpServletRequest.getServerPort() + "/" + relativePath;
-        UserInfo user = userInfoService.saveUserFaceImg(Long.parseLong(httpServletRequest.getParameter("userId")), faceImg);
-
-        Map<String, Object> map = new HashMap<>();
-        RespBean respBean = null;
-
-        if (user == null) {
-            respBean = new RespBean("502", "上传错误");
-        } else {
-            respBean = new RespBean("200", "上传成功");
-        }
-
-        map.put("status", respBean.getStatus());
-        map.put("msg", respBean.getMsg());
-        map.put("data", user);
-
-        return map;
-    }
+//    @ApiOperation(value = "图片上传", notes = "图片上传", httpMethod = "POST")
+//    @PostMapping("uploadFace")
+//    public Map<String, Object> handleFileUpload(
+//            HttpServletRequest httpServletRequest,
+//            @RequestParam("file") MultipartFile file) {
+//
+//        String filename = storageService.store(file);
+//        String relativePath = storageService.load(filename).toString().replaceAll("\\\\", "/");
+//        String faceImg = httpServletRequest.getScheme()+"://"+ httpServletRequest.getServerName() + ":" + httpServletRequest.getServerPort() + "/" + relativePath;
+//        UserInfo user = userInfoService.saveUserFaceImg(Long.parseLong(httpServletRequest.getParameter("userId")), faceImg);
+//
+//        Map<String, Object> map = new HashMap<>();
+//        RespBean respBean = null;
+//
+//        if (user == null) {
+//            respBean = new RespBean("502", "上传错误");
+//        } else {
+//            respBean = new RespBean("200", "上传成功");
+//        }
+//
+//        map.put("status", respBean.getStatus());
+//        map.put("msg", respBean.getMsg());
+//        map.put("data", user);
+//
+//        return map;
+//    }
 
     @ExceptionHandler(StorageFileNotFoundException.class)
     public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
