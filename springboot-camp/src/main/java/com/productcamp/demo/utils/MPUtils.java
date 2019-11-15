@@ -1,6 +1,7 @@
 package com.productcamp.demo.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.productcamp.demo.config.WXAppConfig;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.codehaus.xfire.util.Base64;
 import org.springframework.web.client.RestTemplate;
@@ -22,8 +23,11 @@ import java.util.Arrays;
  * @version 1.0
  */
 public class MPUtils {
-    public static JSONObject decryptByAES(String encryptedData, String sessionkey, String iv) {
 
+    private static String APPID = WXAppConfig.APP_ID;
+    private static String APPSECRET = WXAppConfig.APP_SECRET;
+
+    public static JSONObject decryptByAES(String encryptedData, String sessionkey, String iv) {
         // 被加密的数据
         byte[] dataByte = Base64.decode(encryptedData);
         // 加密秘钥
@@ -78,8 +82,8 @@ public class MPUtils {
 
     public static String getSessionKey(String code) {
         System.out.println(code);
-        String appid = "#Your_APPID";
-        String appSecret = "#Your_APPSecret";
+        String appid = APPID;
+        String appSecret = APPSECRET;
         String url = "https://api.weixin.qq.com/sns/jscode2session?" + "appid=" + appid + "&" + "secret=" + appSecret + "&" +
                 "js_code=" + code + "&" + "grant_type=authorization_code";
         RestTemplate rest = new RestTemplate();

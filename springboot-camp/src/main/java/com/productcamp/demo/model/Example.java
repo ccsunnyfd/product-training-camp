@@ -1,6 +1,7 @@
 package com.productcamp.demo.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -14,6 +15,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(indexes = {@Index(columnList = "productId")})
 public class Example {
     @Id

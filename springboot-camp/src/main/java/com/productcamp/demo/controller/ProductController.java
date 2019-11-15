@@ -163,9 +163,11 @@ public class ProductController {
             if (exFlag) {
                 Course[] newCourseList = proBO.getCourseList();
                 Boolean courseFlag = true;
+                Long chapNum = 1L;
                 for (Course newCourse : newCourseList
                 ) {
                     newCourse.setProductId(newId);
+                    newCourse.setChapterNum(chapNum++);
                     Long newCourseId = courseService.addNewCourse(newCourse);
                     if (newCourseId == null) {
                         respBean = new RespBean("error", "添加课程信息失败");

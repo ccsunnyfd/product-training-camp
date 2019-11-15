@@ -4,7 +4,7 @@
       <!-- 视频上传编辑器 -->
       <div>
         <upload-video
-          :maxNum="3"
+          :maxNum="2"
           @change="handleVideoChange" />
       </div>
       <draggable
@@ -12,12 +12,12 @@
         @update="datadragEnd"
         animation="500">
         <transition-group>
-          <div v-for="(element, index) in step.courseList" :key="element.url" class="drag-item">
+          <div v-for="(element, index) in step.courseList" :key="element.videoTrail" class="drag-item">
             <span class="drag-name">{{ index + 1 }}&nbsp&nbsp
               <span
                 v-focus="element.editable"
                 :contenteditable="element.editable"
-                v-text="element.name"
+                v-text="element.title"
                 @blur.stop="handleInput(index, $event)"
               >
               </span>
@@ -48,7 +48,7 @@
 import UploadVideo from '@/components/UploadVideo/UploadVideo'
 import draggable from 'vuedraggable'
 import { oneOf } from '../../../utils/tools'
-import { removeObject } from '@/api/data.js'
+import { removeFile } from '@/api/data.js'
 
 export default {
   name: 'Step2',
@@ -118,13 +118,13 @@ export default {
       const innerText = $event.target.innerText
       if (innerText === '') {
         this.$message.warning('课时标题不能为空', 3)
-        this.step.courseList[index].name = '课时标题不能为空'
+        this.step.courseList[index].title = '课时标题不能为空'
       } else if (innerText.length > 40) {
         this.$message.warning('课时标题不能大于40个字', 3)
-        this.step.courseList[index].name = innerText.substring(0, 40)
+        this.step.courseList[index].title = innerText.substring(0, 40)
         this.step.courseList[index].editable = false
       } else {
-        this.step.courseList[index].name = innerText
+        this.step.courseList[index].title = innerText
         this.step.courseList[index].editable = false
       }
     },
@@ -139,8 +139,8 @@ export default {
         content: '确实要删除这个视频吗?',
         onOk () {
           // 从s3上删除相应的视频资源
-          const objectName = _this.step.courseList[index].url
-          removeObject(objectName).then((res) => {
+          const objectName = _this.step.courseList[index].videoTrail
+          removeFile(objectName).then((res) => {
             // const res = response.data
             if (res.status === 'success') {
               _this.$message.success('从s3删除视频成功~', 3)

@@ -11,7 +11,7 @@
 		}, {
 			"path": "pages/search/search",
 			"style": {
-				"navigationBarTitleText": "搜索预告片"
+				"navigationBarTitleText": "工程师正在披星戴月开发中。。。"
 			}
 		}, {
 			"path": "pages/me/me",
@@ -21,7 +21,7 @@
 				},
 				"navigationBarTextStyle": "white",
 				"navigationBarTitleText": "我的",
-				"navigationBarBackgroundColor": "#FFD655"
+				"navigationBarBackgroundColor": "#00c1de"
 			}
 		}, {
 			"path": "pages/product/product",
@@ -36,27 +36,24 @@
 				// "navigationBarTextStyle": "black",
 				// "navigationBarBackgroundColor": "#F8F8F8"
 			}
-		},{
+		}, {
 			"path": "pages/course/course",
 			"style": {
 				"app-plus": {
 					// "titleNView": false
 				}
 			}
-		},{
+		}, {
 			"path": "pages/cover/cover",
 			"style": {}
 		}, {
 			"path": "pages/login/index",
-			"style":  {
-				"navigationBarTextStyle": "white",
-				"navigationBarTitleText": "登录",
-				"navigationBarBackgroundColor": "#FFD655"
+			"style": {
+				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/meInfo/meInfo",
-			"style": {
-			}
+			"style": {}
 		}, {
 			"path": "pages/meFace/meFace",
 			"style": {
@@ -71,30 +68,28 @@
 				"navigationBarTitleText": "修改昵称",
 				"navigationBarBackgroundColor": "#FFD655"
 			}
-		}
-	    ,{
-            "path" : "pages/meBirthday/meBirthday",
+		}, {
+			"path": "pages/meBirthday/meBirthday",
 			"style": {
 				"navigationBarTextStyle": "white",
 				"navigationBarTitleText": "修改生日",
 				"navigationBarBackgroundColor": "#FFD655"
 			}
-        }
-        ,{
-            "path" : "pages/meSex/meSex",
+		}, {
+			"path": "pages/meSex/meSex",
 			"style": {
 				"navigationBarTextStyle": "white",
 				"navigationBarTitleText": "修改性别",
 				"navigationBarBackgroundColor": "#FFD655"
 			}
-        }
-    ],
+		}
+	],
 	"globalStyle": {
-		"navigationStyle":"custom"
-		// "navigationBarTextStyle": "black",
-		// "navigationBarTitleText": "RD产品训练营",
-		// "navigationBarBackgroundColor": "#BBBBBB",
-		// "backgroundColor": "#F8F8F8"
+		// "navigationStyle":"custom"
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "RD产品训练营",
+		"navigationBarBackgroundColor": "#BBBBBB",
+		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
 		"color": "#bfbfbf",

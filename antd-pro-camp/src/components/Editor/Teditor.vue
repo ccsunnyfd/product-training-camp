@@ -1,6 +1,9 @@
 <template>
   <div class="editor-wrapper">
-    <div :id="editorId"></div>
+    <div
+      :id="editorId"
+    >
+    </div>
   </div>
 </template>
 
@@ -9,19 +12,21 @@ import Editor from 'wangeditor'
 import lrz from 'lrz'
 import 'wangeditor/release/wangEditor.min.css'
 import { oneOf } from '@/utils/tools'
-import { s3Url, uploadImg, removeObject } from '@/api/data.js'
+import { s3Url, uploadImg, removeFiles } from '@/api/data.js'
 export default {
   name: 'Teditor',
   props: {
     // eslint-disable-next-line vue/require-default-prop
-    value: String,
+    value: {
+      type: String
+    },
     /**
      * 绑定的值的类型, enum: ['html', 'text']
      */
     valueType: {
       type: String,
       default: 'html',
-      validator: (val) => {
+      validator: val => {
         return oneOf(val, ['html', 'text'])
       }
     },
@@ -40,17 +45,20 @@ export default {
       default: false // 使用form表单项的形式，通过vuex保存状态，暂不需要开启本地存储
     }
   },
+  watch: {
+    value (val) {
+      this.content = val || ''
+      this.setHtml(this.content)
+    }
+  },
   data () {
+    const value = this.value
     return {
+      content: value || '',
       // 富文本编辑器已上传过的图片url
       postedImgList: []
     }
   },
-  // watch: {
-  //   value (val) {
-  //     this.setHtml(val)
-  //   }
-  // },
   computed: {
     editorId () {
       return `editor${this._uid}`
@@ -69,15 +77,18 @@ export default {
     }
   },
   methods: {
+    resetPostedImg () {
+      this.postedImgList = []
+    },
     arrayMinus (arr1, arr2) {
       var m = {}
       if (arr1.length > 0) {
-        arr1.forEach((al) => {
+        arr1.forEach(al => {
           m[al] = al
         })
       }
       if (arr2.length > 0) {
-        arr2.forEach((bl) => {
+        arr2.forEach(bl => {
           delete m[bl]
         })
       }
@@ -86,18 +97,32 @@ export default {
     removeImgRequest (editorDeletedUrl) {
       // 过滤掉不是s3图片服务器地址的外域的url
       const s3Urlreg = new RegExp(s3Url)
-      const serverUrlreg = /:\/\/(.*?)\/(.*?)\/(.*)/
+      const serverUrlreg = /:\/\/(.*?)\/(.*)/
       // 过滤掉并发起图片删除请求
-      for (const index in editorDeletedUrl) {
-        if (s3Urlreg.test(editorDeletedUrl[index])) {
-          const objectName = serverUrlreg.exec(editorDeletedUrl[index])[3]
-          removeObject(objectName).then((resp) => {
-            console.log(objectName)
-          }).catch(() => {
-            //
-          })
+      const urlNeedDelete = editorDeletedUrl.reduce((finalList, url) => {
+        if (s3Urlreg.test(url)) {
+          finalList.push(serverUrlreg.exec(url)[2])
         }
+        return finalList
+      }, [])
+      if (urlNeedDelete.length === 0) {
+        return
       }
+      removeFiles(urlNeedDelete)
+        .then(resp => {
+          if (resp.status === 'success') {
+            this.$message.success(resp.msg, 2)
+          } else if (resp.failedFiles) {
+            this.$message.warning(resp.msg, 2)
+            console.log(resp.msg)
+            console.log(resp.failedFiles)
+          } else {
+            this.$message.warning(resp.msg, 2)
+          }
+        })
+        .catch(() => {
+          this.$message.warning('服务器异常~', 2)
+        })
     },
     // removeAllImg () {
     //   this.removeImgRequest(this.postedImgList)
@@ -128,6 +153,9 @@ export default {
     setHtml (val) {
       this.editor.txt.html(val)
     },
+    getHtml () {
+      return this.editor.txt.html()
+    },
     initFullscreen () {
       const enlarge = '<i title="全屏" class="ivu-icon ivu-icon-md-expand"></i>'
       // let enlarge = '<i title="全屏" class="ivu-icon ivu-icon-arrow-expand"></i>'
@@ -136,11 +164,15 @@ export default {
       let isFullscreen = false
       const fullscreenBtn = this.createBtn(enlarge)
       this.toolbar.appendChild(fullscreenBtn)
-      fullscreenBtn.addEventListener('click', _ => {
-        this.editorEle.className = isFullscreen ? '' : 'fullscreen-editor'
-        fullscreenBtn.innerHTML = isFullscreen ? enlarge : shrink
-        isFullscreen = !isFullscreen
-      }, false)
+      fullscreenBtn.addEventListener(
+        'click',
+        _ => {
+          this.editorEle.className = isFullscreen ? '' : 'fullscreen-editor'
+          fullscreenBtn.innerHTML = isFullscreen ? enlarge : shrink
+          isFullscreen = !isFullscreen
+        },
+        false
+      )
     },
     createBtn (btnHtml) {
       const btn = document.createElement('div')
@@ -153,16 +185,6 @@ export default {
   mounted () {
     const _this = this
     this.editor = new Editor(`#${this.editorId}`)
-    this.editor.customConfig.onchange = (html) => {
-      const text = this.editor.txt.text()
-      if (this.cache) {
-        localStorage.editorCache = html
-        // 保存已上传图片列表到localStorage中
-        localStorage.setItem('postedImgList', JSON.stringify(_this.postedImgList))
-      }
-      this.$emit('input', this.valueType === 'html' ? html : text)
-      this.$emit('change', html, text)
-    }
     // 自定义菜单配置
     this.editor.customConfig.menus = [
       'head', // 标题
@@ -185,41 +207,50 @@ export default {
       'undo', // 撤销
       'redo' // 重复
     ]
-    this.editor.customConfig.onchangeTimeout = this.changeInterval
     // zIndex 防止工具栏图标droplist被遮挡，鼠标会点不上去
     this.editor.customConfig.zIndex = 101
     // 默认是false，允许粘贴内容中有图片
     this.editor.customConfig.pasteIgnoreImg = false
     this.editor.customConfig.uploadImgServer = '/upload'
+    this.editor.customConfig.onchange = (html) => {
+      this.$emit('input', html)
+    }
+    this.editor.customConfig.onchangeTimeout = this.changeInterval
     this.editor.customConfig.customUploadImg = function (files, insert) {
       // files是input中选中的文件列表
       // insert是获取图片url后，插入到编辑器的方法
-      files.forEach((item) => {
+      files.forEach(item => {
+        const filename = item.name
         // lrz用于在前端压缩图片
-        lrz(item, { width: 400, height: 200 }).then((rst) => {
-          // 处理成功会执行
-          item = rst.file
-        }).catch(() => {
-          // 处理失败会执行
-          console.log('图片压缩失败~')
-        }).always(() => {
-          // 不管是成功失败，都会执行
-          const formData = new FormData()
-          formData.append('file', item)
-          uploadImg(formData).then((res) => {
-            // const res = response.data
-            if (res.status === 'success') {
-              _this.$message.success('图片上传成功~', 2)
-              // 上传代码返回结果之后，将图片插入到编辑器中
-              insert(res.url)
-              _this.postedImgList.push(res.url)
-            } else {
-              _this.$message.warning('图片上传失败，请联系管理员~', 3)
-            }
-          }).catch((err) => {
-            _this.$message.warning('图片上传异常，请联系管理员~' + err, 600)
+        lrz(item, { width: 300 })
+          .then(rst => {
+            // 处理成功会执行
+            item = rst.file
           })
-        })
+          .catch(() => {
+            // 处理失败会执行
+            console.log('图片压缩失败~')
+          })
+          .always(() => {
+            // 不管是成功失败，都会执行
+            const formData = new FormData()
+            formData.append('file', item, filename)
+            uploadImg(formData)
+              .then(res => {
+                // const res = response.data
+                if (res.status === 'success') {
+                  _this.$message.success('图片上传成功~', 2)
+                  // 上传代码返回结果之后，将图片插入到编辑器中
+                  insert(res.url)
+                  _this.postedImgList.push(res.url)
+                } else {
+                  _this.$message.warning('图片上传失败，请联系管理员~', 3)
+                }
+              })
+              .catch(err => {
+                _this.$message.warning('图片上传异常，请联系管理员~' + err, 600)
+              })
+          })
       })
     }
     // 将图片大小限制为 4M
@@ -236,41 +267,39 @@ export default {
     this.initFullscreen()
     // 如果本地有存储加载本地存储内容
     // const html = this.value || localStorage.editorCache
-    const html = this.value
-    if (html) this.editor.txt.html(html)
     // 如果本地有存储已上传图片url列表，加载本地存储内容
     // _this.postedImgList = _this.postedImgList ? _this.postedImgList : JSON.parse(localStorage.getItem('postedImgList'))
-    this.postedImgList = this.getEditorImgUrl()
+    this.postedImgList = []
   }
 }
 </script>
 
 <style lang="less">
 .w-e-toolbar {
-    flex-wrap: wrap;
-    -webkit-box-lines: multiple;
+  flex-wrap: wrap;
+  -webkit-box-lines: multiple;
 }
 
-.w-e-toolbar .w-e-menu:hover{
-    z-index: 10002!important;
+.w-e-toolbar .w-e-menu:hover {
+  z-index: 10002 !important;
 }
 
 .w-e-menu a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .fullscreen-editor {
-    position: fixed !important;
-    width: 100% !important;
-    height: 100% !important;
-    left: 0px !important;
-    top: 0px !important;
-    background-color: white;
-    z-index: 9999;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+  left: 0px !important;
+  top: 0px !important;
+  background-color: white;
+  z-index: 9999;
 }
 
 .fullscreen-editor .w-e-text-container {
-    width: 100% !important;
-    height: 95% !important;
+  width: 100% !important;
+  height: 95% !important;
 }
 </style>

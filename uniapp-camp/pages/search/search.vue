@@ -1,12 +1,12 @@
 <template>
 	<view class="page">
 		<!-- 搜索栏 start -->
-		<view class="search-block">
+		<!-- <view class="search-block">
 			<view class="search-ico-wrapper">
 				<image src="../../static/icos/search.png" class="search-ico"></image>
 			</view>
 			<input maxlength="10" placeholder="请输入搜索关键词" class="search-text" confirm-type="search" @confirm="searchMe"/>
-		</view>
+		</view> -->
 		<!-- 搜索栏 end -->
 
 		<!-- 搜索结果海报列表 start -->

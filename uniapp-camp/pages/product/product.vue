@@ -12,13 +12,9 @@
 					</view>
 				</view>
 				<view class="left-nav-prodList-wrapper">
-					<uni-list v-for="item in productList" :key="item.id">
+					<uni-list v-for="(item) in productList" :key="item.id">
 						<view :data-prodId="item.id" @click="showProduct">
-							<uni-list-item class="left-nav-prodList-item" 
-							:title="item.name" 
-							show-extra-icon="true" 
-							:extra-icon="{color: '#bbbbbb',size: '16',type: item.iconType}"
-							>
+							<uni-list-item class="left-nav-prodList-item" :title="item.name" show-extra-icon="true" :extra-icon="extraIcon(item)">
 							</uni-list-item>
 						</view>
 					</uni-list>
@@ -40,11 +36,11 @@
 		<!-- 顶部蓝色导航栏end -->
 
 		<!-- 视频start -->
-<!-- 		<view class="player">
+		<!-- 		<view class="player">
 			<video id="mytrailer" :src="productDetail.trailer" :poster="productDetail.poster" controls class="movie"></video>
 		</view> -->
 		<!-- 视频end -->
-		
+
 		<!-- 图片start -->
 		<view class="prod-img-wrapper">
 			<image class="prod-img" :src="productDetail.prodImg"></image>
@@ -78,7 +74,7 @@
 				<text class="prod-title">
 					课程章节
 				</text>
-				<view class="prod-lesson-wrapper" v-for="item in chapterList" :key="item.id">
+				<view class="prod-lesson-wrapper" v-for="(item) in courseList" :key="item.id">
 					<!-- 分割线start -->
 					<view class="line-wrapper">
 						<view class="line"></view>
@@ -89,7 +85,7 @@
 							<text class="iconfont icon-chart18"></text>
 						</view>
 						<text class="prod-lesson-item-title" v-once>
-							{{item.chapterNum}}. {{item.title}}
+							{{ item.chapterNum }}. {{ item.title }}
 						</text>
 					</view>
 				</view>
@@ -103,10 +99,10 @@
 				</text>
 				<view class="prod-example-item-wrapper" v-for="(item, index) in exampleList" :key="item.id">
 					<text class="prod-example-title" v-once>
-						案例{{index + 1}}: {{item.title}}
+						案例{{index + 1}}: {{ item.title }}
 					</text>
 					<text class="prod-example-content" v-once>
-						{{item.plainContent}}
+						{{ item.plainContent }}
 					</text>
 				</view>
 			</view>
@@ -129,7 +125,7 @@
 				productList: [],
 				productDetail: {},
 				exampleList: [],
-				chapterList: [],
+				courseList: [],
 				prodId: '',
 				visible: false
 			}
@@ -140,6 +136,9 @@
 			uniListItem
 		},
 		methods: {
+			extraIcon(item) {
+				return "{color: '#bbbbbb',size: '16', type: " + item.iconType + "}"
+			},
 			handleDrawerOpen() {
 				this.visible = true;
 			},
@@ -166,16 +165,15 @@
 				this.refresh();
 			},
 			refresh() {
-				var serverUrl = this.serverUrl;
 				// 请求课程章节
 				uni.request({
-					url: serverUrl + '/course/list?prodId=' + this.prodId,
+					url: config.getCourseUrl + '?prodId=' + this.prodId,
 					method: 'GET',
 					data: {},
 					success: res => {
 						// 获取真实数据之前,务必判断状态为success
 						if (res.data.status === "success") {
-							this.chapterList = res.data.data;
+							this.courseList = res.data.data;
 						}
 					},
 					fail: () => {},
@@ -185,10 +183,10 @@
 						// uni.stopPullDownRefresh();
 					}
 				});
-				
+
 				// 请求应用案例
 				uni.request({
-					url: serverUrl + '/example/list?prodId=' + this.prodId,
+					url: config.getExampleUrl + '?prodId=' + this.prodId,
 					method: 'GET',
 					data: {},
 					success: res => {
@@ -204,7 +202,7 @@
 						// uni.stopPullDownRefresh();
 					}
 				});
-				
+
 				this.visible = false;
 			}
 		},
@@ -228,11 +226,10 @@
 			this.prodId = params.prodId;
 
 			// 通过API修改导航栏的属性
-			// uni.setNavigationBarColor({
-			// 	frontColor: "#ffffff",
-			// 	backgroundColor: "#000000"
-			// })
-
+			uni.setNavigationBarColor({
+				frontColor: "#ffffff",
+				backgroundColor: "#000000"
+			})
 
 			// 请求产品列表
 			uni.request({
@@ -251,65 +248,43 @@
 							title: this.productDetail.name
 						});
 					}
-
 				},
 				fail: () => {},
 				complete: () => {}
 			});
-			
+
 			this.refresh();
-			
-			// uni.request({
-			// 	url: serverUrl + '/product/detail?prodId=' + prodId,
-			// 	method: 'GET',
-			// 	data: {},
-			// 	success: res => {
-			// 		// 获取真实数据之前,务必判断状态为success
-			// 		if (res.data.status === "success") {
-			// 			this.productDetail = res.data.data;
-			// 		}
-			// 		uni.setNavigationBarTitle({
-			// 			title: this.productDetail.name
-			// 		})
-			// 	},
-			// 	fail: () => {},
-			// 	complete: () => {
-			// 		// uni.hideNavigationBarLoading();
-			// 		// uni.hideLoading();
-			// 		// uni.stopPullDownRefresh();
-			// 	}
-			// });		
-		},
-		// 此函数仅仅只支持在小程序端的分享,分享到微信群或者微信好友
-		onShareAppMessage() {
-			return {
-				title: this.movieDetail.name,
-				path: '/pages/movie/movie?trailerId=' + this.productDetail.id
-			}
-		},
-		// 监听导航栏的按钮
-		onNavigationBarButtonTap(e) {
-			// #ifdef APP-PLUS
-			var index = e.index;
-			var movieDetail = this.movieDetail;
-			var trailerId = movieDetail.id;
-			var trailerName = movieDetail.name;
-			var cover = movieDetail.cover;
-			var poster = movieDetail.poster;
-			// index为0则分享
-			if (index == 0) {
-				uni.share({
-					provider: 'weixin',
-					type: 0,
-					title: 'NEXT超英预告：《' + trailerName + '》',
-					href: 'http://localhost/#/pages/movie/movie?trailerId=' + trailerId,
-					summary: 'NEXT超英预告：《' + trailerName + '》',
-					imageUrl: cover,
-					success: () => {}
-				});
-			}
-			// #endif
 		}
+		// 此函数仅仅只支持在小程序端的分享,分享到微信群或者微信好友
+		// onShareAppMessage() {
+		// 	return {
+		// 		title: this.movieDetail.name,
+		// 		path: '/pages/movie/movie?trailerId=' + this.productDetail.id
+		// 	}
+		// },
+		// 监听导航栏的按钮
+		// onNavigationBarButtonTap(e) {
+		// 	// #ifdef APP-PLUS
+		// 	var index = e.index;
+		// 	var movieDetail = this.movieDetail;
+		// 	var trailerId = movieDetail.id;
+		// 	var trailerName = movieDetail.name;
+		// 	var cover = movieDetail.cover;
+		// 	var poster = movieDetail.poster;
+		// 	// index为0则分享
+		// 	if (index == 0) {
+		// 		uni.share({
+		// 			provider: 'weixin',
+		// 			type: 0,
+		// 			title: '产品训练营：《' + trailerName + '》',
+		// 			href: 'http://localhost/#/pages/course/course?trailerId=' + trailerId,
+		// 			summary: '产品训练营：《' + trailerName + '》',
+		// 			imageUrl: cover,
+		// 			success: () => {}
+		// 		});
+		// 	}
+		// 	// #endif
+		// }
 	}
 </script>
 

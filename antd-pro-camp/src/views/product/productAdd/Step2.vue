@@ -29,19 +29,24 @@
       <span>案例编辑器</span>
       <a-form :form="editorForm">
         <a-form-item>
-          <example
+          <span>案例标题：</span>
+          <a-input
+            type="text"
+            style="width: 80%;"
+            v-model="title"
+          />
+          <span v-show="!titleValid" style="display: block; color: red">案例标题不能为空且不能大于40个字</span>
+        </a-form-item>
+        <a-form-item>
+          <span>案例内容：</span>
+          <Teditor
             ref="editor"
-            v-decorator="[
-              'exObj',
-              {
-                initialValue: { title: exObj.title, htmlContent: exObj.htmlContent },
-                rules: [{ validator: checkExample }]
-              }
-            ]"
-          ></example>
+            v-model="htmlContent"
+          />
+          <span v-show="!contentValid" style="display: block; color: red">案例内容不能为空</span>
         </a-form-item>
         <a-form-item :wrapperCol="{span: 19, offset: 5}">
-          <a-button type="primary" @click="saveExample">保存案例</a-button>
+          <a-button type="primary" :disabled="!titleValid || !contentValid" @click="saveExample">保存案例</a-button>
         </a-form-item>
       </a-form>
     </div>
@@ -50,14 +55,16 @@
 </template>
 
 <script>
-import Example from '@/components/Example/Example'
+import Teditor from '@/components/Editor/Teditor'
+// import Example from '@/components/Example/Example'
 import ExampleList from '@/components/Example/ExampleList'
 let key = 1
 export default {
   name: 'Step2',
   components: {
-    Example,
-    ExampleList
+    // Example,
+    ExampleList,
+    Teditor
   },
   data () {
     this.form = this.$form.createForm(this)
@@ -65,15 +72,19 @@ export default {
     return {
       labelCol: { lg: { span: 5 }, sm: { span: 5 } },
       wrapperCol: { lg: { span: 24 }, sm: { span: 24 } },
-      exObj: {
-        title: '',
-        htmlContent: ''
-      }
+      title: '',
+      htmlContent: ''
     }
   },
   computed: {
     step () {
       return this.$store.state.form.step
+    },
+    titleValid () {
+      return !(this.title === '' || this.title.length > 40)
+    },
+    contentValid () {
+      return !(this.htmlContent === '')
     }
   },
   methods: {
@@ -95,18 +106,6 @@ export default {
     prevStep () {
       this.$emit('prevStep')
     },
-    checkExample (rule, value, callback) {
-      if (value.title === '' || value.title.length > 40) {
-      // eslint-disable-next-line standard/no-callback-literal
-        callback('案例标题不能为空且不能大于40个字')
-        return
-      } else if (value.htmlContent === '') {
-      // eslint-disable-next-line standard/no-callback-literal
-        callback('案例内容不能为空')
-        return
-      }
-      callback()
-    },
     checkExampleList (rule, value, callback) {
       if (value.length < 1) {
       // eslint-disable-next-line standard/no-callback-literal
@@ -116,17 +115,20 @@ export default {
       callback()
     },
     saveExample () {
-      const { editorForm, $store } = this
+      const editor = this.$refs.editor
+      const { $store } = this
       // 先校验，通过表单校验后，才进入下一步
-      editorForm.validateFields((err, values) => {
-        if (!err) {
-          const nextKey = key++
-          $store.commit({
-            type: 'form/pushExample',
-            payload: { ...values.exObj, key: nextKey }
-          })
-        }
-      })
+      if (this.titleValid && this.contentValid) {
+        editor.removeDeletedImg()
+        const nextKey = key++
+        $store.commit({
+          type: 'form/pushExample',
+          payload: { title: this.title, htmlContent: this.htmlContent, key: nextKey }
+        })
+        this.title = ''
+        this.htmlContent = ''
+        editor.resetPostedImg()
+      }
     }
   }
 }

@@ -3,14 +3,14 @@
 		<!-- 顶部蓝色导航栏start -->
 		<view class="top-nav-wrapper">
 			<view class="top-nav-title-wrapper">
-				<text class="top-nav-title">{{this.chapterDetail.chapterNum}}. {{this.chapterDetail.title}}</text>
+				<text class="top-nav-title">{{courseDetail.chapterNum}}. {{courseDetail.title}}</text>
 			</view>
 		</view>
 		<!-- 顶部蓝色导航栏end -->
 
 		<!-- 视频start -->
 		<view class="player">
-			<video id="mytrailer" :src="chapterDetail.videoTrail" :poster="productDetail.poster" controls class="movie"></video>
+			<video id="mytrailer" :src="courseDetail.videoTrail" :poster="productDetail.poster" controls class="movie"></video>
 		</view>
 		<!-- 视频end -->
 
@@ -20,7 +20,7 @@
 			<view :current="TabCur">
 				<!-- 课程章节 start -->
 				<view v-show="TabCur === 0" class="tabContent-wrapper">
-					<view class="prod-lesson-wrapper" v-for="item in chapterList" :key="item.id">
+					<view class="prod-lesson-wrapper" v-for="(item) in courseList" :key="item.id">
 						<!-- 分割线start -->
 						<view class="line-wrapper">
 							<view class="line"></view>
@@ -60,6 +60,7 @@
 
 <script>
 	import WucTab from '@/components/wuc-tab/wuc-tab.vue';
+	import config from '@/config/config.js'
 
 	export default {
 		components: {
@@ -76,8 +77,8 @@
 				],
 				TabCur: 0,
 				productDetail: {},
-				chapterList: [],
-				chapterDetail: {},
+				courseList: [],
+				courseDetail: {},
 				exampleList: [],
 				prodId: '',
 				courseId: ''
@@ -87,7 +88,7 @@
 			handleCourseShow(e) {
 				var currentCourseId = e.currentTarget.dataset.courseid;
 				this.courseId = currentCourseId;
-				this.chapterDetail = this.chapterList.filter(x => x.id === parseInt(currentCourseId))[0];
+				this.courseDetail = this.courseList.filter(x => x.id === parseInt(currentCourseId))[0];
 			}
 		},
 		// #ifdef MP-WEIXIN
@@ -116,10 +117,9 @@
 			// 	backgroundColor: "#000000"
 			// })
 
-			var serverUrl = this.serverUrl;
 			// 请求课程所属产品名称
 			uni.request({
-				url: serverUrl + '/product/detail?prodId=' + this.prodId,
+				url: config.getProductDetailUrl + '?prodId=' + this.prodId,
 				method: 'GET',
 				data: {},
 				success: res => {
@@ -141,14 +141,14 @@
 
 			// 请求课程章节
 			uni.request({
-				url: serverUrl + '/course/list?prodId=' + this.prodId,
+				url: config.getCourseUrl + '?prodId=' + this.prodId,
 				method: 'GET',
 				data: {},
 				success: res => {
 					// 获取真实数据之前,务必判断状态为success
 					if (res.data.status === "success") {
-						this.chapterList = res.data.data;
-						this.chapterDetail = this.chapterList.filter(x => x.id === parseInt(this.courseId))[0];
+						this.courseList = res.data.data;
+						this.courseDetail = this.courseList.filter(x => x.id === parseInt(this.courseId))[0];
 					}
 				},
 				fail: () => {},
@@ -161,7 +161,7 @@
 			
 			// 请求应用案例
 			uni.request({
-				url: serverUrl + '/example/list?prodId=' + this.prodId,
+				url: config.getExampleUrl + '?prodId=' + this.prodId,
 				method: 'GET',
 				data: {},
 				success: res => {

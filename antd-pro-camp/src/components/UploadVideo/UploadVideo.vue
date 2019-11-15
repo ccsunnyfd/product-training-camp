@@ -8,7 +8,7 @@
       :fileList="fileList"
       class="upload-list-inline"
     >
-      <a-button> <a-icon type="upload" /> 选择文件（可多选） </a-button>
+      <a-button> <a-icon type="upload" /> 选择文件（最多一次选2个） </a-button>
     </a-upload>
     <a-button
       type="primary"
@@ -23,13 +23,13 @@
   </div>
 </template>
 <script>
-import { uploadVideo } from '@/api/data.js'
+import { uploadVideos } from '@/api/data.js'
 export default {
   name: 'UploadVideo',
   props: {
     maxNum: {
       type: Number,
-      default: 3
+      default: 2
     }
   },
   data () {
@@ -76,11 +76,11 @@ export default {
       // 2. read from response and show file link
       const formData = new FormData()
       fileList.forEach(file => {
-        formData.append('files[]', file)
+        formData.append('files', file)
       })
       this.uploading = true
       // 上传
-      uploadVideo(formData).then((res) => {
+      uploadVideos(formData).then((res) => {
         // const res = response.data
         if (res.status === 'success') {
           this.uploading = false

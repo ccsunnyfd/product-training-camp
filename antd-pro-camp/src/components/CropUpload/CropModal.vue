@@ -73,6 +73,7 @@ export default {
   },
   data () {
     return {
+      filename: '',
       visible: false,
       id: null,
       confirmLoading: false,
@@ -119,6 +120,7 @@ export default {
       reader.readAsDataURL(file)
       reader.onload = () => {
         this.options.img = reader.result
+        this.filename = file.name
       }
       // 转化为blob
       // reader.readAsArrayBuffer(file)
@@ -136,8 +138,8 @@ export default {
           const img = window.URL.createObjectURL(data)
           this.model = true
           this.modelSrc = img
-          formData.append('file', data, this.fileName)
-          uploadImg().then((response) => {
+          formData.append('file', data, this.filename)
+          uploadImg(formData).then((response) => {
             // var res = response.data
             if (response.status === 'success') {
               _this.imgFile = ''

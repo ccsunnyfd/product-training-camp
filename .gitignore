@@ -18,6 +18,8 @@ springboot-camp/.idea
 springboot-camp/*.iws
 springboot-camp/*.iml
 springboot-camp/*.ipr
+springboot-camp/src/main/java/com/productcamp/demo/config/
+springboot-camp/src/main/resources/
 
 ### NetBeans ###
 springboot-camp/nbproject/private/
@@ -65,8 +67,10 @@ antd-pro-camp/node_modules
 antd-pro-camp/dist
 
 # local env files
+antd-pro-camp/.env*
 antd-pro-camp/.env.local
 antd-pro-camp/.env.*.local
+antd-pro-camp/src/api/
 
 # Log files
 antd-pro-camp/npm-debug.log*
@@ -81,3 +85,7 @@ antd-pro-camp/*.ntvs*
 antd-pro-camp/*.njsproj
 antd-pro-camp/*.sln
 antd-pro-camp/*.sw*
+
+# uniapp-camp directories and files
+uniapp-camp/config/
+uniapp-camp/common/

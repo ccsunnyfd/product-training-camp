@@ -11,13 +11,14 @@ const authDo = function(param) {
 			},
 			success(res) {
 				res = res.data
-				if (res.status == '201') {
+				if (res.status === '201') {
 					resolve(res.data) // {"userInfo": {...}, "skey": xxx}
 				} else {
 					reject()
 				}
 			},
 			fail(error) {
+				console.log(error)
 				reject()
 			}
 		})

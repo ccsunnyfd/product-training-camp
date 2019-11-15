@@ -1,4 +1,4 @@
-import { axios } from '@/utils/request'
+import { submitStepForm } from '@/api/data.js'
 
 const state = {
   step: {
@@ -15,11 +15,7 @@ const state = {
 
 const actions = {
   async submitStepForm ({ commit }, { payload }) {
-    await axios.request({
-      url: '/api/product/addForm',
-      method: 'POST',
-      data: payload
-    })
+    await submitStepForm(payload)
     // commit('saveStepFormData', payload)
     commit('clearData')
   }
@@ -42,7 +38,6 @@ const mutations = {
     }
   },
   saveStepFormData (state, { payload }) {
-    console.log(payload)
     state.step = {
       ...state.step,
       ...payload

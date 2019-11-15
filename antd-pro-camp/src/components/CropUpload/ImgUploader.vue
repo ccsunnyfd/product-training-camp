@@ -1,7 +1,7 @@
 <template>
   <div :style="{ minHeight: '50px' }">
-    <div class="ant-upload-preview" @click="modal.edit(id)" >
-      <a-icon type="cloud-upload-o" class="upload-icon"/>
+    <div class="ant-upload-preview" @click="modal.edit(id)">
+      <a-icon type="cloud-upload-o" class="upload-icon" />
       <div class="mask">
         <a-icon type="plus" />
       </div>
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { removeObject } from '@/api/data.js'
+import { s3Url, removeFile } from '@/api/data.js'
 export default {
   name: 'ImgUploader',
   props: {
@@ -31,20 +31,28 @@ export default {
   },
   watch: {
     value (val, oldVal) {
-      if (oldVal === '/pleaseUpload.png') {
+      if (oldVal === '') {
         return
       }
-      // 从s3上删除相应的图片资源
-      removeObject(oldVal).then((res) => {
-        // const res = response.data
-        if (res.status === 'success') {
-          this.$message.success('从s3删除图片成功~', 3)
-        } else {
-          this.$message.warning('从s3删除图片失败，请联系管理员~', 3)
-        }
-      }).catch((err) => {
-        this.$message.warning('从s3删除图片失败，请联系管理员~' + err, 10)
-      })
+      // 过滤掉不是s3图片服务器地址的外域的url
+      const s3Urlreg = new RegExp(s3Url)
+      const serverUrlreg = /:\/\/(.*?)\/(.*)/
+      // 过滤掉并发起图片删除请求
+      if (s3Urlreg.test(oldVal)) {
+        const objectName = serverUrlreg.exec(oldVal)[2]
+        // 从s3上删除相应的图片资源
+        removeFile(objectName)
+          .then(res => {
+            if (res.status === 'success') {
+              this.$message.success('从s3删除图片成功~', 3)
+            } else {
+              this.$message.warning('从s3删除图片失败，请联系管理员~', 3)
+            }
+          })
+          .catch(err => {
+            this.$message.warning('从s3删除图片失败，请联系管理员~' + err, 10)
+          })
+      }
       this.$emit('change', val)
     }
   }
@@ -73,7 +81,7 @@ export default {
   .mask {
     opacity: 0;
     position: absolute;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
     cursor: pointer;
     transition: opacity 0.4s;
 
@@ -92,7 +100,8 @@ export default {
     }
   }
 
-  img, .mask {
+  img,
+  .mask {
     width: 100%;
     max-width: 180px;
     height: 100%;
