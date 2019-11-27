@@ -2,6 +2,7 @@ import { submitStepForm } from '@/api/data.js'
 
 const state = {
   step: {
+    id: '',
     name: '',
     description: '',
     scenario: '',
@@ -27,6 +28,7 @@ const mutations = {
   },
   clearData (state) {
     state.step = {
+      id: '',
       name: '',
       description: '',
       scenario: '',

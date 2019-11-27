@@ -150,21 +150,6 @@ export default {
               this.$emit('ok', this.id, response.url)
             }
           })
-          // this.$http.post('https://www.mocky.io/v2/5cc8019d300000980a055e76', formData, { contentType: false, processData: false, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
-          //   .then((response) => {
-          //     console.log('upload response:', response)
-          //     // var res = response.data
-          //     // if (response.status === 'done') {
-          //     //   _this.imgFile = ''
-          //     //   _this.headImg = res.realPathList[0] // 完整路径
-          //     //   _this.uploadImgRelaPath = res.relaPathList[0] // 非完整路径
-          //     //   _this.$message.success('上传成功')
-          //     //   this.visible = false
-          //     // }
-          //     _this.$message.success('上传成功')
-          //     _this.$emit('ok', response.url)
-          //     _this.visible = false
-          //   })
         })
       } else {
         this.$refs.cropper.getCropData((data) => {

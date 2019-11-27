@@ -31,4 +31,9 @@ public class ExampleService {
         Example newExample = exampleRepository.save(example);
         return newExample.getId();
     }
+
+    @Transactional
+    public void delExample(Long id) {
+        exampleRepository.deleteById(id);
+    }
 }

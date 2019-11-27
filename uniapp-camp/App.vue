@@ -5,10 +5,10 @@
 		// globalData: {
 		// 	userInfo: null
 		// },
-		onLaunch: function() {
+		onLaunch: async function() {
 			// #ifdef MP
 			//检查登录状态
-			checkLoginStatus()
+			await checkLoginStatus()
 			// #endif
 		},
 		onShow: function() {

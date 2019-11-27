@@ -22,7 +22,7 @@ import java.util.UUID;
 public class AliyunOSSUtil {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AliyunOSSUtil.class);
     private static String FILE_URL;
-    private static String bucketName = AliyunOSSConfig.BUCKE_NAME;
+    private static String bucketName = AliyunOSSConfig.BUCKET_NAME;
     private static String endpoint = AliyunOSSConfig.END_POINT;
     private static String accessKeyId = AliyunOSSConfig.AccessKey_ID;
     private static String accessKeySecret = AliyunOSSConfig.AccessKey_Secret;

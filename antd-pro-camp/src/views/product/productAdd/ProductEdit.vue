@@ -20,6 +20,7 @@ import Step1 from './Step1'
 import Step2 from './Step2'
 import Step3 from './Step3'
 import Step4 from './Step4'
+import getCurrentProduct from '@/views/product/utils/getCurrentProduct'
 
 export default {
   name: 'StepForm',
@@ -28,12 +29,6 @@ export default {
     Step2,
     Step3,
     Step4
-  },
-  mounted () {
-    const { $store } = this
-    $store.commit({
-      type: 'form/clearData'
-    })
   },
   data () {
     return {
@@ -44,7 +39,29 @@ export default {
       form: null
     }
   },
+  mounted () {
+    this.setProductInForm()
+  },
   methods: {
+    // setProductInForm
+    async setProductInForm () {
+      const id = this.$route.query.id
+      let currentItem = {}
+      await getCurrentProduct(id).then((results) => {
+        const basicInfo = results[0].data
+        const exampleList = results[1].data
+        const courseList = results[2].data
+        currentItem = { ...basicInfo, ...{ exampleList }, ...{ courseList } }
+      })
+      const { $store } = this
+      await $store.commit({
+        type: 'form/clearData'
+      })
+      $store.commit({
+        type: 'form/saveStepFormData',
+        payload: currentItem
+      })
+    },
     // handler
     nextStep () {
       if (this.currentTab < 3) {

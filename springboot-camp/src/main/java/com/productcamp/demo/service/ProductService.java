@@ -50,6 +50,10 @@ public class ProductService {
         return newProduct.getId();
     }
 
+    @Transactional
+    public void delProduct(Long id) {
+        productRepository.deleteById(id);
+    }
 
     // 注意，PageRequest.of的第一个参数表示第几页，从0开始计数，这与通常的分页从1开始有些不同，要处理下
     //动态构造查询语句

@@ -44,7 +44,7 @@
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
-        <icon-selector v-decorator="['iconType', { initialValue: step.iconType, rules: [{required: true, message: '请选择左侧划栏的图标'}] }]" />
+        <font-icon-selector v-decorator="['iconType', { initialValue: step.iconType, rules: [{required: true, message: '请选择左侧划栏的图标'}] }]" />
 
       </a-form-item>
       <a-form-item :wrapperCol="{span: 19, offset: 5}">
@@ -64,14 +64,14 @@
 
 <script>
 import { CropModal, ImgUploader } from '@/components/CropUpload'
-import IconSelector from '@/components/IconSelector'
+import FontIconSelector from '@/components/IconSelector/FontIconSelector'
 
 export default {
   name: 'Step1',
   components: {
     CropModal,
     ImgUploader,
-    IconSelector
+    FontIconSelector
   },
   mounted () {
     this.$nextTick(() => {

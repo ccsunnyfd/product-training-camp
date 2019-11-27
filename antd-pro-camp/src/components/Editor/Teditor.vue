@@ -13,6 +13,7 @@ import lrz from 'lrz'
 import 'wangeditor/release/wangEditor.min.css'
 import { oneOf } from '@/utils/tools'
 import { s3Url, uploadImg, removeFiles } from '@/api/data.js'
+import { filterS3UrlArray, getImgUrlArray } from '@/components/_util/util'
 export default {
   name: 'Teditor',
   props: {
@@ -94,17 +95,8 @@ export default {
       }
       return Object.keys(m)
     },
-    removeImgRequest (editorDeletedUrl) {
-      // 过滤掉不是s3图片服务器地址的外域的url
-      const s3Urlreg = new RegExp(s3Url)
-      const serverUrlreg = /:\/\/(.*?)\/(.*)/
-      // 过滤掉并发起图片删除请求
-      const urlNeedDelete = editorDeletedUrl.reduce((finalList, url) => {
-        if (s3Urlreg.test(url)) {
-          finalList.push(serverUrlreg.exec(url)[2])
-        }
-        return finalList
-      }, [])
+    removeImgRequest (editorDeletedUrlArray) {
+      const urlNeedDelete = filterS3UrlArray(s3Url, editorDeletedUrlArray)
       if (urlNeedDelete.length === 0) {
         return
       }
@@ -127,28 +119,14 @@ export default {
     // removeAllImg () {
     //   this.removeImgRequest(this.postedImgList)
     // },
-    getEditorImgUrl () {
-      const reg = /<img\b.*?(?:>|\/>)/gi // 全局匹配<img >的子串
-      const regSrc = /\bsrc\b\s*=\s*['"]?([^'"]*)['"]?/i // 匹配子串中的url部分
-      const editorImgUrl = [] // 编辑框内剩余的图片url
-      // const matchList = localStorage.editorCache.match(reg) // 全局匹配<img >的子串列表
-      const matchList = this.editor.txt.html().match(reg) // 全局匹配<img >的子串列表
-      for (const index in matchList) {
-        const srcStr = matchList[index].match(regSrc)
-        if (srcStr.length > 0) {
-          editorImgUrl.push(srcStr[1])
-        }
-      }
-      return editorImgUrl
-    },
     removeDeletedImg () {
-      const editorImgUrl = this.getEditorImgUrl()
+      const editorImgUrl = getImgUrlArray(this.editor.txt.html())
       // console.log(editorImgUrl)
       // const localStorageImgUrl = JSON.parse((localStorage.getItem('postedImgList')))
       // 将记录的上传过的图片url数组和从编辑框获得的图片url数组相减，获得编辑删除的图片url
       // const editorDeletedUrl = this.arrayMinus(localStorageImgUrl, editorImgUrl)
-      const editorDeletedUrl = this.arrayMinus(this.postedImgList, editorImgUrl)
-      this.removeImgRequest(editorDeletedUrl)
+      const editorDeletedUrlArray = this.arrayMinus(this.postedImgList, editorImgUrl)
+      this.removeImgRequest(editorDeletedUrlArray)
     },
     setHtml (val) {
       this.editor.txt.html(val)
@@ -222,7 +200,7 @@ export default {
       files.forEach(item => {
         const filename = item.name
         // lrz用于在前端压缩图片
-        lrz(item, { width: 300 })
+        lrz(item, { width: 150 })
           .then(rst => {
             // 处理成功会执行
             item = rst.file

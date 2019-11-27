@@ -1,12 +1,11 @@
 package com.productcamp.demo.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Product
@@ -17,6 +16,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
+@ToString
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO,
@@ -45,8 +45,13 @@ public class Product {
     @Column(name = "prod_img", length = 1000)
     private String prodImg;
 
+    @CreatedDate
+    @Column(name = "create_time",insertable = false,updatable = false,columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Date createTime; // 产品创建时间
+
     // 构造函数
-    public Product(String name, String description, String scenario, String favicon, String iconType, String prodImg) {
+    public Product(Long id, String name, String description, String scenario, String favicon, String iconType, String prodImg) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.scenario = scenario;

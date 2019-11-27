@@ -11,7 +11,8 @@
 </template>
 
 <script>
-import { s3Url, removeFile } from '@/api/data.js'
+import { s3Url } from '@/api/data.js'
+import { delS3Object } from '@/components/_util/util'
 export default {
   name: 'ImgUploader',
   props: {
@@ -31,28 +32,10 @@ export default {
   },
   watch: {
     value (val, oldVal) {
-      if (oldVal === '') {
+      if (oldVal === '' || val === '') {
         return
       }
-      // 过滤掉不是s3图片服务器地址的外域的url
-      const s3Urlreg = new RegExp(s3Url)
-      const serverUrlreg = /:\/\/(.*?)\/(.*)/
-      // 过滤掉并发起图片删除请求
-      if (s3Urlreg.test(oldVal)) {
-        const objectName = serverUrlreg.exec(oldVal)[2]
-        // 从s3上删除相应的图片资源
-        removeFile(objectName)
-          .then(res => {
-            if (res.status === 'success') {
-              this.$message.success('从s3删除图片成功~', 3)
-            } else {
-              this.$message.warning('从s3删除图片失败，请联系管理员~', 3)
-            }
-          })
-          .catch(err => {
-            this.$message.warning('从s3删除图片失败，请联系管理员~' + err, 10)
-          })
-      }
+      delS3Object(s3Url, oldVal)
       this.$emit('change', val)
     }
   }

@@ -18,22 +18,22 @@
 		getProvider,
 		login,
 		getCode
-	} from '@/api/request/login/login.js'
+	} from '@/api/request/login/loginUtils.js'
 	import {
-		getSetting
-	} from '@/api/request/login/authorize.js'
+		getAuthSetting
+	} from '@/api/request/login/getAuthSetting.js'
 
 	export default {
 		data() {
 			return {
-				code: '',
+				code: '',  // 小程序授权码
 				status: 0 //2未操作 1已经授权  0拒绝授权
 			}
 		},
 		onShow() {
 			(async () => {
 				//获取授权状态 2未操作 1已经授权  0拒绝授权
-				this.status = await getSetting()
+				this.status = await getAuthSetting()
 				//获取服务商信息 "provider":["weixin"]
 				let provider = await getProvider();
 				//获取code "009Lbpsj2ggKpE8AM4tj2604sj7Xbpsp"

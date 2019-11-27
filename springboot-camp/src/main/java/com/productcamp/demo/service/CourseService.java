@@ -31,4 +31,9 @@ public class CourseService {
         Course newCourse = courseRepository.save(course);
         return newCourse.getId();
     }
+
+    @Transactional
+    public void delCourse(Long id) {
+        courseRepository.deleteById(id);
+    }
 }
