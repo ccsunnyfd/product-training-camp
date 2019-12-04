@@ -126,6 +126,9 @@
 	flex-direction: column;
 	padding: 15upx;
 }
+.progress-box {
+	/* padding: 5upx 5upx; */
+}
 .prod-lesson-wrapper {
 	display: flex;
 	flex-direction: column;

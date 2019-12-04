@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App'
+import PubFuc from'./common/common'
 import "./common/iconfont.css"
 
 Vue.config.productionTip = false
@@ -18,6 +19,7 @@ Vue.prototype.getGlobalUser = function(key) {
 };
 
 App.mpType = 'app'
+Vue.prototype.$pubFuc = PubFuc
 
 const app = new Vue({
     ...App

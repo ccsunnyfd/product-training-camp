@@ -106,6 +106,7 @@ export default {
       videoList.forEach(element => {
         element.editable = false
       })
+      videoList = [...step.courseList, ...videoList]
       $store.commit({
         type: 'form/saveStepFormData',
         payload: { ...step, courseList: videoList }

@@ -77,12 +77,11 @@ public class UserInfoService {
         return userInfoRepository.findByUname(uname);
     }
 
-    // 根据用户id查找用户
-    public UserInfo findByUserId(Long uid) {
-        Optional<UserInfo> user = userInfoRepository.findById(uid);
-        return user.isPresent() ? user.get() : null;
+    // 根据用户skey查找用户id
+    public Long getUserIdBySkey(String skey) {
+        Long userId = userInfoRepository.findUserIdBySkey(skey);
+        return userId;
     }
-
 
     // 注册用户
 //    @Transactional

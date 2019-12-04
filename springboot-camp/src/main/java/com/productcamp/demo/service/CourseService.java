@@ -23,7 +23,7 @@ public class CourseService {
     }
 
     public List<Course> getCoursesByProductId(Long prodId) {
-        return courseRepository.findByProductId(prodId);
+        return courseRepository.findByProductIdOrderByChapterNum(prodId);
     }
 
     @Transactional

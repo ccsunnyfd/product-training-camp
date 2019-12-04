@@ -74,6 +74,9 @@
 				<text class="prod-title">
 					课程章节
 				</text>
+				<view class="progress-box">
+					<progress :percent="courseProg" show-info active stroke-width="3" />
+				</view>
 				<view class="prod-lesson-wrapper" v-for="(item) in courseList" :key="item.id">
 					<!-- 分割线start -->
 					<view class="line-wrapper">
@@ -81,9 +84,9 @@
 					</view>
 					<!-- 分割线end -->
 					<view class="prod-lesson-item-wrapper" :data-courseId="item.id" @click="handleCourseShow">
-						<view class="chart-wrapper">
+				<!-- 		<view class="chart-wrapper">
 							<text class="iconfont icon-chart18"></text>
-						</view>
+						</view> -->
 						<text class="prod-lesson-item-title" v-once>
 							{{ item.chapterNum }}. {{ item.title }}
 						</text>
@@ -101,9 +104,10 @@
 					<text class="prod-example-title" v-once>
 						案例{{index + 1}}: {{ item.title }}
 					</text>
-					<text class="prod-example-content" v-once>
+			<!-- 		<text class="prod-example-content" v-once>
 						{{ item.plainContent }}
-					</text>
+					</text> -->
+					<div v-html="item.htmlContent"></div>
 				</view>
 			</view>
 			<!-- 应用实例end -->
@@ -118,6 +122,7 @@
 	import uniList from '@/components/uni-list/uni-list.vue'
 	import uniListItem from '@/components/uni-list-item/uni-list-item.vue'
 	import config from '@/config/config.js'
+	import getWatchProg from '@/api/request/watchProg/getWatchProg.js'
 
 	export default {
 		data() {
@@ -127,8 +132,8 @@
 				exampleList: [],
 				courseList: [],
 				prodId: '',
-				visible: false
-			}
+				courseProg: 0,
+				visible: false			}
 		},
 		components: {
 			uniDrawer,
@@ -164,26 +169,7 @@
 				this.prodId = currentProdId;
 				this.refresh();
 			},
-			refresh() {
-				// 请求课程章节
-				uni.request({
-					url: config.getCourseUrl + '?prodId=' + this.prodId,
-					method: 'GET',
-					data: {},
-					success: res => {
-						// 获取真实数据之前,务必判断状态为success
-						if (res.data.status === "success") {
-							this.courseList = res.data.data;
-						}
-					},
-					fail: () => {},
-					complete: () => {
-						// uni.hideNavigationBarLoading();
-						// uni.hideLoading();
-						// uni.stopPullDownRefresh();
-					}
-				});
-
+			async refresh() {
 				// 请求应用案例
 				uni.request({
 					url: config.getExampleUrl + '?prodId=' + this.prodId,
@@ -202,7 +188,43 @@
 						// uni.stopPullDownRefresh();
 					}
 				});
+				// 请求课程章节
+				await uni.request({
+					url: config.getCourseUrl + '?prodId=' + this.prodId,
+					method: 'GET',
+					data: {},
+					success: res => {
+						// 获取真实数据之前,务必判断状态为success
+						if (res.data.status === "success") {
+							this.courseList = res.data.data;
+						}
+					},
+					fail: () => {},
+					complete: () => {
+						// uni.hideNavigationBarLoading();
+						// uni.hideLoading();
+						// uni.stopPullDownRefresh();
+					}
+				});
 
+				// 获取到课程章节后请求当前用户该产品所有课程的平均观看进度
+				getWatchProg(this.prodId).then(result => {
+					const watchProg = result
+					let totalPercent = 0
+					let count = 0
+					this.courseList.forEach(item => {
+						for(var i = 0; i < watchProg.length; i++) {
+							if(watchProg[i].courseId === item.id) {
+								totalPercent = totalPercent + watchProg[i].currentProgress / watchProg[i].duration
+								break
+							}
+						}
+						count++
+					})
+					const averageProg = Math.floor(totalPercent / count * 100)
+					this.courseProg = averageProg
+				})
+				
 				this.visible = false;
 			}
 		},

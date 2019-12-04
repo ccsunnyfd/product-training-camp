@@ -65,17 +65,28 @@
 	padding-top: 20upx;
 	padding-bottom: 20upx;
 }
-.chart-wrapper {
-	margin-top: 10upx;
-	line-height: 20upx;
-}
+/* .chart-wrapper {
+	display: flex;
+	flex-direction: column;
+	width: 30upx;
+	height: 30upx;
+	margin-bottom: 25upx;
+	margin-left: 20upx;
+} */
 .prod-lesson-item-title {
-	margin-left: 45upx;
+	margin-left: 40upx;
 	line-height: 40upx;
 	font-size: 14px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+.lesson-item-progress {
+	flex: 1;
+	text-align: right;
+	font-size: 25upx;
+	padding-right: 15upx;
+	margin-top: 15upx;
 }
 .chapter-chosen {
 	background: #e6dabbb0;

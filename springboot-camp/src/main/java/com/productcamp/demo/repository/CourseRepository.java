@@ -12,5 +12,5 @@ import java.util.List;
  * @version 1.0
  */
 public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecificationExecutor {
-    List<Course> findByProductId(Long prodId);
+    List<Course> findByProductIdOrderByChapterNum(Long prodId);
 }
