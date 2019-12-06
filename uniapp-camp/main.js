@@ -18,6 +18,15 @@ Vue.prototype.getGlobalUser = function(key) {
 	}
 };
 
+Vue.prototype.getSkey = function() {
+	var skey = uni.getStorageSync('loginFlag');
+	if (skey != null && skey != "" && skey != undefined) {
+		return skey;
+	} else {
+		return null;
+	}
+};
+
 App.mpType = 'app'
 Vue.prototype.$pubFuc = PubFuc
 

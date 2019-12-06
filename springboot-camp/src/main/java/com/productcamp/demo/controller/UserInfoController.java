@@ -117,7 +117,7 @@ public class UserInfoController {
 
     @PostMapping("logout")
     @ApiOperation(value = "退出登录")
-    public Map<String, Object> logout(@RequestParam(value = "userId") Long userId) {
+    public Map<String, Object> logout(@RequestParam(value = "skey") String skey) {
         Map<String, Object> map = new HashMap<>();
         UserInfo res = null;
         RespBean respBean = null;

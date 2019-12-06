@@ -21,7 +21,8 @@
 	font-weight: bold;
 }
 .left-nav-prodList-wrapper {
-	margin-top: 30upx;
+	/* margin-top: 30upx; */
+	line-height: 0;
 }
 .left-nav-prodList-item {
 	

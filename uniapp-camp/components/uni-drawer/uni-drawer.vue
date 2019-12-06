@@ -133,11 +133,12 @@
 		&__content {
 			display: block;
 			position: absolute;
-			top: 0;
+			top: 1%;
 			left: 0;
 			width: $drawer-width;
 			height: 100%;
-			background: $uni-bg-color;
+			// background: $uni-bg-color;
+			background: linear-gradient(to bottom right, #133386, #afcbe3);
 			opacity: 0.98;
 			transition: all 0.3s ease-out;
 			transform: translatex(-100%);

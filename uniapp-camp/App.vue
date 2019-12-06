@@ -17,7 +17,9 @@
 }
 </script>
 
-<style>
+<style lang="scss">
+	@import './static/css/common';
+	/*每个页面公共css */
 	/*每个页面公共css */
 	.page {
 		width: 100%;
@@ -25,16 +27,16 @@
 		background-color: #f7f7f7;
 		/* position: absolute; */
 	}
-
+	
 	.page-block {
 		background-color: #ffffff;
 		margin: 20upx 20upx 20upx 20upx;
 	}
-
+	
 	.line-wrapper {
 		padding: 0upx 20upx;
 	}
-
+	
 	.line {
 		height: 1px;
 		background-color: #DBDBDA;

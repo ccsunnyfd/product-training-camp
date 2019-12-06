@@ -40,16 +40,16 @@
 
 /* 课程详情页video end */
 
-/* 标签页 start */
-.text-orange {
-	color: #f37b1d
+.tab-class {
+	font-size: 35upx;
 }
 
+/* 标签页 start */
 .tabContent-wrapper {
 	color: #333333;
 	background-color: #ffffff;
 	padding: 30upx;
-	margin: 10upx;
+	margin: 0upx;
 }
 /* 标签页 end */
 
@@ -58,12 +58,6 @@
 	display: flex;
 	flex-direction: column;
 	margin-top: 15upx;
-}
-.prod-lesson-item-wrapper {
-	display: flex;
-	flex-direction: row;
-	padding-top: 20upx;
-	padding-bottom: 20upx;
 }
 /* .chart-wrapper {
 	display: flex;
@@ -87,9 +81,6 @@
 	font-size: 25upx;
 	padding-right: 15upx;
 	margin-top: 15upx;
-}
-.chapter-chosen {
-	background: #e6dabbb0;
 }
 /* 课程信息 end */
 

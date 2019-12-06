@@ -2,29 +2,34 @@
 	<view class="page">
 		<!-- 抽屉侧滑菜单start -->
 		<uni-drawer :visible="visible">
-			<view style="padding:0upx 15upx;">
-				<view class="left-nav-head-wrapper">
-					<view class="left-nav-head-title-wrapper">
-						<text class="left-nav-head-title">产品训练营</text>
-					</view>
-					<view class="left-nav-head-backicon-wrapper" @click="handleDrawerClose">
-						<i class="iconfont icon-daohang_jiantou_zuo_dingbu left-nav-head-backicon"></i>
-					</view>
-				</view>
-				<view class="left-nav-prodList-wrapper">
-					<uni-list v-for="(item) in productList" :key="item.id">
+			<view>
+				<cmd-nav-bar title="产品目录" icon-one="chevron-left" font-color="white" background-color="#133386" @iconOne="handleDrawerClose"></cmd-nav-bar>
+				<cmd-page-body type="top">
+					<cmd-transition name="fade-up">
+						<view v-for="(item) in productList" :key="item.id">
+							<view :data-prodId="item.id" @click="showProduct">
+								<cmd-cel-item :title="item.name" slot-left arrow >
+									<cmd-icon prefix-class="iconfont" :type="item.iconType" size="24" color="#133386"></cmd-icon>
+								</cmd-cel-item>
+							</view>
+						</view>
+					</cmd-transition>
+				</cmd-page-body>
+				
+
+				<!--<uni-list v-for="(item) in productList" :key="item.id">
 						<view :data-prodId="item.id" @click="showProduct">
 							<uni-list-item class="left-nav-prodList-item" :title="item.name" show-extra-icon="true" :extra-icon="extraIcon(item)">
 							</uni-list-item>
 						</view>
-					</uni-list>
-				</view>
+					</uni-list> -->
+				<!-- </view> -->
 			</view>
 		</uni-drawer>
 		<!-- 抽屉侧滑菜单end -->
 
 		<!-- 顶部蓝色导航栏start -->
-		<view class="top-nav-wrapper">
+<!-- 		<view class="top-nav-wrapper">
 			<view class="top-nav-directory-wrapper" @click="handleDrawerOpen">
 				<i class="iconfont icon-mulu top-nav-directoryicon"></i>
 				<text class="top-nav-title">产 品 中 心</text>
@@ -32,14 +37,9 @@
 			<view class="top-nav-search-wrapper">
 				<i class="iconfont icon-fangdajing top-nav-searchicon"></i>
 			</view>
-		</view>
-		<!-- 顶部蓝色导航栏end -->
-
-		<!-- 视频start -->
-		<!-- 		<view class="player">
-			<video id="mytrailer" :src="productDetail.trailer" :poster="productDetail.poster" controls class="movie"></video>
 		</view> -->
-		<!-- 视频end -->
+		<top @catalogClicked="this.visible = !this.visible"></top>
+		<!-- 顶部蓝色导航栏end -->
 
 		<!-- 图片start -->
 		<view class="prod-img-wrapper">
@@ -78,18 +78,10 @@
 					<progress :percent="courseProg" show-info active stroke-width="3" />
 				</view>
 				<view class="prod-lesson-wrapper" v-for="(item) in courseList" :key="item.id">
-					<!-- 分割线start -->
-					<view class="line-wrapper">
-						<view class="line"></view>
-					</view>
-					<!-- 分割线end -->
-					<view class="prod-lesson-item-wrapper" :data-courseId="item.id" @click="handleCourseShow">
-				<!-- 		<view class="chart-wrapper">
-							<text class="iconfont icon-chart18"></text>
-						</view> -->
-						<text class="prod-lesson-item-title" v-once>
-							{{ item.chapterNum }}. {{ item.title }}
-						</text>
+					<view :data-courseId="item.id" @click="handleCourseShow">
+						<cmd-cel-item :title="item.title" slot-left>
+							{{ item.chapterNum }} | 
+						</cmd-cel-item>
 					</view>
 				</view>
 			</view>
@@ -101,13 +93,10 @@
 					应用实例
 				</text>
 				<view class="prod-example-item-wrapper" v-for="(item, index) in exampleList" :key="item.id">
-					<text class="prod-example-title" v-once>
-						案例{{index + 1}}: {{ item.title }}
+					<text class="prod-example-title">
+						案例{{index + 1}} | {{ item.title }}
 					</text>
-			<!-- 		<text class="prod-example-content" v-once>
-						{{ item.plainContent }}
-					</text> -->
-					<div v-html="item.htmlContent"></div>
+					<div style="margin-top: 20upx;" v-html="item.htmlContent"></div>
 				</view>
 			</view>
 			<!-- 应用实例end -->
@@ -118,9 +107,13 @@
 </template>
 
 <script>
+	import cmdNavBar from "@/components/cmd-nav-bar/cmd-nav-bar.vue"
+	import cmdIcon from "@/components/cmd-icon/cmd-icon.vue"
+	import cmdPageBody from "@/components/cmd-page-body/cmd-page-body.vue"
+	import cmdTransition from "@/components/cmd-transition/cmd-transition.vue"
+	import cmdCelItem from "@/components/cmd-cell-item/cmd-cell-item.vue"
+	import top from '@/components/top'
 	import uniDrawer from "@/components/uni-drawer/uni-drawer.vue"
-	import uniList from '@/components/uni-list/uni-list.vue'
-	import uniListItem from '@/components/uni-list-item/uni-list-item.vue'
 	import config from '@/config/config.js'
 	import getWatchProg from '@/api/request/watchProg/getWatchProg.js'
 
@@ -136,9 +129,13 @@
 				visible: false			}
 		},
 		components: {
+			top,
 			uniDrawer,
-			uniList,
-			uniListItem
+			cmdNavBar,
+			cmdPageBody,
+			cmdTransition,
+			cmdCelItem,
+			cmdIcon
 		},
 		methods: {
 			extraIcon(item) {
@@ -248,10 +245,10 @@
 			this.prodId = params.prodId;
 
 			// 通过API修改导航栏的属性
-			uni.setNavigationBarColor({
-				frontColor: "#ffffff",
-				backgroundColor: "#000000"
-			})
+			// uni.setNavigationBarColor({
+			// 	frontColor: "#ffffff",
+			// 	backgroundColor: "#000000"
+			// })
 
 			// 请求产品列表
 			uni.request({

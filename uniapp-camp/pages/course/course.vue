@@ -26,24 +26,16 @@
 
 		<!-- tabPane start -->
 		<view>
-			<wuc-tab :tab-list="tabList" textFlex :tabCur.sync="TabCur" select-class="text-orange"></wuc-tab>
+			<wuc-tab :tab-list="tabList" tab-class="tab-class" textFlex :tabCur.sync="TabCur" select-class="textColor"></wuc-tab>
 			<view :current="TabCur">
 				<!-- 课程章节 start -->
 				<view v-show="TabCur === 0" class="tabContent-wrapper">
 					<view class="prod-lesson-wrapper" v-for="(item) in courseList" :key="item.id">
-						<!-- 分割线start -->
-						<view class="line-wrapper">
-							<view class="line"></view>
-						</view>
-						<!-- 分割线end -->
-						<view :class="'prod-lesson-item-wrapper' + (parseInt(courseId) === item.id ? ' chapter-chosen' : '')" :data-courseId="item.id" @click="handleCourseShow">
-							<text class="prod-lesson-item-title">
-								{{item.chapterNum}} | {{item.title}}
-							</text>
-							<text class="lesson-item-progress">{{calcPercent(item.id)}}%</text>
-						<!-- 	<view class="chart-wrapper">
-								<text class="iconfont icon-chart18"></text>
-							</view> -->
+						<view :class="parseInt(courseId) === item.id ? ' frameBottomColor' : ''"
+							:data-courseId="item.id" @click="handleCourseShow">
+							<cmd-cel-item :title="item.title" :addon="calcPercent(item.id)" slot-left>
+								{{ item.chapterNum }} | 
+							</cmd-cel-item>
 						</view>
 					</view>
 				</view>
@@ -51,14 +43,11 @@
 				
 				<!-- 应用实例 start -->
 				<view v-show="TabCur === 1" class="tabContent-wrapper">
-					<view class="prod-example-item-wrapper" v-for="(item) in exampleList" :key="item.id">
+					<view class="prod-example-item-wrapper" v-for="(item, index) in exampleList" :key="item.id">
 						<text class="prod-example-title">
 							案例{{index + 1}} | {{item.title}}
 						</text>
-					<!-- 	<text class="prod-example-content" v-once>
-							{{item.plainContent}}
-						</text> -->
-						<div v-html="item.htmlContent"></div>
+						<div style="margin-top: 20upx;" v-html="item.htmlContent"></div>
 					</view>
 				</view>
 				<!-- 应用实例 end -->
@@ -71,13 +60,15 @@
 </template>
 
 <script>
+	import cmdCelItem from "@/components/cmd-cell-item/cmd-cell-item.vue"
 	import WucTab from '@/components/wuc-tab/wuc-tab.vue'
 	import config from '@/config/config.js'
 	import getWatchProg from '@/api/request/watchProg/getWatchProg.js'
 
 	export default {
 		components: {
-			WucTab
+			WucTab,
+			cmdCelItem
 		},
 		data() {
 			return {
@@ -105,9 +96,9 @@
 			calcPercent(courseId) {
 				const curWatchProg = this.watchProg.filter(x => x.courseId === parseInt(courseId))[0]
 				if (curWatchProg) {
-					return (curWatchProg.currentProgress / curWatchProg.duration).toFixed(2) * 100
+					return (curWatchProg.currentProgress / curWatchProg.duration).toFixed(2) * 100 + '%'
 				} else {
-					return 0
+					return '0%'
 				}
 			},
 			refreshWatchProg() {
@@ -136,7 +127,7 @@
 				})
 			},
 			saveProgress(currentTime) {
-				const skey = (uni.getStorageSync('loginFlag'));
+				const skey = this.getSkey();
 				if (skey) {
 					// 请求保存当前用户的视频进度
 					uni.request({

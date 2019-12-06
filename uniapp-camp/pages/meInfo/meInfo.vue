@@ -1,146 +1,72 @@
 <template>
-	<view class="page page-fill">
-		<view class="page-block info-list">
-			<!-- 头像 -->
-			<view class="item-wrapper face-line-upbottom" @click="operator">
-				<view class="info-words">头像</view>
-
-				<view class="right-wrapper">
-					<image :src="globalUser.faceImage" class="face"></image>
-					<view class="arrow-block">
-						<image src="../../static/icos/left-gray-arrow.png" class="arrow-ico"></image>
-					</view>
+	<view class="info-padding">
+		<cmd-nav-bar back title="信息设置"></cmd-nav-bar>
+		<cmd-page-body type="top">
+			<cmd-transition name="fade-up">
+				<view v-if="userIsLogin">
+					<cmd-cel-item title="头像" slot-right arrow>
+						<cmd-avatar :src="userInfo.avatarUrl"></cmd-avatar>
+					</cmd-cel-item>
+					<!-- <cmd-cel-item title="积分" addon="566" arrow></cmd-cel-item> -->
+					<cmd-cel-item title="性别" :addon="getGender" arrow></cmd-cel-item>
+					<cmd-cel-item title="昵称" :addon="userInfo.nickName" arrow></cmd-cel-item>
+					<cmd-cel-item title="省份" :addon="userInfo.province" arrow></cmd-cel-item>
+					<cmd-cel-item title="区域" :addon="userInfo.city" arrow></cmd-cel-item>
+					<!-- <cmd-cel-item title="修改密码" @click="fnClick('modify')" arrow></cmd-cel-item> -->
+					<button class="btn-logout" @click="logout">退出登录</button>
 				</view>
-			</view>
-			<view class="line-top">
-				<view class="line"></view>
-			</view>
-
-			<!-- 昵称 -->
-			<view class="item-wrapper" @click="modifyNickname">
-				<view class="info-words">昵称</view>
-
-				<view class="right-wrapper">
-					<view class="gray-fields">{{globalUser.nickname}}</view>
-					<view class="arrow-block">
-						<image src="../../static/icos/left-gray-arrow.png" class="arrow-ico"></image>
-					</view>
-				</view>
-			</view>
-			<view class="line-top">
-				<view class="line"></view>
-			</view>
-
-			<!-- 生日 -->
-			<view class="item-wrapper" @click="modifyBirthday">
-				<view class="info-words">生日</view>
-
-				<view class="right-wrapper">
-					<view class="gray-fields">{{globalUser.birthday}}</view>
-					<view class="arrow-block">
-						<image src="../../static/icos/left-gray-arrow.png" class="arrow-ico"></image>
-					</view>
-				</view>
-			</view>
-			<view class="line-top">
-				<view class="line"></view>
-			</view>
-
-			<!-- 性别 -->
-			<view class="item-wrapper" @click="modifySex">
-				<view class="info-words">性别</view>
-
-				<view class="right-wrapper">
-					<view class="gray-fields">
-						<view v-if="globalUser.sex == 'm'">
-							男
-						</view>
-						<view v-else-if="globalUser.sex == 'f'">
-							女
-						</view>
-						<view v-else>
-							未选择
-						</view>
-					</view>
-					<view class="arrow-block">
-						<image src="../../static/icos/left-gray-arrow.png" class="arrow-ico"></image>
-					</view>
-				</view>
-			</view>
-
-		</view>
-
-		<view class="footer-wrapper">
-			<view class="footer-words" @click="cleanStorage">
-				清理缓存
-			</view>
-			<view class="footer-words" style="margin-top: 10upx;" @click="logout">
-				退出登录
-			</view>
-		</view>
-
-	</view>
+			</cmd-transition>
+		</cmd-page-body>
+	</view>	
 </template>
 
 <script>
+	import cmdNavBar from "@/components/cmd-nav-bar/cmd-nav-bar.vue"
+	import cmdPageBody from "@/components/cmd-page-body/cmd-page-body.vue"
+	import cmdTransition from "@/components/cmd-transition/cmd-transition.vue"
+	import cmdCelItem from "@/components/cmd-cell-item/cmd-cell-item.vue"
+	import cmdAvatar from "@/components/cmd-avatar/cmd-avatar.vue"
+	import config from '@/config/config.js'
+	
 	export default {
 		data() {
 			return {
-				globalUser: {}
+				userIsLogin: false,
+				userInfo: {}
+			}
+		},
+		components: {
+			cmdNavBar,
+			cmdPageBody,
+			cmdTransition,
+			cmdCelItem,
+			cmdAvatar
+		},
+		computed: {
+			getGender: function () {
+				if(this.userIsLogin && this.userInfo) {
+					if (this.userInfo.gender === 1) {
+						return '男'
+					} else if (this.userInfo.gender === 2) {
+						return '女'
+					} else {
+						return '未知'
+					}
+				}
 			}
 		},
 		onShow() {
-			this.globalUser = this.getGlobalUser("globalUser");
+			// 使用挂载方法获取用户数据
+			var userInfo = this.getGlobalUser("userInfo");
+			if (userInfo != null) {
+				this.userIsLogin = true;
+				this.userInfo = JSON.parse(userInfo);
+			} else {
+				this.userIsLogin = false;
+				this.userInfo = {};
+			}
 		},
 		methods: {
-			modifyNickname() {
-				uni.navigateTo({
-					url: "../meNickname/meNickname"
-				})
-			},
-			modifyBirthday() {
-				uni.navigateTo({
-					url: "../meBirthday/meBirthday"
-				})
-			},
-			modifySex() {
-				uni.navigateTo({
-					url: "../meSex/meSex"
-				})
-			},
-			operator() {
-				var me = this;
-				var globalUser = me.getGlobalUser("globalUser");
-				uni.showActionSheet({
-					itemList: ["查看我的头像", "从相册选择上传"],
-					success(res) {
-						var index = res.tapIndex;
-						if (index == 0) {
-							// 预览头像
-							var faceArr = [];
-							faceArr.push(globalUser.faceImage);
-							uni.previewImage({
-								urls: faceArr,
-								current: faceArr[0]
-							})
-						} else if (index == 1) {
-							// 选择上传头像
-							uni.chooseImage({
-								count: 1,
-								sizeType: ["compressed"],
-								sourceType: ["album", "camera"],
-								success(res) {
-									// 获得临时路径
-									var tempFilePath = res.tempFilePaths[0];
-									uni.navigateTo({
-										url: "../meFace/meFace?tempFilePath=" + tempFilePath
-									})
-								}
-							})
-						}
-					}
-				});
-			},
 			cleanStorage() {
 				uni.clearStorageSync();
 				uni.showToast({
@@ -150,31 +76,29 @@
 				})
 			},
 			logout() {
-				var me = this;
-				var globalUser = me.getGlobalUser("globalUser");
-				if (globalUser != null) {
-					var currentUserId = globalUser.id;
+				let skey = this.getSkey()
+				if (skey) {
 					// 发起退出登录的请求
-					var serverUrl = me.serverUrl;
 					uni.request({
-						url: serverUrl + '/user/logout?userId=' + currentUserId,
+						url: config.logoutUrl + '?skey=' + skey,
 						method: 'POST',
 						data: {},
 						success: res => {
 							if (res.data.status == 200) {
-								uni.removeStorageSync("globalUser");
-								uni.switchTab({
-									url: "../me/me"
-								});
+								uni.removeStorageSync("userInfo")
+								uni.removeStorageSync("loginFlag")
+								uni.navigateTo({
+									url: "/pages/login/index"
+								})
 							}
 						},
 						fail: () => {},
 						complete: () => {}
 					});
 				} else {
-					uni.switchTab({
-						url: "../me/me"
-					});
+					uni.navigateTo({
+						url: "/pages/login/index"
+					})
 				}
 			}
 		}
@@ -182,5 +106,19 @@
 </script>
 
 <style>
-	@import url("meInfo.css");
+	.info-padding {
+		padding: 25upx 25upx;
+	}
+	.btn-logout {
+		margin-top: 100upx;
+		width: 80%;
+		border-radius: 50upx;
+		font-size: 16px;
+		color: #fff;
+		background: linear-gradient(to right, #133386, #6a8ce2);
+	}
+
+	.btn-logout-hover {
+		background: linear-gradient(to right, #1333dd, #6a8cfa);
+	}
 </style>

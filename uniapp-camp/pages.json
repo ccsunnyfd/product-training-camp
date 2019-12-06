@@ -16,12 +16,13 @@
 		}, {
 			"path": "pages/me/me",
 			"style": {
-				"app-plus": {
-					"titleNView": false
-				},
-				"navigationBarTextStyle": "white",
-				"navigationBarTitleText": "我的",
-				"navigationBarBackgroundColor": "#00c1de"
+				"navigationStyle": "custom"
+				// "app-plus": {
+				// 	"titleNView": false
+				// }
+				// "navigationBarTextStyle": "white",
+				// "navigationBarTitleText": "我的",
+				// "navigationBarBackgroundColor": "#BBBBBB"
 			}
 		}, {
 			"path": "pages/product/product",
@@ -44,58 +45,29 @@
 				}
 			}
 		}, {
-			"path": "pages/cover/cover",
-			"style": {}
-		}, {
 			"path": "pages/login/index",
 			"style": {
 				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/meInfo/meInfo",
-			"style": {}
-		}, {
-			"path": "pages/meFace/meFace",
 			"style": {
-				"navigationBarTextStyle": "white",
-				"navigationBarTitleText": "头像上传",
-				"navigationBarBackgroundColor": "#000000"
-			}
-		}, {
-			"path": "pages/meNickname/meNickname",
-			"style": {
-				"navigationBarTextStyle": "white",
-				"navigationBarTitleText": "修改昵称",
-				"navigationBarBackgroundColor": "#FFD655"
-			}
-		}, {
-			"path": "pages/meBirthday/meBirthday",
-			"style": {
-				"navigationBarTextStyle": "white",
-				"navigationBarTitleText": "修改生日",
-				"navigationBarBackgroundColor": "#FFD655"
-			}
-		}, {
-			"path": "pages/meSex/meSex",
-			"style": {
-				"navigationBarTextStyle": "white",
-				"navigationBarTitleText": "修改性别",
-				"navigationBarBackgroundColor": "#FFD655"
+				"navigationStyle": "custom"
 			}
 		}
 	],
 	"globalStyle": {
 		// "navigationStyle":"custom"
-		"navigationBarTextStyle": "black",
+		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "RD产品训练营",
-		"navigationBarBackgroundColor": "#BBBBBB",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarBackgroundColor": "#133386",
+		"backgroundColor": "#133386"
 	},
 	"tabBar": {
 		"color": "#bfbfbf",
-		"selectedColor": "#515151",
+		"selectedColor": "#133386",
 		"borderStyle": "black",
-		"backgroundColor": "#ffffff",
+		"backgroundColor": "#133386",
 		"list": [{
 				"pagePath": "pages/index/index",
 				"text": "产品中心",

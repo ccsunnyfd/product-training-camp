@@ -35,7 +35,7 @@ public class UserInfo {
     private String uname; // 用户微信名
 
     @Column(name = "ugender", length = 1, columnDefinition = "int default 0")
-    private Integer ugender;    // 用户性别 1: 男  0：女
+    private Integer ugender;    // 用户性别 1: 男  2：女  0: 未知
 
     @Column(name = "uaddress", columnDefinition = "varchar(128) default ''")
     private String uaddress; // 用户地址

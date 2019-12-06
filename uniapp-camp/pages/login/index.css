@@ -106,7 +106,7 @@
 	height: 60upx;
 }
 
-.third-btn-ico {
+/* .third-btn-ico {
 	background-image: url(../../static/icos/weixin.png);
 	width: 60upx;
 	height: 60upx;
@@ -115,7 +115,7 @@
 	background-repeat: no-repeat;
 	border: none;
 	padding: 0;
-}
+} */
 
 button::after {
 	border: none;

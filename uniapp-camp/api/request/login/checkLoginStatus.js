@@ -1,10 +1,10 @@
 import checkSession from "@/api/request/login/checkSession.js" //检验sessing是否过期 0未过期 1已过期
 
-//用户缓存信息
-const userInfo = (uni.getStorageSync('userInfo'));
 
 //判断登录状态
 const checkLoginStatus = async function() {
+	//用户缓存信息
+	const userInfo = uni.getStorageSync("userInfo");
     if (userInfo) {
         // 检查 session_key 是否过期
         let status = await checkSession()
