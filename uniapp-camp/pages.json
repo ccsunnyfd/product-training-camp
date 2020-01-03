@@ -14,6 +14,11 @@
 				"navigationBarTitleText": "工程师正在披星戴月开发中。。。"
 			}
 		}, {
+			"path": "pages/test/test",
+			"style": {
+				"navigationBarTitleText": "在线考试"
+			}
+		}, {
 			"path": "pages/me/me",
 			"style": {
 				"navigationStyle": "custom"
@@ -55,7 +60,13 @@
 				"navigationStyle": "custom"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/test/testGoingOn/testGoingOn",
+            "style": {
+            	"navigationStyle": "custom"
+            }
+        }
+    ],
 	"globalStyle": {
 		// "navigationStyle":"custom"
 		"navigationBarTextStyle": "white",
@@ -75,7 +86,7 @@
 				"selectedIconPath": "static/tabBarIco/product-active.png"
 			},
 			{
-				"pagePath": "pages/search/search",
+				"pagePath": "pages/test/test",
 				"text": "在线考试",
 				"iconPath": "static/tabBarIco/test.png",
 				"selectedIconPath": "static/tabBarIco/test-active.png"

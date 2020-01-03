@@ -17,7 +17,7 @@
 import { s3Url, removeFiles } from '@/api/data.js'
 import ExampleListContent from '@/components/Example/ExampleListContent'
 export default {
-  name: 'Step2',
+  name: 'ExampleList',
   components: {
     ExampleListContent
   },

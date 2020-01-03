@@ -58,6 +58,13 @@ export const asyncRouterMap = [
         component: RouteView,
         meta: { title: '考试管理', keepAlive: true, icon: 'form', permission: [ 'dashboard' ] },
         children: [
+          // 题库管理
+          {
+            path: '/exam/qa',
+            name: 'Qa',
+            component: () => import('@/views/exam/qa/Qa'),
+            meta: { title: '题库管理', keepAlive: false, permission: ['dashboard'] }
+          },
           // 考试信息
           {
             path: '/exam/examInfo',

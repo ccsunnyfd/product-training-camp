@@ -136,7 +136,7 @@ public class ProductController {
 
     @PostMapping("del")
     @ApiOperation(value = "删除产品")
-    public Map<String, Object> addNewProduct(@RequestParam(value = "prodId") Long prodId) {
+    public Map<String, Object> delProduct(@RequestParam(value = "prodId") Long prodId) {
         Map<String, Object> map = new HashMap<>();
         RespBean respBean = null;
         Product product = productService.getProductById(prodId);

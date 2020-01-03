@@ -43,14 +43,6 @@
 		onPullDownRefresh() {
 			this.refresh();
 		},
-		// #ifdef MP-WEIXIN
-		// 页面被隐藏的时候，暂停播放
-		onHide() {
-			// if(this.videoContext) {
-			// 	this.videoContext.pause();
-			// }
-		},
-		// #endif
 		onLoad() {
 			// 请求轮播图数据
 			uni.request({
@@ -71,22 +63,6 @@
 			this.refresh();
 		},
 		methods: {
-			// iAmPlaying(e) {
-			// 	// 播放一个视频的时候,需要暂停其他正在播放的视频
-			// 	var trailerId = "";
-			// 	if (e) {
-			// 		trailerId = e.currentTarget.dataset.playingindex;
-			// 		this.videoContext = uni.createVideoContext(trailerId);
-			// 	}
-			// 	var hotTrailerList = this.hotTrailerList;
-			// 	for (var i = 0; i < hotTrailerList.length; i ++) {
-			// 		var tempId = hotTrailerList[i].id;
-			// 		if (tempId != trailerId) {
-			// 			uni.createVideoContext(tempId).pause();
-			// 		}
-			// 	}
-			// }
-			// ,
 			refresh() {
 				uni.showLoading({
 					mask: true

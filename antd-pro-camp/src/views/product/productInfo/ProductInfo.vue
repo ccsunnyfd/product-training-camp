@@ -108,6 +108,7 @@ export default {
         keywords: '',
         page: pagination.current,
         size: pagination.pageSize
+        // lastid: this.columns.length > 0 ? this.columns[this.columns.length - 1]._id : 0
         // sortField: sorter.field,
         // sortOrder: sorter.order,
         // ...filters
@@ -171,11 +172,13 @@ export default {
     fetch (params = {}) {
       const page = params.page
       const size = params.size
+      // const lastid = params.lastid
       this.loading = true
       getProductList({
         keywords: '',
         page: page,
         size: size
+        // lastid: lastid
       }).then(res => {
         if (res.status === 'success') {
           const pagination = { ...this.pagination }
