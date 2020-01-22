@@ -59,8 +59,7 @@ public class UserInfoService {
         } else {
             // 更新用户
             userInfo.setId(searchUser.getId());
-            userInfoRepository.save(userInfo);
-
+            UserInfo newUser = userInfoRepository.save(userInfo);
         }
 
         // 去除敏感信息并返回

@@ -81,14 +81,12 @@ public class MPUtils {
     }
 
     public static String getSessionKey(String code) {
-        System.out.println(code);
         String appid = APPID;
         String appSecret = APPSECRET;
         String url = "https://api.weixin.qq.com/sns/jscode2session?" + "appid=" + appid + "&" + "secret=" + appSecret + "&" +
                 "js_code=" + code + "&" + "grant_type=authorization_code";
         RestTemplate rest = new RestTemplate();
         String jsonString = rest.getForObject(url, String.class);
-        System.out.println(jsonString);
         JSONObject jsonObject = JSONObject.parseObject(jsonString);
         String session_key = jsonObject.get("session_key").toString();
         return session_key;

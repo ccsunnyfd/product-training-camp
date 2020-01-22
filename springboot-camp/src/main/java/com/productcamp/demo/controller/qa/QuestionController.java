@@ -1,6 +1,5 @@
 package com.productcamp.demo.controller.qa;
 
-import com.alibaba.fastjson.JSONObject;
 import com.productcamp.demo.model.RespBean;
 import com.productcamp.demo.model.qa.Question;
 import com.productcamp.demo.service.qa.QuestionService;
@@ -9,8 +8,10 @@ import io.swagger.annotations.ApiOperation;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class QuestionController {
     public Map<String, Object> getQuestionById(@RequestParam(value = "id") String id) {
         Map<String, Object> map = new HashMap<>();
         Question res = null;
-        RespBean respBean = null;
+        RespBean respBean;
         try {
             res = questionService.getQuestionById(id);
             respBean = new RespBean("success", "获取题目信息成功");
@@ -56,10 +57,13 @@ public class QuestionController {
     public Map<String, Object> getSampleListByQtype(@RequestParam(value = "qtype") Integer qtype,
                                                     @RequestParam(value = "samplesize") Long samplesize) {
         Map<String, Object> map = new HashMap<>();
-        List<Document> sampleList = null;
-        RespBean respBean = null;
+        List<Question> sampleList = null;
+        Long totalScore = 0L;
+        RespBean respBean;
         try {
-            sampleList = questionService.getSampleListByQtype(qtype, samplesize);
+            Map<String, Object> res = questionService.getSampleListByQtype(qtype, samplesize);
+            sampleList = Collections.unmodifiableList((List<Question>) res.get("sampleList"));
+            totalScore = (Long)res.get("totalScore");
             respBean = new RespBean("success", "采样成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,7 +72,8 @@ public class QuestionController {
 
         map.put("status", respBean.getStatus());
         map.put("msg", respBean.getMsg());
-        map.put("data", sampleList);
+        map.put("sampleList", sampleList);
+        map.put("totalScore", totalScore);
         return map;
     }
 
@@ -80,7 +85,7 @@ public class QuestionController {
                                                     @RequestParam(value = "size", defaultValue = "9") Integer size) {
         Map<String, Object> map = new HashMap<>();
         List<Question> questions = null;
-        RespBean respBean = null;
+        RespBean respBean;
         int totalCount = 0;
         try {
             Page<Question> pageQuestions = questionService.getPageQuestions(keywords == null ? null : keywords.trim(), page, size);
@@ -104,7 +109,7 @@ public class QuestionController {
     @ApiOperation(value = "添加或修改题目")
     public RespBean saveOrUpdateQuestion(@RequestBody Question question) {
         String newId = questionService.saveOrUpdateQuestion(question);
-        if (newId != null) {
+        if (!StringUtils.isEmpty(newId)) {
             return new RespBean("success", "添加或修改题目成功");
         } else {
             return new RespBean("error", "添加或修改题目失败");
@@ -114,8 +119,6 @@ public class QuestionController {
     @PostMapping("del")
     @ApiOperation(value = "删除题目")
     public RespBean delQuestion(@RequestParam(value = "id") String id) {
-        Map<String, Object> map = new HashMap<>();
-        RespBean respBean = null;
         questionService.delQuestion(id);
         return new RespBean("success", "删除题目成功");
     }

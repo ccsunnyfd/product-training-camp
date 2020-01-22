@@ -11,5 +11,5 @@ import java.util.List;
  * @version 1.0
  */
 public interface QuestionRepository extends MongoRepository<Question, String> {
-    List<Question> findByQtype(Integer qtype);
+//    List<Question> findByQtype(Integer qtype);
 }

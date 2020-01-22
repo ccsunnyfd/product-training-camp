@@ -21,9 +21,6 @@
         :loading="loading"
         @change="handleTableChange"
       >
-        <!-- <span slot="qtype" slot-scope="text, record">
-          {{ qtypes[record.qtype-1] }}
-        </span> -->
         <span slot="action" slot-scope="text, record">
           <a-button
             size="small"
@@ -57,20 +54,27 @@
         <span>考试标题: </span>
         <span>{{ test.title }}</span>
       </div>
-      <!-- <div>
-        <span>题目类型：</span>
-        <span>{{ qtypes[question.qtype-1] }}</span>
-      </div> -->
-      <!-- <div>
-        <span>选项: </span>
-        <div v-for="(o, index) in question.options" :key="index">
-          <span>{{ (index+1) + ":" + o.text }}</span>
-        </div>
-      </div> -->
-      <!-- <div>
-        <span>答案解析: </span>
-        <span>{{ question.analysis }}</span>
-      </div> -->
+      <div>
+        <span>总分: </span>
+        <span>{{ test.totalScore }}</span>
+      </div>
+      <a-table
+        :columns="bindCol"
+        :rowKey="record => record.id"
+        :dataSource="test.questionList"
+        :pagination="false"
+        size="small"
+        :border="true"
+      >
+        <span slot="qType" slot-scope="text, record">
+          {{ qTypes[record.qType-1] }}
+        </span>
+        <span slot="optionList" slot-scope="text, record">
+          <div v-for="(o,i) in record.optionAndRight.optionList" :key="o.id">
+            {{ '(' + String.fromCharCode("A".charCodeAt() + i) + ') ' + o.text }}
+          </div>
+        </span>
+      </a-table>
       <div slot="footer">
         <a-button type="primary" @click="showDetail = false">确定</a-button>
       </div>
@@ -78,86 +82,78 @@
     <!-- 新建和修改对话框 -->
     <a-modal title="编辑考试" v-model="showEdit" :closable="false" :mask-closable="false">
       <a-form :form="form">
-        <a-form-item>
-          <a-input
-            v-decorator="[
-              'id',
-              {
-                initialValue: test.id
-              }
-            ]"
-            type="hidden"
-            style="position: absolute">
-          </a-input>
-        </a-form-item>
-        <a-form-item>
-          <a-input
-            v-decorator="[
-              'questionList',
-              {
-                initialValue: JSON.stringify(test.questionList),
-                rules: [{ validator: checkQuestionList }]
-              }
-            ]"
-            type="hidden"
-            style="position: absolute">
-          </a-input>
-        </a-form-item>
-        <!-- <a-form-item label="题目类型：">
-          <a-select
-            v-decorator="[
-              'qtype',
-              {
-                initialValue: question.qtype,
-                rules: [{ required: true, message: '必须选择题目类型' }]}
-            ]"
-            placeholder="题目类型">
-            <a-select-option v-for="(d,index) in qtypes" :value="index+1" :key="d">{{ d }}</a-select-option>
-          </a-select>
-        </a-form-item> -->
-        <a-form-item label="考试标题：">
-          <a-input
-            v-decorator="[
-              'title',
-              {
-                initialValue: test.title,
-                rules: [{ required: true, message: '必须填写考试标题' }]
-              }
-            ]"
-            type="textarea"
-            row="2"
-            placeholder="考试标题"
-          ></a-input>
-        </a-form-item>
-        <div>
-          <div>选择关联模板组合题目</div>
-          <a-button type="dashed" @click="ranTestTemp(3, 4, 3)">模板(3判断/4单选/3多选)</a-button>
-        </div>
-        <!-- <a-form-item label="选项：">
-          <option-list
-            v-decorator="[
-              'options',
-              {
-                initialValue: question.options,
-                rules: [{ validator: checkOptions }]
-              }
-            ]"
-          />
-        </a-form-item>
-        <a-form-item label="答案解析：">
-          <a-input
-            v-decorator="[
-              'analysis',
-              {
-                initialValue: question.analysis
-              }
-            ]"
-            type="textarea"
-            row="1"
-            placeholder="答案解析"
-          ></a-input>
-        </a-form-item> -->
-      </a-form>
+        <a-row :gutter="8">
+          <a-col :span="5">
+            <a-form-item>
+              <a-input
+                v-decorator="[
+                  'id',
+                  {
+                    initialValue: test.id
+                  }
+                ]"
+                type="hidden"
+                style="position: absolute">
+              </a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :span="8">
+            <a-form-item>
+              <a-input
+                v-decorator="[
+                  'questionList',
+                  {
+                    initialValue: JSON.stringify(test.questionList),
+                    rules: [{ validator: checkQuestionList }]
+                  }
+                ]"
+                type="hidden"
+                style="position: absolute">
+              </a-input>
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="8">
+          <a-col :span="16">
+            <a-form-item label="考试标题：">
+              <a-input
+                v-decorator="[
+                  'title',
+                  {
+                    initialValue: test.title,
+                    rules: [{ required: true, message: '必须填写考试标题' }]
+                  }
+                ]"
+                type="textarea"
+                row="2"
+                placeholder="考试标题"
+              ></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :span="5">
+            <a-form-item label="当前试卷总分：">
+              <a-input
+                v-decorator="[
+                  'totalScore',
+                  {
+                    initialValue: test.totalScore,
+                    rules: [{ required: true, message: '总分不为空' }]
+                  }
+                ]"
+                disabled
+                type="text">
+              </a-input>
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="8">
+          <a-col :span="16">
+            <div>
+              <div>选择关联模板组合题目</div>
+              <a-button type="dashed" @click="ranTestTemp(3, 4, 3)">模板(3判断/4单选/3多选)</a-button>
+            </div>
+          </a-col>
+        </a-row></a-form>
       <div slot="footer">
         <a-button @click="cancelTest">取消</a-button>
         <a-button type="primary" :loading="saveLoading" @click="saveTest">保存</a-button>
@@ -171,35 +167,15 @@
         size="small"
         :border="true"
       >
-        <span slot="qtype" slot-scope="text, record">
-          {{ qtypes[record.qType-1] }}
+        <span slot="qType" slot-scope="text, record">
+          {{ qTypes[record.qType-1] }}
         </span>
-        <span slot="options" slot-scope="text, record">
-          <div v-for="(o,i) in record.options" :key="o._id">
+        <span slot="optionList" slot-scope="text, record">
+          <div v-for="(o,i) in record.optionAndRight.optionList" :key="o.id">
             {{ '(' + String.fromCharCode("A".charCodeAt() + i) + ') ' + o.text }}
           </div>
         </span>
       </a-table>
-      <!-- <div v-for="(q, qIndex) in test.questionList" :key="qIndex">
-        <div>
-          <span>考试标题: </span>
-          <span>{{ q.title }}</span>
-        </div>
-        <div>
-          <span>题目类型：</span>
-          <span>{{ qtypes[q.qtype-1] }}</span>
-        </div>
-        <div>
-          <span>选项: </span>
-          <div v-for="(o, index) in q.options" :key="index">
-            <span>{{ (index+1) + ":" + o.text }}</span>
-          </div>
-        </div>
-        <div>
-          <span>答案解析: </span>
-          <span>{{ q.analysis }}</span>
-        </div>
-      </div> -->
     </a-modal>
   </div>
 </template>
@@ -213,6 +189,12 @@ const columns = [
     dataIndex: 'title',
     // sorter: true,
     width: '20%'
+  },
+  {
+    title: '总分',
+    dataIndex: 'totalScore',
+    // sorter: true,
+    width: '10%'
   },
   {
     title: '操作',
@@ -229,14 +211,19 @@ const bindCol = [
   },
   {
     title: '类型',
-    dataIndex: 'qtype',
+    dataIndex: 'qType',
     width: '10%',
-    scopedSlots: { customRender: 'qtype' }
+    scopedSlots: { customRender: 'qType' }
+  },
+  {
+    title: '分值',
+    dataIndex: 'points',
+    width: '10%'
   },
   {
     title: '选项',
-    key: 'options',
-    scopedSlots: { customRender: 'options' }
+    key: 'optionList',
+    scopedSlots: { customRender: 'optionList' }
   }
 ]
 
@@ -248,9 +235,6 @@ export default {
       size: 10
     })
   },
-  // components: {
-  //   OptionList
-  // },
   data () {
     return {
       form: this.$form.createForm(this),
@@ -261,9 +245,10 @@ export default {
       loading: false,
       columns,
       data: [],
-      qtypes: ['判断题', '单选题', '多选题'],
+      qTypes: ['判断题', '单选题', '多选题'],
       test: {
         title: '',
+        totalScore: 0,
         questionList: []
       },
       bindCol
@@ -298,7 +283,8 @@ export default {
     handleAddTest () {
       this.test = {
         title: '',
-        questionList: []
+        totalScore: 0,
+        qustionList: []
       }
       this.form.resetFields()
       this.showEdit = true
@@ -367,8 +353,8 @@ export default {
     // 保存考试
     saveTest () {
       this.form.validateFields((err, values) => {
+        values.questionList = JSON.parse(values.questionList)
         if (!err) {
-          values.questionList = JSON.parse(values.questionList)
           saveOrUpdateTest(values).then(res => {
             if (res.status === 'success') {
               this.fetch({
@@ -383,25 +369,29 @@ export default {
       })
     },
     ranTestTemp (samplesize1, samplesize2, samplesize3) {
-      const qtype1 = 1
-      const qtype2 = 2
-      const qtype3 = 3
+      const qType1 = 1
+      const qType2 = 2
+      const qType3 = 3
       Promise.all([
         // 获取判断题
-        getSampleListByQtype(qtype1, samplesize1),
+        getSampleListByQtype(qType1, samplesize1),
         // 获取单选题
-        getSampleListByQtype(qtype2, samplesize2),
+        getSampleListByQtype(qType2, samplesize2),
         // 获取多选题
-        getSampleListByQtype(qtype3, samplesize3)
+        getSampleListByQtype(qType3, samplesize3)
       ]).then((results) => {
         this.test.questionList = [
-          ...results[0].data,
-          ...results[1].data,
-          ...results[2].data
+          ...results[0].sampleList,
+          ...results[1].sampleList,
+          ...results[2].sampleList
         ]
-        console.log(this.test.questionList)
+        this.test.totalScore = 0
+        results.forEach(element => {
+          this.test.totalScore += element.totalScore
+        })
         this.form.setFieldsValue({
-          questionList: JSON.stringify(this.test.questionList)
+          questionList: JSON.stringify(this.test.questionList),
+          totalScore: this.test.totalScore
         })
       })
     }

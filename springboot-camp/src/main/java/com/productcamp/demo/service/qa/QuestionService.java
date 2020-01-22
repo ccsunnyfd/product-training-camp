@@ -1,9 +1,12 @@
 package com.productcamp.demo.service.qa;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.productcamp.demo.model.qa.Option;
+import com.productcamp.demo.model.qa.OptionAndRight;
 import com.productcamp.demo.model.qa.Question;
 import com.productcamp.demo.repository.qa.QuestionRepository;
 import org.bson.Document;
+import org.bson.json.JsonWriterSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,8 +18,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * QuestionService
@@ -36,29 +42,35 @@ public class QuestionService {
     }
 
     // 按照题目类型抽样取题
-    public List<Document> getSampleListByQtype(Integer qtype, Long sampleSize) {
-        Criteria criteria = Criteria.where("qtype").is(qtype);
+    public Map<String, Object> getSampleListByQtype(Integer qType, Long sampleSize) {
+        Criteria criteria = Criteria.where("qType").is(qType);
 //        TypedAggregation<Question> agg = Aggregation.newAggregation(Question.class,
 //                Aggregation.match(criteria), Aggregation.sample(sampleSize), Aggregation.project("id"));
         TypedAggregation<Question> agg = Aggregation.newAggregation(Question.class,
                 Aggregation.match(criteria), Aggregation.sample(sampleSize));
         AggregationResults<Document> result = mongoTemplate.aggregate(agg, Document.class);
 //        List<JSONObject> sampleList = result.getMappedResults().stream().map(item -> JSONObject.parseObject(item.toJson())).collect(Collectors.toList());
-        List<Document> sampleList = result.getMappedResults();
-        for ( Document x: sampleList) {
-            x.put("id", x.getObjectId("_id").toString());
-            x.remove("_id");
-        };
-        return sampleList;
+        List<Document> sampleDocumentList = result.getMappedResults();
+
+//        for ( Document x: sampleList) {
+//            x.put("id", x.getObjectId("_id").toString());
+//            x.remove("_id");
+//        }
+        Long totalScore = 0L;
+        List<Question> sampleList = sampleDocumentList.stream().map(x -> JSON.parseObject(x.toJson(JsonWriterSettings.builder().build()), Question.class)).collect(Collectors.toList());
+        for (Question q: sampleList
+             ) {
+            totalScore += q.getPoints();
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("sampleList", sampleList);
+        map.put("totalScore", totalScore);
+        return map;
     }
 
     public Question getQuestionById(String id) {
         Optional<Question> questionOptional = questionRepository.findById(id);
-        if (questionOptional.isPresent()) {
-            return questionOptional.get();
-        } else {
-            return null;
-        }
+        return questionOptional.orElse(null);
     }
 
     // 注意，PageRequest.of的第一个参数表示第几页，从0开始计数，这与通常的分页从1开始有些不同，要处理下

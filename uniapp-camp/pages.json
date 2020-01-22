@@ -66,6 +66,26 @@
             	"navigationStyle": "custom"
             }
         }
+        ,{
+            "path" : "pages/test/testResult/testResult",
+			"style": {
+				"navigationBarTitleText": "考试结果"
+			}
+        }
+        ,{
+            "path" : "pages/test/testCheck/testCheck",
+            "style": {
+            	"navigationStyle": "custom"
+            }
+        }
+        ,{
+            "path" : "pages/test/testList/testList",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/test/testHist/testHist",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		// "navigationStyle":"custom"

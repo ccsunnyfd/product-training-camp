@@ -13,14 +13,9 @@ import lombok.*;
 @Builder
 public class Option {
     /**
-     * 每次插入时，前端生成一个uuid用以子文档的key
+     * 选项的id
      */
-    private String _id;
-
-    /**
-     * 选项类型
-     */
-    private Integer otype = 1;
+    private String id;
 
     /**
      * 选项内容
@@ -33,12 +28,7 @@ public class Option {
     private String img;
 
     /**
-     * 是否正确答案
+     * 非引用文档字段。是否选中
      */
-    private Boolean right;
-
-    /**
-     * 用户是否选择
-     */
-    private Boolean selected;
+    private Boolean checked;
 }

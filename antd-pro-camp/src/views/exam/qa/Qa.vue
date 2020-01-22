@@ -21,8 +21,8 @@
         :loading="loading"
         @change="handleTableChange"
       >
-        <span slot="qtype" slot-scope="text, record">
-          {{ qtypes[record.qtype-1] }}
+        <span slot="qType" slot-scope="text, record">
+          {{ qTypes[record.qType-1] }}
         </span>
         <span slot="action" slot-scope="text, record">
           <a-button
@@ -54,21 +54,26 @@
     <!-- 查看对话框 -->
     <a-modal title="题目查看" v-model="showDetail" :closable="false" :mask-closable="false">
       <div>
-        <span>题目标题: </span>
+        <span style="font-weight: bold;">题目标题: </span>
         <span>{{ question.title }}</span>
       </div>
       <div>
-        <span>题目类型：</span>
-        <span>{{ qtypes[question.qtype-1] }}</span>
+        <span style="font-weight: bold;">题目类型：</span>
+        <span>{{ qTypes[question.qType-1] }}</span>
       </div>
       <div>
-        <span>选项: </span>
-        <div v-for="(o, index) in question.options" :key="index">
-          <span>{{ (index+1) + ":" + o.text }}</span>
+        <span style="font-weight: bold;">选项: </span>
+        <div v-for="(o, index) in question.optionAndRight.optionList" :key="index">
+          <span>{{ "(" + String.fromCharCode('A'.charCodeAt() + index) + ") " + o.text }}</span>
+          <a-icon v-if="question.optionAndRight.rightIds.indexOf(o.id) !== -1" type="check" style="color: green;" />
         </div>
       </div>
       <div>
-        <span>答案解析: </span>
+        <span style="font-weight: bold;">分值：</span>
+        <span>{{ question.points }}</span>
+      </div>
+      <div>
+        <span style="font-weight: bold;">答案解析: </span>
         <span>{{ question.analysis }}</span>
       </div>
       <div slot="footer">
@@ -94,13 +99,26 @@
         <a-form-item label="题目类型：">
           <a-select
             v-decorator="[
-              'qtype',
+              'qType',
               {
-                initialValue: question.qtype,
+                initialValue: question.qType,
                 rules: [{ required: true, message: '必须选择题目类型' }]}
             ]"
+            @change="handleQtypeChange"
             placeholder="题目类型">
-            <a-select-option v-for="(d,index) in qtypes" :value="index+1" :key="d">{{ d }}</a-select-option>
+            <a-select-option v-for="(d,index) in qTypes" :value="index+1" :key="d">{{ d }}</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="分值：">
+          <a-select
+            v-decorator="[
+              'points',
+              {
+                initialValue: question.points,
+                rules: [{ required: true, message: '必须选择题目分值' }]}
+            ]"
+            placeholder="分值">
+            <a-select-option v-for="d in pointTypes" :value="d" :key="d">{{ d }}</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item label="题目：">
@@ -118,10 +136,11 @@
         </a-form-item>
         <a-form-item label="选项：">
           <option-list
+            :type="question.qType"
             v-decorator="[
-              'options',
+              'optionAndRight',
               {
-                initialValue: question.options,
+                initialValue: { optionList: question.optionAndRight.optionList, rightIds: question.optionAndRight.rightIds },
                 rules: [{ validator: checkOptions }]
               }
             ]"
@@ -162,8 +181,12 @@ const columns = [
   },
   {
     title: '类型',
-    dataIndex: 'qtype',
-    scopedSlots: { customRender: 'qtype' }
+    dataIndex: 'qType',
+    scopedSlots: { customRender: 'qType' }
+  },
+  {
+    title: '分值',
+    dataIndex: 'points'
   },
   {
     title: '操作',
@@ -193,14 +216,23 @@ export default {
       loading: false,
       columns,
       data: [],
-      qtypes: ['判断题', '单选题', '多选题'],
+      qTypes: ['判断题', '单选题', '多选题'],
+      pointTypes: [2, 3, 5, 10, 20],
       question: {
+        points: 10,
         title: '',
-        options: []
+        analysis: '',
+        optionAndRight: {
+          optionList: [],
+          rightIds: []
+        }
       }
     }
   },
   methods: {
+    handleQtypeChange (value) {
+      this.question.qType = value
+    },
     handleTableChange (pagination, filters, sorter) {
       const pager = { ...this.pagination }
       pager.current = pagination.current
@@ -227,10 +259,14 @@ export default {
     },
     // 新增一条题目信息的对话框
     handleAddQuestion () {
-      // for (var key in this.question) {
-      //   delete this.question[key]
-      // }
-      this.question = {}
+      this.question = {
+        title: '',
+        analysis: '',
+        optionAndRight: {
+          optionList: [],
+          rightIds: []
+        }
+      }
       this.form.resetFields()
       this.showEdit = true
     },
@@ -286,14 +322,26 @@ export default {
     },
     // 对选项列表的校验规则
     checkOptions (rule, value, callback) {
-      const status = value.every(element => {
-        return (element.text && element.text.trim() !== '')
-      })
+      let status = true
+      const options = value.optionList
+      const rightIds = value.rightIds
+      const countRight = rightIds.length
+      for (let i = 0; i < options.length; i = i + 1) {
+        if (!options[i].text || options[i].text.trim() === '') {
+          status = false
+          break
+        }
+      }
+      if (this.question.qType === 3 && countRight < 2) {
+        status = false
+      } else if (countRight < 1) {
+        status = false
+      }
       if (status) {
         callback()
       } else {
         // eslint-disable-next-line standard/no-callback-literal
-        callback('所有选项都不能为空')
+        callback('所有选项都不能为空且多选题至少2个答案单选判断至少1个答案')
       }
     },
     // 保存题目

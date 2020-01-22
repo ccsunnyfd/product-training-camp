@@ -1,22 +1,14 @@
 package com.productcamp.demo.service.qa;
 
-import com.productcamp.demo.model.qa.Question;
 import com.productcamp.demo.model.qa.Test;
 import com.productcamp.demo.repository.qa.TestRepository;
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * TestService
@@ -62,13 +54,16 @@ public class TestService {
     public List<Test> getTestsByStatusAndCategory(Integer status, Long category) {
 //        Criteria criteria = Criteria.where("userStatusList.status").is(status).and("category").is(category);
         List<Test> testList = testRepository.findAll();
+        for ( Test t: testList) {
+            t.setQuestionList(null);
+        }
         return testList;
     }
 
     // 插入或更新条目
     public String saveOrUpdateTest(Test test) {
         Test newT;
-        if (StringUtils.isEmpty(test.getId())) {
+        if (test.getId() == null) {
             newT = testRepository.insert(test);
         } else {
             newT = testRepository.save(test);
@@ -79,4 +74,6 @@ public class TestService {
     public void delTest(String id) {
         testRepository.deleteById(id);
     }
+
+
 }

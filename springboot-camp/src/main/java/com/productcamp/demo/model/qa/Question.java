@@ -2,8 +2,10 @@ package com.productcamp.demo.model.qa;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -14,7 +16,7 @@ import java.util.List;
  *
  * @version 1.0
  */
-@Document
+@Document(collection = "question")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,44 +26,38 @@ public class Question {
     private String id;
 
     /**
-     * 题目类型，1判断题；2单选题；3多选题
-     */
-    @Indexed(background = true)
-    private Integer qtype;
-
-    /**
      * 题目标题
      */
     private String title;
 
     /**
-     * 题目选项
+     * 题目类型，1判断题；2单选题；3多选题
      */
-    private List<Option> options;
+    @Indexed(background = true)
+    @JsonProperty("qType")
+    private Integer qType;
 
     /**
-     * 数据标题
+     * 选项和正确勾选
      */
-    private String datatitle;
+    @JsonProperty("optionAndRight")
+    private OptionAndRight optionAndRight;
+
     /**
      * 解析
      */
     private String analysis;
 
     /**
-     * 这题是否答对
-     */
-    private Boolean right;
-
-    /**
-     * 这题答的时长
-     */
-    private Long duration;
-
-    /**
      * 这题的得分
      */
     private Long points;
+
+    /**
+     * 非引用文档字段。本题得分
+     */
+    @JsonProperty("getPoints")
+    private Long getPoints;
 
     private Date createTime;
     private Date updateTime;
