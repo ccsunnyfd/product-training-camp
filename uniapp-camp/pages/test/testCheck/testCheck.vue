@@ -6,9 +6,11 @@
 				<view class="header-area-back-icon"  @click="navigateBack">
 					<i class="iconfont icon-daohang_jiantou_zuo_dingbu"></i>
 				</view>
-				<wuc-tab :tab-list="tabList" tab-class="tab-class" textFlex :tabCur.sync="TabCur" select-class="textColor"></wuc-tab>
 				<view class="header-area-statistics-icon" @click="statisticsShow = ! statisticsShow">
 					<i class="iconfont icon-chengji3"></i>
+				</view>
+				<view class="tab-wrapper">
+					<wuc-tab :tab-list="tabList" tab-class="tab-class" textFlex :tabCur.sync="TabCur" select-class="textColor"></wuc-tab>
 				</view>
 			</view>
 		</view>

@@ -100,7 +100,7 @@ public class UserRecordService {
                     userRecordRepository.save(nowRecord);
                 }
             }
-        }, (timeLimit + 1) * 60000); //指定启动定时器(timeLimit+3)分钟之后运行定时器任务run方法，并且只运行一次
+        }, timeLimit * 60000 + 10000); //指定启动定时器timeLimit分钟+10秒种之后运行定时器任务run方法，并且只运行一次
     }
 
     // 用户点击进行中的考卷时，加载进行中的考试数据（包括部分答题记录），返回记录的id
@@ -223,7 +223,7 @@ public class UserRecordService {
 
     // 查询当前用户的答题记录列表，返回信息包括recordId、title、score、updatedAt
     public List<UserRecord> getUserRecordList(Long userId) {
-        return userRecordRepository.findByUserIdOrderByUpdatedAtDesc(userId);
+        return userRecordRepository.findByUserIdOrderByUpdatedAtDesc(userId, true);
     }
 
     // 查询当前用户该门考试的答题记录

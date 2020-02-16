@@ -11,19 +11,22 @@
 	padding-top: 80upx;
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+	justify-content: flex-start;
 	align-items: center;
 	background-color: #00C1DE;
+}
+.tab-wrapper {
 }
 .tab-class {
 	font-size: 35upx;
 }
 .header-area-back-icon {
 	font-size: 25px;
+	width: 60upx;
 }
 .header-area-statistics-icon {
 	font-size: 25px;
-	margin-right: 30upx;
+	width: 130upx;
 }
 
 /* 标签页 start */
