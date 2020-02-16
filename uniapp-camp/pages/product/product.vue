@@ -15,29 +15,12 @@
 						</view>
 					</cmd-transition>
 				</cmd-page-body>
-				
 
-				<!--<uni-list v-for="(item) in productList" :key="item.id">
-						<view :data-prodId="item.id" @click="showProduct">
-							<uni-list-item class="left-nav-prodList-item" :title="item.name" show-extra-icon="true" :extra-icon="extraIcon(item)">
-							</uni-list-item>
-						</view>
-					</uni-list> -->
-				<!-- </view> -->
 			</view>
 		</uni-drawer>
 		<!-- 抽屉侧滑菜单end -->
 
-		<!-- 顶部蓝色导航栏start -->
-<!-- 		<view class="top-nav-wrapper">
-			<view class="top-nav-directory-wrapper" @click="handleDrawerOpen">
-				<i class="iconfont icon-mulu top-nav-directoryicon"></i>
-				<text class="top-nav-title">产 品 中 心</text>
-			</view>
-			<view class="top-nav-search-wrapper">
-				<i class="iconfont icon-fangdajing top-nav-searchicon"></i>
-			</view>
-		</view> -->
+
 		<top @catalogClicked="this.visible = !this.visible"></top>
 		<!-- 顶部蓝色导航栏end -->
 
@@ -225,30 +208,8 @@
 				this.visible = false;
 			}
 		},
-		// #ifdef MP-WEIXIN
-		// 页面初次渲染完成,获得视频上下文对象
-		// onReady() {
-		// 	this.videoContext = uni.createVideoContext('myTrailer');
-		// },
-		// onHide() {
-		// 	// 页面被隐藏的时候,暂停播放
-		// 	this.videoContext.pause();
-		// },
-		// onShow() {
-		// 	// 页面被再次显示的时候,可以继续播放
-		// 	if (this.videoContext) {
-		// 		this.videoContext.play();
-		// 	}
-		// },
-		// #endif
 		onLoad(params) {
 			this.prodId = params.prodId;
-
-			// 通过API修改导航栏的属性
-			// uni.setNavigationBarColor({
-			// 	frontColor: "#ffffff",
-			// 	backgroundColor: "#000000"
-			// })
 
 			// 请求产品列表
 			uni.request({
@@ -270,9 +231,10 @@
 				},
 				fail: () => {},
 				complete: () => {}
-			});
-
-			this.refresh();
+			})
+		},
+		onShow() {
+			this.refresh()
 		}
 		// 此函数仅仅只支持在小程序端的分享,分享到微信群或者微信好友
 		// onShareAppMessage() {

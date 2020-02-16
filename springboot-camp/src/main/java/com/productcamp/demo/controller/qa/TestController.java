@@ -3,7 +3,11 @@ package com.productcamp.demo.controller.qa;
 import com.productcamp.demo.model.RespBean;
 import com.productcamp.demo.model.qa.Question;
 import com.productcamp.demo.model.qa.Test;
+import com.productcamp.demo.model.qa.UserRecord;
+import com.productcamp.demo.pojo.qa.TestSubmitBO;
+import com.productcamp.demo.service.UserInfoService;
 import com.productcamp.demo.service.qa.TestService;
+import com.productcamp.demo.service.qa.UserRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +27,22 @@ import java.util.*;
 @Api(value = "测试的api接口", tags={"测试相关"})
 public class TestController {
     private TestService testService;
+    private UserInfoService userInfoService;
+    private UserRecordService userRecordService;
 
     @Autowired
     public void setTestService(TestService testService) {
         this.testService = testService;
+    }
+
+    @Autowired
+    public void setUserInfoService(UserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
+    }
+
+    @Autowired
+    public void setUserRecordService(UserRecordService userRecordService) {
+        this.userRecordService = userRecordService;
     }
 
     @GetMapping("detail")
@@ -49,18 +65,17 @@ public class TestController {
         return map;
     }
 
-    @GetMapping("getTestQuestions")
+    @PostMapping("getTestQuestions")
     @ApiOperation(value = "根据id获取试卷信息（不包括答案）")
-    public Map<String, Object> getTestQuestions(@RequestParam(value = "id") String id) {
+    public Map<String, Object> getTestQuestions(@RequestBody TestSubmitBO testSubmitBO) {
         Map<String, Object> map = new HashMap<>();
-        Test res = null;
+        UserRecord res = null;
         RespBean respBean;
         try {
-            res = testService.getTestById(id);
-            List<Question> questionList = res.getQuestionList();
-            for ( Question question: questionList) {
-                question.getOptionAndRight().setRightIds(null);
-            }
+            String skey = testSubmitBO.getSkey();
+            String testId = testSubmitBO.getTestId();
+            Long userId = userInfoService.getUserIdBySkey(skey);
+            res = userRecordService.clickExam(userId, testId);
             respBean = new RespBean("success", "获取测试信息成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,13 +116,16 @@ public class TestController {
 
     @GetMapping("search/getTests")
     @ApiOperation(value = "根据状态和分类获取在线考试列表")
-    public Map<String, Object> getTestsByStatusAndCategory(@RequestParam(value = "status", required=false) Integer status,
-                                                          @RequestParam(value = "category", required=false) Long category) {
+    public Map<String, Object> getTestsByStatusAndCategory(@RequestParam(value = "skey", required=true) String skey,
+                                                            @RequestParam(value = "status", required=false) Integer status,
+                                                            @RequestParam(value = "category", required=false) Long category) {
+        // status: 1. 进行中 2. 可参加 3. 全部
         Map<String, Object> map = new HashMap<>();
-        List<Test> tests = null;
+        Map<String, Object> testMap = null;
         RespBean respBean;
         try {
-            tests = testService.getTestsByStatusAndCategory(status, category);
+            Long userId = userInfoService.getUserIdBySkey(skey);
+            testMap = testService.getTestsByStatusAndCategory(userId, status, category);
             respBean = new RespBean("success", "获取在线考试列表成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,7 +134,7 @@ public class TestController {
 
         map.put("status", respBean.getStatus());
         map.put("msg", respBean.getMsg());
-        map.put("data", tests);
+        map.put("data", testMap);
         return map;
     }
 

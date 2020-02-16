@@ -7,12 +7,12 @@
 				</view>
 			</view>
 			<view class="nav-wrapper">
-				<div class="exam-look-analye" @click="handleExamCheck">
+				<view class="exam-look-analye" @click="handleExamCheck">
 					查看试卷
-				</div>
-				<div class="exam-again-test" @click="handleExamAgain">
+				</view>
+				<view class="exam-again-test" @click="handleExamAgain">
 					再考一次
-				</div>
+				</view>
 			</view>
 	</view>
 </template>

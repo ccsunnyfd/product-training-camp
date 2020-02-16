@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -20,7 +21,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Test {
     @Id
     private String id;
@@ -55,10 +56,20 @@ public class Test {
     private Long timeLimit;
 
     /**
-     * 非引用文档字段。试卷得分
+     * 考试或记录创建的时间
      */
-    private Long score;
+    @JsonProperty("createdAt")
+    private Date createdAt;
 
-    private Date createTime;
-    private Date updateTime;
+    /**
+     * 考试或记录更新的时间
+     */
+    @JsonProperty("updatedAt")
+    private Date updatedAt;
+
+    /**
+     * 是否要随机打乱题序，默认true
+     */
+    @JsonProperty("shuffle")
+    private Boolean shuffle = true;
 }

@@ -1,7 +1,9 @@
 package com.productcamp.demo.service.qa;
 
 import com.productcamp.demo.model.qa.Test;
+import com.productcamp.demo.model.qa.UserRecord;
 import com.productcamp.demo.repository.qa.TestRepository;
+import com.productcamp.demo.repository.qa.UserRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +11,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * TestService
@@ -21,10 +24,16 @@ public class TestService {
     private MongoTemplate mongoTemplate;
 
     private TestRepository testRepository;
+    private UserRecordRepository userRecordRepository;
 
     @Autowired
     public void setTestRepository(TestRepository testRepository) {
         this.testRepository = testRepository;
+    }
+
+    @Autowired
+    public void setUserRecordRepository(UserRecordRepository userRecordRepository) {
+        this.userRecordRepository = userRecordRepository;
     }
 
     public Test getTestById(String id) {
@@ -51,13 +60,24 @@ public class TestService {
         return page;
     }
 
-    public List<Test> getTestsByStatusAndCategory(Integer status, Long category) {
+    // 小程序端根据考试状态获取考试列表（包括进行中的考试记录）
+    public Map<String, Object> getTestsByStatusAndCategory(Long userId, Integer status, Long category) {
+        // status: 1. 进行中 2. 可参加 3. 全部
 //        Criteria criteria = Criteria.where("userStatusList.status").is(status).and("category").is(category);
-        List<Test> testList = testRepository.findAll();
-        for ( Test t: testList) {
-            t.setQuestionList(null);
+        Map<String, Object> map = new HashMap<>();
+        List<UserRecord> recordList = userRecordRepository.findByUserIdAndCompletedOrderByUpdatedAtDesc(userId, false);
+        if (status == 1L) {
+            map.put("onGoing", recordList);
+        } else {
+            if (status == 3L) {
+                map.put("onGoing", recordList);
+            }
+            List<Test> testList = testRepository.findByOrderByUpdatedAtDesc();
+            List<String> onGoingTestIdList = recordList.stream().map(UserRecord::getTestId).collect(Collectors.toList());
+            testList = testList.stream().filter(x -> !(onGoingTestIdList.contains(x.getId()))).collect(Collectors.toList());
+            map.put("ready", testList);
         }
-        return testList;
+        return map;
     }
 
     // 插入或更新条目

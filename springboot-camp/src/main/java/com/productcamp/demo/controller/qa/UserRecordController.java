@@ -38,6 +38,25 @@ public class UserRecordController {
         this.userInfoService = userInfoService;
     }
 
+    @PostMapping("pauseTest")
+    @ApiOperation(value = "中途退出考试")
+    public Map<String, Object> pauseTest(@RequestBody TestSubmitBO testSubmitBO) {
+        Map<String, Object> map = new HashMap<>();
+        RespBean respBean;
+        try {
+            String skey = testSubmitBO.getSkey();
+            Long userId = userInfoService.getUserIdBySkey(skey);
+            userRecordService.pauseTest(userId, testSubmitBO.getRecordId(), testSubmitBO.getAnswerMap());
+            respBean = new RespBean("success", "中途退出考试成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            respBean = new RespBean("failure", "中途退出考试失败");
+        }
+        map.put("status", respBean.getStatus());
+        map.put("msg", respBean.getMsg());
+        return map;
+    }
+
     @PostMapping("processSubmittedTest")
     @ApiOperation(value = "处理提交的考卷")
     public Map<String, Object> processSubmittedTest(@RequestBody TestSubmitBO testSubmitBO) {
@@ -47,7 +66,7 @@ public class UserRecordController {
         try {
             String skey = testSubmitBO.getSkey();
             Long userId = userInfoService.getUserIdBySkey(skey);
-            testRecordBO = userRecordService.processSubmittedTest(userId, testSubmitBO.getTestId(), testSubmitBO.getAnswerMap());
+            testRecordBO = userRecordService.processSubmittedTest(userId, testSubmitBO.getRecordId(), testSubmitBO.getAnswerMap());
             respBean = new RespBean("success", "处理提交的考卷成功");
         } catch (Exception e) {
             e.printStackTrace();

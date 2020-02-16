@@ -30,5 +30,5 @@ public class Option {
     /**
      * 非引用文档字段。是否选中
      */
-    private Boolean checked;
+    private Boolean checked=false;
 }

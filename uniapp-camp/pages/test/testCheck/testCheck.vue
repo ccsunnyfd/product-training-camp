@@ -1,22 +1,25 @@
 <template>
 	<!-- tabPane start -->
-	<view class="page">
-		<view class="header-area">
-			<view class="header-area-back-icon"  @click="navigateBack">
-				<i class="iconfont icon-daohang_jiantou_zuo_dingbu"></i>
-			</view>
-			<wuc-tab :tab-list="tabList" tab-class="tab-class" textFlex :tabCur.sync="TabCur" select-class="textColor"></wuc-tab>
-			<view class="header-area-statistics-icon" @click="statisticsShow = ! statisticsShow">
-				<i class="iconfont icon-chengji3"></i>
+	<view class="page position-class">
+		<view class="position-absolute">
+			<view class="header-area">
+				<view class="header-area-back-icon"  @click="navigateBack">
+					<i class="iconfont icon-daohang_jiantou_zuo_dingbu"></i>
+				</view>
+				<wuc-tab :tab-list="tabList" tab-class="tab-class" textFlex :tabCur.sync="TabCur" select-class="textColor"></wuc-tab>
+				<view class="header-area-statistics-icon" @click="statisticsShow = ! statisticsShow">
+					<i class="iconfont icon-chengji3"></i>
+				</view>
 			</view>
 		</view>
+		
 		<view v-show="statisticsShow">
 			<view class="number-card">
-				<div class="card-content">
-					<div class="card-content-title">题目统计</div>
-					<div class="split"></div>
-					<div class="box-list">
-						<div class="box">
+				<view class="card-content">
+					<view class="card-content-title">题目统计</view>
+					<view class="split"></view>
+					<view class="box-list">
+						<view class="box">
 							<view v-for="(q, index) in questionList" :key="q.id">
 								<view v-if="q.getPoints === 0" class="iconBox icon-answer-no">
 									{{index+1}}
@@ -25,11 +28,12 @@
 									{{index+1}}
 								</view>
 							</view>
-						</div>
-					</div>
-				</div>
+						</view>
+					</view>
+				</view>
 			</view>
 		</view>
+		
 		<view v-show="!statisticsShow" :current="TabCur">
 			<!-- 全部 start -->
 			<view v-show="TabCur === 0" class="tabContent-wrapper">
@@ -52,6 +56,7 @@
 											</text>
 										</view>
 									</view>
+	
 									<!-- 题目对错状态区 -->
 									<view v-if="question.getPoints !== 0" class="status-content-wrapper">
 										<view class="status-content-icon-container">
@@ -116,6 +121,7 @@
 											</text>
 										</view>
 									</view>
+
 									<!-- 题目对错状态区 -->
 									<view class="status-content-wrapper">
 										<view class="status-content-icon-container">
@@ -172,6 +178,7 @@
 											</text>
 										</view>
 									</view>
+									
 									<!-- 题目对错状态区 -->
 									<view class="status-content-wrapper">
 										<view class="status-content-icon-container">
@@ -209,8 +216,6 @@
 		</view>
 	</view>
 	<!-- tabPane end -->
-
-
 
 </template>
 
@@ -259,9 +264,9 @@
 				success: res => {
 					// 获取真实数据之前,务必判断状态为success
 					if (res.data.status === "success") {
-						this.questionList = res.data.data.record.questionList;
-						this.rightList = this.questionList.filter(item => item.getPoints !== 0)
-						this.wrongList = this.questionList.filter(item => item.getPoints === 0)
+						this.questionList = res.data.data.questionList;
+						this.rightList = this.questionList.filter(item => item.getPoints !== null && item.getPoints !== 0)
+						this.wrongList = this.questionList.filter(item => item.getPoints === null || item.getPoints === 0)
 					}
 				},
 				fail: () => {},

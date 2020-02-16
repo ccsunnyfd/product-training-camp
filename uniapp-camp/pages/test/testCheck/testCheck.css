@@ -1,4 +1,14 @@
+.position-class {
+	position: relative;
+}
+.position-absolute {
+	position: fixed;
+	z-index: 999;
+	width: 100%;
+	top: 0;
+}
 .header-area {
+	padding-top: 80upx;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -21,7 +31,7 @@
 	color: #333333;
 	background-color: #ffffff;
 	padding: 30upx;
-	margin: 0upx;
+	margin-top: 100upx;
 }
 /* 标签页 end */
 
@@ -152,6 +162,7 @@
 	z-index: 1000;
 	background: #f0f3f7;
 	min-height: 100%;
+	margin-top: 180upx;
 }
 .card-content {
 	padding: 10upx;

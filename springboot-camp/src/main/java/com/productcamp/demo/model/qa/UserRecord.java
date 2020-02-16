@@ -5,11 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.Date;
 
 /**
  * UserRecord
@@ -20,10 +18,14 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class UserRecord {
-    @Id
-    private String id;
+@SuperBuilder
+public class UserRecord extends Test {
+    /**
+     * 关联的试卷id
+     */
+    @Indexed(background = true)
+    @JsonProperty("testId")
+    private String testId;
 
     /**
      * 用户id
@@ -33,24 +35,13 @@ public class UserRecord {
     private Long userId;
 
     /**
-     * 记录创建时间
+     * 考试状态，false进行中；true已完成
      */
-    private Date createdAt;
+    @Indexed(background = true)
+    private Boolean completed;
 
     /**
-     * 记录更新时间
+     * 试卷得分
      */
-    private Date updatedAt;
-
-    /**
-     * 考试历史记录
-     */
-    @JsonProperty("record")
-    private Test record;
-
-//    /**
-//     * 考试状态，1已完成；2进行中；3未开始
-//     */
-//    @Indexed(background = true)
-//    private Integer status;
+    private Long score = 0L;
 }

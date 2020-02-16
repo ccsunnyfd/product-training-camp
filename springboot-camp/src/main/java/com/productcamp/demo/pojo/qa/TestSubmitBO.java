@@ -16,5 +16,6 @@ import java.util.Set;
 public class TestSubmitBO {
     private String skey;
     private String testId;
+    private String recordId;
     private Map<String, Set<String>> answerMap;
 }

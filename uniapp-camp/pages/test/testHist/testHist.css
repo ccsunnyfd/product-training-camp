@@ -1,3 +1,8 @@
+.empty-hint {
+	font-size: 20px;
+	font-weight: bold;
+	color: #1A8CFE;
+}
 .record-pane {
 	border-radius: 8upx;
 	padding: 10upx 15upx 5upx 15upx;

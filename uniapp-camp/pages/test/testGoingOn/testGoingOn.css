@@ -1,3 +1,9 @@
+.count-down-panel {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding: 60upx 0 20upx 0;
+}
 .card-wrapper {
 	overflow: hidden;
 	position: relative;

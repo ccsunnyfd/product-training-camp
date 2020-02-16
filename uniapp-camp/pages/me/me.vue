@@ -33,16 +33,16 @@
 		</view>
 		  
 		<view class="person-list" v-if="userIsLogin">
-			<cmd-cell-item title="常见问题" slot-left arrow>
+			<cmd-cell-item title="个人信息" slot-left arrow @click="meInfo">
 				<cmd-icon type="message" size="24" color="#133386"></cmd-icon>
 			</cmd-cell-item>
-			<cmd-cell-item title="成绩查询" slot-left arrow>
+			<cmd-cell-item title="成绩查询" slot-left arrow @click="navTestHist">
 				<cmd-icon type="edit" size="24" color="#133386"></cmd-icon>
 			</cmd-cell-item>
-			<cmd-cell-item title="系统设置" slot-left arrow>
+<!-- 			<cmd-cell-item title="系统设置" slot-left arrow>
 				<cmd-icon type="settings" size="24" color="#133386"></cmd-icon>
-			</cmd-cell-item>
-			<cmd-cell-item title="检查版本" addon="v1.0" slot-left arrow>
+			</cmd-cell-item> -->
+			<cmd-cell-item title="版本" addon="v1.0" slot-left arrow @click="popCopyright">
 				<cmd-icon type="alert-circle" size="24" color="#133386"></cmd-icon>
 			</cmd-cell-item>
 		</view>
@@ -87,6 +87,24 @@
 			meInfo() {
 				uni.navigateTo({
 					url: '/pages/meInfo/meInfo'
+				})
+			},
+			// 跳转到常见问题页面
+			navQA() {
+				//
+			},
+			// 跳转到历史成绩查询页面
+			navTestHist() {
+				uni.navigateTo({
+					url: "/pages/test/testHist/testHist"
+				})
+			},
+			// 弹出版权信息对话框
+			popCopyright() {
+				uni.showToast({
+					icon: 'none',
+					title: 'Version 1.0.5 Copyright 2007-2020 柏科数据技术（深圳）股份有限公司',
+					duration: 3000
 				})
 			}
 		}

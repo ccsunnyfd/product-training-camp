@@ -21,6 +21,9 @@
         :loading="loading"
         @change="handleTableChange"
       >
+        <span slot="shuffle" slot-scope="text, record">
+          {{ record? '是': '否' }}
+        </span>
         <span slot="action" slot-scope="text, record">
           <a-button
             size="small"
@@ -53,6 +56,14 @@
       <div>
         <span>考试标题: </span>
         <span>{{ test.title }}</span>
+      </div>
+      <div>
+        <span>考试时长（分钟）: </span>
+        <span>{{ test.timeLimit }}</span>
+      </div>
+      <div>
+        <span>题序随机: </span>
+        <span>{{ test.shuffle? '是': '否' }}</span>
       </div>
       <div>
         <span>总分: </span>
@@ -147,10 +158,76 @@
           </a-col>
         </a-row>
         <a-row :gutter="8">
+          <a-col :span="8">
+            <a-form-item label="考试时长：">
+              <a-select
+                v-decorator="[
+                  'timeLimit',
+                  {
+                    initialValue: test.timeLimit,
+                    rules: [{ required: true, message: '必须选择考试时长' }]
+                  }
+                ]"
+                @change="handleSelectLimitTimeChange"
+              >
+                <a-select-option value="10">
+                  10
+                </a-select-option>
+                <a-select-option value="15">
+                  15
+                </a-select-option>
+                <a-select-option value="20">
+                  20
+                </a-select-option>
+                <a-select-option value="25">
+                  25
+                </a-select-option>
+                <a-select-option value="30">
+                  30
+                </a-select-option>
+                <a-select-option value="35">
+                  35
+                </a-select-option>
+                <a-select-option value="40">
+                  40
+                </a-select-option>
+                <a-select-option value="45">
+                  45
+                </a-select-option>
+                <a-select-option value="50">
+                  50
+                </a-select-option>
+                <a-select-option value="55">
+                  55
+                </a-select-option>
+                <a-select-option value="60">
+                  60
+                </a-select-option>
+              </a-select>
+              分钟
+            </a-form-item>
+          </a-col>
+          <a-col :span="8">
+            <a-form-item>
+              <a-checkbox
+                v-decorator="[
+                  'shuffle',
+                  {
+                    initialValue: test.shuffle
+                  }
+                ]"
+              >
+                是否随机题序（防作弊）
+              </a-checkbox>
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="8">
           <a-col :span="16">
             <div>
               <div>选择关联模板组合题目</div>
               <a-button type="dashed" @click="ranTestTemp(3, 4, 3)">模板(3判断/4单选/3多选)</a-button>
+              <a-button type="dashed" @click="ranTestTemp(6, 7, 7)">模板(6判断/7单选/7多选)</a-button>
             </div>
           </a-col>
         </a-row></a-form>
@@ -189,6 +266,17 @@ const columns = [
     dataIndex: 'title',
     // sorter: true,
     width: '20%'
+  },
+  {
+    title: '考试时长(分钟)',
+    dataIndex: 'timeLimit',
+    width: '10%'
+  },
+  {
+    title: '随机题序',
+    dataIndex: 'shuffle',
+    width: '10%',
+    scopedSlots: { customRender: 'shuffle' }
   },
   {
     title: '总分',
@@ -248,6 +336,8 @@ export default {
       qTypes: ['判断题', '单选题', '多选题'],
       test: {
         title: '',
+        timeLimit: 10,
+        shuffle: true,
         totalScore: 0,
         questionList: []
       },
@@ -255,6 +345,12 @@ export default {
     }
   },
   methods: {
+    // 考试时长选择改变时修改对应的form
+    handleSelectLimitTimeChange (value) {
+      this.form.setFieldsValue({
+        timeLimit: value
+      })
+    },
     handleTableChange (pagination, filters, sorter) {
       const pager = { ...this.pagination }
       pager.current = pagination.current
@@ -283,6 +379,8 @@ export default {
     handleAddTest () {
       this.test = {
         title: '',
+        timeLimit: 10,
+        shuffle: true,
         totalScore: 0,
         qustionList: []
       }
