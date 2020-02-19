@@ -10,6 +10,7 @@ import org.bson.json.JsonWriterSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -18,10 +19,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -88,7 +86,8 @@ public class QuestionService {
 //                return predicate;
 //            }
 //        };
-        Page<Question> page = questionRepository.findAll(PageRequest.of(pageNum - 1, size));
+        Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
+        Page<Question> page = questionRepository.findAll(PageRequest.of(pageNum - 1, size, sort));
         return page;
     }
 
@@ -97,8 +96,11 @@ public class QuestionService {
     public String saveOrUpdateQuestion(Question question) {
         Question newQ;
         if (StringUtils.isEmpty(question.getId())) {
+            question.setCreateTime(new Date());
+            question.setUpdateTime(new Date());
             newQ = questionRepository.insert(question);
         } else {
+            question.setUpdateTime(new Date());
             newQ = questionRepository.save(question);
         }
         return newQ.getId();
