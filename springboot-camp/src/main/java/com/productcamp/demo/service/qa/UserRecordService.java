@@ -154,6 +154,7 @@ public class UserRecordService {
         userRecord.setQuestionList(questionList);
         userRecord.setUpdatedAt(new Date());
         userRecord.setCompleted(false);
+        userRecord.setUserId(userId);
         userRecordRepository.save(userRecord);
         return recordId;
     }
@@ -212,6 +213,7 @@ public class UserRecordService {
 //        }
 
         // 把包含questionList历史记录的版本持久化到UserRecord中去
+        userRecord.setUserId(userId);
         userRecord.setQuestionList(qListToSave);
         userRecord.setUpdatedAt(new Date());
         userRecord.setCompleted(true);

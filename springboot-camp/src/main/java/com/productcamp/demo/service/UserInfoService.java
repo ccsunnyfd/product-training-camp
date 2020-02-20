@@ -55,11 +55,13 @@ public class UserInfoService {
         UserInfo searchUser = userInfoRepository.findByUid(uid);
         if(searchUser == null) {
             // 新增用户
-            userInfoRepository.save(userInfo);
+            UserInfo newUser = userInfoRepository.save(userInfo);
+            System.out.println("新增用户： userId:" + newUser.getId() + "; skey:" + newUser.getSkey());
         } else {
             // 更新用户
             userInfo.setId(searchUser.getId());
             UserInfo newUser = userInfoRepository.save(userInfo);
+            System.out.println("更新用户： userId:" + newUser.getId() + "; skey:" + newUser.getSkey());
         }
 
         // 去除敏感信息并返回

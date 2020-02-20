@@ -75,6 +75,7 @@ public class TestController {
             String skey = testSubmitBO.getSkey();
             String testId = testSubmitBO.getTestId();
             Long userId = userInfoService.getUserIdBySkey(skey);
+            System.out.println("获取试卷： userId:" + userId + "; skey:" + skey);
             res = userRecordService.clickExam(userId, testId);
             respBean = new RespBean("success", "获取测试信息成功");
         } catch (Exception e) {

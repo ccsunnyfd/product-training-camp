@@ -65,8 +65,6 @@
 	import config from '@/config/config.js'
 	import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 	
-	const skey = uni.getStorageSync('loginFlag')
-
 	export default {
 		components: {
 			uniCountdown
@@ -100,7 +98,7 @@
 			uni.showLoading({
 				mask: true
 			})
-			
+			const skey = this.getSkey()
 			const that = this
 
 			// 请求当前考试数据
@@ -138,6 +136,7 @@
 		// 	console.log('onUnload')
 		// },
 		onHide() {
+			const skey = this.getSkey()
 			const that = this
 			uni.request({
 				url: config.pauseTestUrl,
@@ -200,6 +199,7 @@
 			},
 			// 真正的提交方法，供formSubmit调用
 			submitMethod(formdata) {
+				const skey = this.getSkey()
 				const that = this
 				// console.log(formdata)
 				// 提交考卷

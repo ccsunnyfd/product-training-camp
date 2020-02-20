@@ -34,7 +34,6 @@
 
 <script>
 	import config from '@/config/config.js'
-	const skey = uni.getStorageSync('loginFlag')
 
 	export default {
 		data() {
@@ -43,6 +42,7 @@
 			}
 		},
 		onLoad() {
+			const skey = this.getSkey()
 			// 请求用户历史记录列表
 			uni.request({
 				url: config.getUserRecordListUrl + '?skey=' + skey,

@@ -71,9 +71,10 @@ const login = async function(e) {
 	try {
 		const result = await authDo(param)
 		// 储存用户信息到本地
-		uni.setStorageSync('userInfo', JSON.stringify(result.userInfo));
+		uni.setStorageSync('userInfo', JSON.stringify(result.userInfo))
 		// 储存自定义登录态到本地
-		uni.setStorageSync('loginFlag', result.skey);
+		uni.setStorageSync('loginFlag', result.skey)
+		console.log("更新skey:" + uni.getStorageSync('loginFlag'))
 		//登录成功之后的回调
 		uni.showToast({
 			title: '登录成功',
