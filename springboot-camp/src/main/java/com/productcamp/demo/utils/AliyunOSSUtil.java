@@ -27,6 +27,7 @@ public class AliyunOSSUtil {
     private static String accessKeyId = AliyunOSSConfig.AccessKey_ID;
     private static String accessKeySecret = AliyunOSSConfig.AccessKey_Secret;
     private static String fileHost = AliyunOSSConfig.FILE_HOST;
+    private static String ossUrl = AliyunOSSConfig.OSS_URL;
 
 
     /**
@@ -63,7 +64,7 @@ public class AliyunOSSUtil {
             }
             // 设置文件路径和名称
             String fileUrl = fileHost + "/" + (dateStr + "/" + UUID.randomUUID().toString().replace("-", "") + "-" + file.getName());
-            FILE_URL = "https://" + bucketName + "." + endpoint + "/" + fileUrl;
+            FILE_URL = ossUrl + fileUrl;
 //            if (isImage) {//如果是图片，则图片的URL为：....
 //                FILE_URL = "https://" + bucketName + "." + endpoint + "/" + fileUrl;
 //            } else {

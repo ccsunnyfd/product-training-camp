@@ -90,7 +90,7 @@
 	"globalStyle": {
 		// "navigationStyle":"custom"
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "RD产品训练营",
+		"navigationBarTitleText": "柏科训练营",
 		"navigationBarBackgroundColor": "#133386",
 		"backgroundColor": "#133386"
 	},

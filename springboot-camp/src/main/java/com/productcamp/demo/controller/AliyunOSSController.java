@@ -33,14 +33,14 @@ public class AliyunOSSController {
      *
      * @return success
      */
-    @RequestMapping("testUpload")
-    @ResponseBody
-    public String testUpload() {
-        File file = new File("C:/Users/David/Desktop/1.jpg");
-        String url = AliyunOSSUtil.upload(file);
-        System.out.println(url);
-        return "success";
-    }
+//    @RequestMapping("testUpload")
+//    @ResponseBody
+//    public String testUpload() {
+//        File file = new File("C:/Users/David/Desktop/1.jpg");
+//        String url = AliyunOSSUtil.upload(file);
+//        System.out.println(url);
+//        return "success";
+//    }
 
     /**
      * 通过文件名下载文件
@@ -56,22 +56,22 @@ public class AliyunOSSController {
     /**
      * 列出某个文件夹下的所有文件
      */
-    @RequestMapping("testListFile")
-    @ResponseBody
-    public String testListFile() {
-        AliyunOSSUtil.listFile();
-        return "success";
-    }
+//    @RequestMapping("testListFile")
+//    @ResponseBody
+//    public String testListFile() {
+//        AliyunOSSUtil.listFile();
+//        return "success";
+//    }
 
     /**
      * 从阿里云OSS存储删除文件
      */
-    @RequestMapping("testDeleteFile")
-    @ResponseBody
-    public String testDeleteFile() {
-        AliyunOSSUtil.deleteFile("test/2019-11-11/d40e2e2e3ce943c2af97ebfde1a3dc1c-blob");
-        return "success";
-    }
+//    @RequestMapping("testDeleteFile")
+//    @ResponseBody
+//    public String testDeleteFile() {
+//        AliyunOSSUtil.deleteFile("test/2019-11-11/d40e2e2e3ce943c2af97ebfde1a3dc1c-blob");
+//        return "success";
+//    }
 
     /**
      * 文件上传（供前端调用）
