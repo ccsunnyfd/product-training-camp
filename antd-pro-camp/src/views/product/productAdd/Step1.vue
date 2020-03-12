@@ -26,14 +26,14 @@
           v-decorator="['scenario', { initialValue: step.scenario, rules: [{required: true, max: 250, message: '必填，字数不超过250字'}] }]"/>
       </a-form-item>
       <a-form-item
-        label="首页产品图标"
+        label="首页图标1:1"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
         <img-uploader ref="favicon" :modal="cropDom" :id="1" v-decorator="['favicon', { initialValue: step.favicon, rules: [{required: true, message: '请上传首页产品图标'}] }]" />
       </a-form-item>
       <a-form-item
-        label="产品详情页图片"
+        label="详情页图片16:9"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
@@ -94,9 +94,9 @@ export default {
         canScale: false,
         autoCrop: true,
         // 只有自动截图开启 宽度高度才生效
-        autoCropWidth: 180,
-        autoCropHeight: 180,
-        fixedBox: true,
+        autoCropWidth: 200,
+        autoCropHeight: 200,
+        fixedBox: false,
         // 开启宽度和高度比例
         fixed: true,
         fixedNumber: [1, 1]

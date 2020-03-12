@@ -58,4 +58,7 @@ public class UserInfo {
 //    @Column(name = "update_time")
     @Column(name = "update_time",insertable = false,updatable = false,columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Date updateTime; // 用户最近登录时间
+
+    @Column(name = "identified_id")
+    private Long identified_id; // 关联的IdentifiedUser表的主键id
 }

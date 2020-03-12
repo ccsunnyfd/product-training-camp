@@ -1,8 +1,6 @@
 package com.productcamp.demo.service.qa;
 
 import com.alibaba.fastjson.JSON;
-import com.productcamp.demo.model.qa.Option;
-import com.productcamp.demo.model.qa.OptionAndRight;
 import com.productcamp.demo.model.qa.Question;
 import com.productcamp.demo.repository.qa.QuestionRepository;
 import org.bson.Document;

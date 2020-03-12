@@ -18,6 +18,7 @@
           :autoCropHeight="options.autoCropHeight"
           :fixedBox="options.fixedBox"
           @realTime="realTime"
+          :fixedNumber="fixedNumber"
         >
         </vue-cropper>
       </a-col>
@@ -80,14 +81,14 @@ export default {
       fileList: [],
       uploading: false,
       options: {
-        // img: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
         img: '',
         autoCrop: true,
         autoCropWidth: this.autoCropWidth,
         autoCropHeight: this.autoCropHeight,
-        fixedBox: true
+        fixedBox: false
       },
-      previews: {}
+      previews: {},
+      fixedNumber: [1, 1]
     }
   },
   methods: {

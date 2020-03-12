@@ -5,6 +5,7 @@ import com.productcamp.demo.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +33,7 @@ public class ProductService {
     }
 
     public List<Product> getProduct() {
-        return productRepository.findAll();
+        return productRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
     }
 
     public Product getProductById(Long id) {

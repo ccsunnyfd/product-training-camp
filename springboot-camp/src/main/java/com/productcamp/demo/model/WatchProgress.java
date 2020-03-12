@@ -17,8 +17,8 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Table(indexes = {
-        @Index(name="IDX_Userid_CourseId", columnList = "userId"),
-        @Index(name="IDX_Userid_CourseId", columnList = "courseId")
+        @Index(name="IDX_UserId", columnList = "userId"),
+        @Index(name="IDX_CourseId", columnList = "courseId")
 })
 public class WatchProgress {
     @Id
