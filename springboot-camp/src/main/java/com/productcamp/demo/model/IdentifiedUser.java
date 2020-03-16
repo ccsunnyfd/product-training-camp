@@ -16,12 +16,16 @@ import javax.persistence.*;
 @Setter
 @Entity
 @ToString
+@Table(indexes = {@Index(columnList = "phoneNumber")})
 public class IdentifiedUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO,
             generator = "identifiedUser_gen")
     @GenericGenerator(name = "identifiedUser_gen", strategy = "native")
     private Long id;
+
+    @Column(name = "phoneNumber", columnDefinition = "varchar(20) default ''")
+    private String phoneNumber; // 手机号码
 
     @Column(name = "realname", columnDefinition = "varchar(40) default ''")
     private String realname; // 真实姓名

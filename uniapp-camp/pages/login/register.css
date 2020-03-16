@@ -1,0 +1,71 @@
+.ground-page {
+	background-color: #f7f7f7;
+}
+
+.header-panel {
+	padding: 50upx 50upx 50upx 50upx;
+	background-color: #ffffff;
+}
+
+.register-panel {
+	margin-top: 30upx;
+	padding: 30upx 5upx 30upx 5upx;
+	background-color: #ffffff;
+}
+
+.tab-class {
+	font-size: 35upx;
+}
+
+/* 标签页 start */
+.tabContent-wrapper {
+	color: #333333;
+	background-color: #ffffff;
+	padding: 30upx;
+	margin: 0upx;
+}
+/* 标签页 end */
+
+.divider-line {
+	background-color: #DBDBDA;
+	height: 1px;
+	width: 95%;
+	text-align: center;
+}
+.auth-hint {
+	padding: 20upx 30upx 20upx 30upx;
+	font-size: 11px;
+	color: #989898;
+}
+.button-grabAuth {
+	padding: 20upx 30upx 20upx 30upx;
+}
+.auth-law-check {
+	padding: 20upx 30upx 20upx 30upx;
+	width: 100%;
+	height: 50upx;
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
+}
+.button-wrapper {
+	width: 100%;
+}
+.auth-law {	
+	padding: 20upx 30upx 20upx 30upx;
+	font-size: 11px;
+	color: #989898;
+}
+
+/* 手机号或令牌验证 */
+.phone-or-token-panel {
+	padding: 20upx 30upx 20upx 30upx;
+	font-size: 13px;
+	color: #989898;
+}
+.phone-or-token-layout {
+	padding: 20upx 50upx 20upx 50upx;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}

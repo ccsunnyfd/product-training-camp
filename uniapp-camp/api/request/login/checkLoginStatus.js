@@ -12,8 +12,17 @@ const checkLoginStatus = async function() {
         if (status === 'expire') {
             //重新登录
             toLogin();
-        }
-		//未过期则什么都不用做
+        } else {
+			//未过期则检查是否实名过
+			const identified = uni.getStorageSync('identified')
+			if (identified !== true) {
+				//未实名且未过期则跳转到注册页的手机号获取环节
+				uni.redirectTo({
+					url: '/pages/login/register?step=1'
+				})			
+			}
+			//已实名什么都不用做
+		}
     } else {
         // 无skey，作为首次登录
         toLogin();
@@ -25,7 +34,7 @@ const toLogin = () => {
     setTimeout(() => {
         uni.redirectTo({
             url: '/pages/login/index'
-        });
+        })
     }, 1000)
 }
 

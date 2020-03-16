@@ -86,6 +86,12 @@
             "path" : "pages/test/testHist/testHist",
             "style" : {}
         }
+        ,{
+            "path" : "pages/login/register",
+            "style": {
+            	"navigationBarTitleText": "注册/登录"
+            }
+        }
     ],
 	"globalStyle": {
 		// "navigationStyle":"custom"

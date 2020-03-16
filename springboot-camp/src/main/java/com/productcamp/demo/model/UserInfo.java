@@ -21,6 +21,7 @@ import java.util.Date;
 @Entity
 //@EntityListeners(AuditingEntityListener.class)
 @ToString
+@Table(indexes = {@Index(columnList = "skey")})
 public class UserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO,
@@ -60,5 +61,8 @@ public class UserInfo {
     private Date updateTime; // 用户最近登录时间
 
     @Column(name = "identified_id")
-    private Long identified_id; // 关联的IdentifiedUser表的主键id
+    private Long identifiedId; // 关联的IdentifiedUser表的主键id
+
+    @Column(name = "token_id")
+    private Long tokenId; // 关联的TokenUser表的主键id
 }

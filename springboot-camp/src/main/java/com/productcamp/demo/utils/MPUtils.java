@@ -88,8 +88,11 @@ public class MPUtils {
         RestTemplate rest = new RestTemplate();
         String jsonString = rest.getForObject(url, String.class);
         JSONObject jsonObject = JSONObject.parseObject(jsonString);
-        String session_key = jsonObject.get("session_key").toString();
-        return session_key;
+        if(jsonObject.containsKey("session_key")) {
+            return jsonObject.get("session_key").toString();
+        } else {
+            return null;
+        }
     }
 
     /**

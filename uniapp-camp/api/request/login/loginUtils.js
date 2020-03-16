@@ -1,6 +1,8 @@
 //loginUtils.js
 import {
-	authDo
+	authDo,
+	phoneDo,
+	tokenDo
 } from '@/api/mpLogin/wxlogin.js'
 
 //获取服务商信息
@@ -15,13 +17,7 @@ const getProvider = () => {
 			fail(res) {
 				reject(res)
 			}
-		});
-	}).catch(res => {
-		uni.showToast({
-			icon: 'none',
-			title: res.errMsg || '获取服务商信息失败',
-			duration: 2000
-		});
+		})
 	})
 
 	return promise
@@ -51,49 +47,74 @@ const getCode = provider => {
 				}
 			}
 		});
-	}).catch(res => {
-		uni.showToast({
-			icon: 'none',
-			title: res.errMsg || '获取code失败',
-			duration: 2000
-		});
 	})
 }
 
 // 申请skey并保存userInfo和skey到本地
-const login = async function(e) {
-	// 向开发者服务器申请获取自定义登录态
-	let param = {
-		code: e.code,
-		encryptedData: e.encryptedData,
-		iv: e.iv
-	}
-	try {
-		const result = await authDo(param)
-		// 储存用户信息到本地
-		uni.setStorageSync('userInfo', JSON.stringify(result.userInfo))
-		// 储存自定义登录态到本地
-		uni.setStorageSync('loginFlag', result.skey)
-		console.log("更新skey:" + uni.getStorageSync('loginFlag'))
-		//登录成功之后的回调
-		uni.showToast({
-			title: '登录成功',
-			duration: 2000
-		});
-		uni.switchTab({
-			url: '/pages/index/index'
-		});
-	} catch (e) {
-		uni.showToast({
-			icon: 'none',
-			title: '服务器登录失败',
-			duration: 2000
-		});
-	}
+const login = (e) => {
+	const promise = new Promise((resolve, reject) => {
+		let param = {
+			code: e.code,
+			encryptedData: e.encryptedData,
+			iv: e.iv
+		}
+		authDo(param).then((result) => {
+			// 储存用户信息到本地
+			uni.setStorageSync('userInfo', JSON.stringify(result.userInfo))
+			// 储存自定义登录态到本地
+			uni.setStorageSync('loginFlag', result.skey)
+			// 储存绑定实名与否到本地用来判断是否曾经实名过
+			if (result.identified) {
+				uni.setStorageSync('identified', result.identified)
+			}
+			console.log("更新skey:" + uni.getStorageSync('loginFlag'))
+			resolve()
+		}).catch(() => {
+			reject()
+		})	
+	})
+	return promise
+}
+
+const bindPhone = (e) => {
+	const promise = new Promise((resolve, reject) => {
+		let param = {
+			skey: e.skey,
+			encryptedData: e.encryptedData,
+			iv: e.iv
+		}
+		phoneDo(param).then((res) => {
+			// 储存绑定实名与否到本地用来判断是否曾经实名过
+			uni.setStorageSync('identified', true)
+			resolve(res)
+		}).catch(() => {
+			reject()
+		})	
+	})
+	return promise
+}
+
+const bindToken = (e) => {
+	const promise = new Promise((resolve, reject) => {
+		let param = {
+			skey: e.skey,
+			token: e.token
+		}
+		tokenDo(param).then((res) => {
+			// 储存绑定实名与否到本地用来判断是否曾经实名过
+			uni.setStorageSync('identified', true)
+			resolve(res)
+		}).catch(() => {
+			reject()
+		})	
+	})
+	return promise
 }
 
 export {
 	login, //申请skey并保存usrInfo和skey到本地
+	bindPhone, //通过手机号绑定实名
+	bindToken, //通过令牌绑定实名
 	getCode, //获取code
 	getProvider //获取服务商信息
 }

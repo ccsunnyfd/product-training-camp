@@ -2,10 +2,10 @@
 	<view class="top bgColor">
 		<view class="bar">
 			<cmd-icon prefix-class="iconfont" type="icon-mulu" size="21" color="white" @click="handleCatalogClick"></cmd-icon>
-			<view class="search bgDeepColor">
+<!-- 			<view class="search bgDeepColor">
 				<input type="text" placeholder="搜索" placeholder-style="color:rgba(255,255,255,.8)" />
 				<i class="iconfont icon-fangdajing icon"></i>
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>

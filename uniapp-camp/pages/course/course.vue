@@ -47,7 +47,7 @@
 						<text class="prod-example-title">
 							案例{{index + 1}} | {{item.title}}
 						</text>
-						<div style="margin-top: 20upx;" v-html="item.htmlContent"></div>
+						<view style="margin-top: 20upx;" v-html="item.htmlContent"></view>
 					</view>
 				</view>
 				<!-- 应用实例 end -->

@@ -1,9 +1,13 @@
 package com.productcamp.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.productcamp.demo.model.IdentifiedUser;
+import com.productcamp.demo.model.TokenUser;
 import com.productcamp.demo.model.UserInfo;
 import com.productcamp.demo.model.RespBean;
 import com.productcamp.demo.pojo.MPWXLoginBO;
+import com.productcamp.demo.pojo.MPWXPhoneBO;
+import com.productcamp.demo.pojo.MPWXTokenBO;
 import com.productcamp.demo.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +32,58 @@ public class UserInfoController {
     public void setUserInfoService(UserInfoService userInfoService) {
         this.userInfoService = userInfoService;
     }
+
+    @PostMapping("bindPhone")
+    @ApiOperation(value = "通过手机号绑定实名")
+    public Map<String, Object> bindPhone(@RequestBody MPWXPhoneBO mpwxPhoneBO) {
+        Map<String, Object> map = new HashMap<>();
+        RespBean respBean = null;
+
+        if (mpwxPhoneBO != null &&
+                (!"".equals(mpwxPhoneBO.getSkey().trim())) &&
+                (!"".equals(mpwxPhoneBO.getEncryptedData().trim())) &&
+                (!"".equals(mpwxPhoneBO.getIv().trim()))) {
+            IdentifiedUser identifiedUser = userInfoService.bindPhone(mpwxPhoneBO.getSkey(), mpwxPhoneBO.getEncryptedData(), mpwxPhoneBO.getIv());
+            if(identifiedUser != null) {
+                map.put("data", identifiedUser);
+                respBean = new RespBean("201", "手机号绑定实名成功");
+            } else {
+                respBean = new RespBean("400", "不是备案手机号");
+            }
+        } else {
+            respBean = new RespBean("500", "参数不全");
+        }
+
+        map.put("status", respBean.getStatus());
+        map.put("msg", respBean.getMsg());
+        return map;
+    }
+
+    @PostMapping("bindToken")
+    @ApiOperation(value = "通过令牌绑定实名")
+    public Map<String, Object> bindToken(@RequestBody MPWXTokenBO mpwxTokenBO) {
+        Map<String, Object> map = new HashMap<>();
+        RespBean respBean = null;
+
+        if (mpwxTokenBO != null &&
+                (!"".equals(mpwxTokenBO.getSkey().trim())) &&
+                (!"".equals(mpwxTokenBO.getToken().trim()))) {
+            TokenUser tokenUser = userInfoService.bindToken(mpwxTokenBO.getSkey(), mpwxTokenBO.getToken());
+            if(tokenUser != null) {
+                map.put("data", tokenUser);
+                respBean = new RespBean("201", "令牌绑定实名成功");
+            } else {
+                respBean = new RespBean("400", "不是备案令牌");
+            }
+        } else {
+            respBean = new RespBean("500", "参数不全");
+        }
+
+        map.put("status", respBean.getStatus());
+        map.put("msg", respBean.getMsg());
+        return map;
+    }
+
 
     @PostMapping("wxlogin")
     @ApiOperation(value = "微信登录")

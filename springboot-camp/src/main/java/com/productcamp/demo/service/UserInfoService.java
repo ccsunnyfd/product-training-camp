@@ -1,7 +1,11 @@
 package com.productcamp.demo.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.productcamp.demo.model.IdentifiedUser;
+import com.productcamp.demo.model.TokenUser;
 import com.productcamp.demo.model.UserInfo;
+import com.productcamp.demo.repository.IdentifiedUserRepository;
+import com.productcamp.demo.repository.TokenUserRepository;
 import com.productcamp.demo.repository.UserInfoRepository;
 import com.productcamp.demo.utils.MPUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,8 @@ import java.util.UUID;
 @Service
 public class UserInfoService {
     private UserInfoRepository userInfoRepository;
+    private IdentifiedUserRepository identifiedUserRepository;
+    private TokenUserRepository tokenUserRepository;
 
     @Autowired
     private EntityManager entityManager;
@@ -29,6 +35,16 @@ public class UserInfoService {
     @Autowired
     public void setUserInfoRepository(UserInfoRepository userInfoRepository) {
         this.userInfoRepository = userInfoRepository;
+    }
+
+    @Autowired
+    public void setIdentifiedUserRepository(IdentifiedUserRepository identifiedUserRepository) {
+        this.identifiedUserRepository = identifiedUserRepository;
+    }
+
+    @Autowired
+    public void setTokenUserRepository(TokenUserRepository tokenUserRepository) {
+        this.tokenUserRepository = tokenUserRepository;
     }
 
 //    // 更新skey
@@ -53,25 +69,66 @@ public class UserInfoService {
         userInfo.setSessionkey(session_key);
         userInfo.setUavatar(decryptedData.getString("avatarUrl"));
         UserInfo searchUser = userInfoRepository.findByUid(uid);
+        JSONObject result = new JSONObject();
         if(searchUser == null) {
             // 新增用户
             UserInfo newUser = userInfoRepository.save(userInfo);
             System.out.println("新增用户： userId:" + newUser.getId() + "; skey:" + newUser.getSkey());
         } else {
             // 更新用户
+            Long identifiedId = searchUser.getIdentifiedId();
+            Long tokenId = searchUser.getTokenId();
+            userInfo.setIdentifiedId(identifiedId);
+            userInfo.setTokenId(tokenId);
             userInfo.setId(searchUser.getId());
             UserInfo newUser = userInfoRepository.save(userInfo);
+            if(identifiedId != null || tokenId != null) {
+                result.put("identified", true);
+            }
             System.out.println("更新用户： userId:" + newUser.getId() + "; skey:" + newUser.getSkey());
         }
 
         // 去除敏感信息并返回
         decryptedData.remove("openId");
         decryptedData.remove("watermark");
-        JSONObject result = new JSONObject();
         result.put("userInfo", decryptedData);
         result.put("skey", skey);
         return result;
     }
+
+    // 通过手机号绑定实名
+    public IdentifiedUser bindPhone(String skey, String encryptedData, String iv) {
+        UserInfo userInfo = userInfoRepository.findBySkey(skey);
+        String session_key = userInfo.getSessionkey();
+        JSONObject decryptedData = MPUtils.decryptByAES(encryptedData, session_key, iv);
+        String phoneNumber = decryptedData.getString("purePhoneNumber");
+        // 查找数据库表IdentifiedUser，比对是否有备案的手机号码，有就绑定到UserInfo表
+        IdentifiedUser identifiedUser = identifiedUserRepository.findOneByPhoneNumber(phoneNumber);
+        if(identifiedUser == null) {
+            return null;
+        } else {
+            // 绑定手机号
+            userInfo.setIdentifiedId(identifiedUser.getId());
+            userInfoRepository.save(userInfo);
+            return identifiedUser;
+        }
+    }
+
+    // 通过令牌绑定实名
+    public TokenUser bindToken(String skey, String token) {
+        UserInfo userInfo = userInfoRepository.findBySkey(skey);
+        // 查找数据库表TokenUser，比对是否有备案的令牌，有就绑定到UserInfo表
+        TokenUser tokenUser = tokenUserRepository.findOneByToken(token);
+        if(tokenUser == null) {
+            return null;
+        } else {
+            // 绑定令牌
+            userInfo.setTokenId(tokenUser.getId());
+            userInfoRepository.save(userInfo);
+            return tokenUser;
+        }
+    }
+
 
     // 根据用户名查找用户
     public UserInfo findByUname(String uname) {
@@ -83,6 +140,8 @@ public class UserInfoService {
         Long userId = userInfoRepository.findUserIdBySkey(skey);
         return userId;
     }
+
+
 
     // 注册用户
 //    @Transactional
