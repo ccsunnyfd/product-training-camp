@@ -8,19 +8,13 @@ const checkLoginStatus = async function() {
     if (userInfo) {
         // 检查 session_key 是否过期
         let status = await checkSession()
+		const identified = uni.getStorageSync('identified')
         //已过期
-        if (status === 'expire') {
+		//未过期则检查是否实名过
+        if (status === 'expire' || identified !== true) {
             //重新登录
             toLogin();
         } else {
-			//未过期则检查是否实名过
-			const identified = uni.getStorageSync('identified')
-			if (identified !== true) {
-				//未实名且未过期则跳转到注册页的手机号获取环节
-				uni.redirectTo({
-					url: '/pages/login/register?step=1'
-				})			
-			}
 			//已实名什么都不用做
 		}
     } else {
