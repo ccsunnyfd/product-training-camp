@@ -135,9 +135,11 @@ export default {
       return this.editor.txt.html()
     },
     initFullscreen () {
-      const enlarge = '<i title="全屏" class="ivu-icon ivu-icon-md-expand"></i>'
+      // const enlarge = '<i title="全屏" class="ivu-icon ivu-icon-md-expand"></i>'
+      const enlarge = '<button>全屏</button>'
       // let enlarge = '<i title="全屏" class="ivu-icon ivu-icon-arrow-expand"></i>'
-      const shrink = '<i title="退出全屏" class="ivu-icon ivu-icon-ios-expand"></i>'
+      // const shrink = '<i title="退出全屏" class="ivu-icon ivu-icon-ios-expand"></i>'
+      const shrink = '<button>关闭全屏</button>'
       // let shrink = '<i title="退出全屏" class="ivu-icon ivu-icon-arrow-shrink"></i>'
       let isFullscreen = false
       const fullscreenBtn = this.createBtn(enlarge)
@@ -181,9 +183,9 @@ export default {
       'emoticon', // 表情
       'image', // 插入图片
       'table', // 表格
-      'code', // 插入代码
-      'undo', // 撤销
-      'redo' // 重复
+      'code' // 插入代码
+      // 'undo', // 撤销
+      // 'redo' // 重复
     ]
     // zIndex 防止工具栏图标droplist被遮挡，鼠标会点不上去
     this.editor.customConfig.zIndex = 101
@@ -200,7 +202,7 @@ export default {
       files.forEach(item => {
         const filename = item.name
         // lrz用于在前端压缩图片
-        lrz(item, { width: 150 })
+        lrz(item, { width: 400 })
           .then(rst => {
             // 处理成功会执行
             item = rst.file
