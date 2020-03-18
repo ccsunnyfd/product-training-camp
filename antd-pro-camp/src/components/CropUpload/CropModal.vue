@@ -19,11 +19,12 @@
           :fixedBox="options.fixedBox"
           @realTime="realTime"
           :fixedNumber="fixedNumber"
+          outputType="png"
         >
         </vue-cropper>
       </a-col>
-      <a-col :xs="24" :md="12" :style="{height: '350px'}">
-        <div class="avatar-upload-preview">
+      <a-col :xs="24" :md="12" class="avatar-upload-preview" :style="previewStyle">
+        <div :style="previews.div">
           <img :src="previews.url" :style="previews.img"/>
         </div>
       </a-col>
@@ -88,7 +89,8 @@ export default {
         fixedBox: false
       },
       previews: {},
-      fixedNumber: [1, 1]
+      fixedNumber: [1, 1],
+      previewStyle: {}
     }
   },
   methods: {
@@ -114,6 +116,34 @@ export default {
     rotateRight () {
       this.$refs.cropper.rotateRight()
     },
+
+    // uploadImg (e, num) {
+    //   // 上传图片
+    //   // this.option.img
+    //   var file = e.target.files[0]
+    //   if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
+    //     alert('图片类型必须是.gif,jpeg,jpg,png,bmp中的一种')
+    //     return false
+    //   }
+    //   var reader = new FileReader()
+    //   reader.onload = (e) => {
+    //     let data
+    //     if (typeof e.target.result === 'object') {
+    //       // 把Array Buffer转化为blob 如果是base64不需要
+    //       data = window.URL.createObjectURL(new Blob([e.target.result]))
+    //     } else {
+    //       data = e.target.result
+    //     }
+    //     if (num === 1) {
+    //       this.options.img = data
+    //     }
+    //   }
+    //   // 转化为base64
+    //   // reader.readAsDataURL(file)
+    //   // 转化为blob
+    //   reader.readAsArrayBuffer(file)
+    // },
+
     beforeUpload (file) {
       const reader = new FileReader()
       // 把Array Buffer转化为blob 如果是base64不需要
@@ -171,6 +201,16 @@ export default {
     // },
 
     realTime (data) {
+      var previews = data
+      var h = 0.5
+
+      this.previewStyle = {
+        width: previews.w + 'px',
+        height: previews.h + 'px',
+        overflow: 'hidden',
+        zoom: h
+      }
+
       this.previews = data
     }
   }
@@ -181,16 +221,9 @@ export default {
   .avatar-upload-preview {
     position: absolute;
     top: 50%;
+    left: 50%;
     transform: translate(50%, -50%);
-    width: 180px;
-    height: 180px;
     border-radius: 0%;
     box-shadow: 0 0 4px #ccc;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-    }
   }
 </style>
