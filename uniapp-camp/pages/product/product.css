@@ -165,7 +165,7 @@
 	padding-bottom: 15upx;
 }
 .prod-example-title {
-	font-size: 14px;
+	font-size: 18px;
 	font-weight: bold;
 	white-space: nowrap;
 	overflow: hidden;
@@ -251,7 +251,7 @@
 /* 评分块stop */
 /* 影片信息end */
 
-/* 剧情介绍start */
+
 .plots-block {
 	padding: 20upx 40upx;
 	background-color: #f7f4f9;
@@ -266,5 +266,19 @@
 	margin-top: 10upx;
 	font-size: 16px;
 }
-
-/* 剧情介绍end */
+.divider-line {
+	background-color: #DBDBDA;
+	height: 1px;
+	width: 95%;
+	text-align: center;
+}
+/* .rich-text-style {
+	margin-top: 20upx;
+	text-indent: 24pt;
+}
+.rich-text-style img {
+	text-indent: 0pt;
+	max-width: 100%;
+	display: block;
+	margin: 0 auto;
+} */

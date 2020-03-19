@@ -76,10 +76,11 @@
 					应用实例
 				</text>
 				<view class="prod-example-item-wrapper" v-for="(item, index) in exampleList" :key="item.id">
+					<view class="divider-line" />
 					<text class="prod-example-title">
 						案例{{index + 1}} | {{ item.title }}
 					</text>
-					<div style="margin-top: 20upx;" v-html="item.htmlContent"></div>
+					<div class="rich-text-style" v-html="item.htmlContent"></div>
 				</view>
 			</view>
 			<!-- 应用实例end -->

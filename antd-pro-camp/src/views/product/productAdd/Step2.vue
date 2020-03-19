@@ -121,9 +121,20 @@ export default {
       if (this.titleValid && this.contentValid) {
         editor.removeDeletedImg()
         const nextKey = key++
+        let content = this.htmlContent
+        content = content.replace(/(<img|<p)/gi, function ($0, $1) {
+          return {
+            '<img': '<img style="margin: 0 auto; display:block;" ',
+            '<p': '<p style="text-indent: 24px;" ',
+            '<article': '<div',
+            '</article': '</div',
+            '<header': '<div',
+            '</header': '</div'
+          }[$1]
+        })
         $store.commit({
           type: 'form/pushExample',
-          payload: { title: this.title, htmlContent: this.htmlContent, key: nextKey }
+          payload: { title: this.title, htmlContent: content, key: nextKey }
         })
         this.title = ''
         this.htmlContent = ''

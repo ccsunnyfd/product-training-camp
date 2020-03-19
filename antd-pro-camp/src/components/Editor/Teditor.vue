@@ -135,12 +135,9 @@ export default {
       return this.editor.txt.html()
     },
     initFullscreen () {
-      // const enlarge = '<i title="全屏" class="ivu-icon ivu-icon-md-expand"></i>'
-      const enlarge = '<button>全屏</button>'
-      // let enlarge = '<i title="全屏" class="ivu-icon ivu-icon-arrow-expand"></i>'
-      // const shrink = '<i title="退出全屏" class="ivu-icon ivu-icon-ios-expand"></i>'
-      const shrink = '<button>关闭全屏</button>'
-      // let shrink = '<i title="退出全屏" class="ivu-icon ivu-icon-arrow-shrink"></i>'
+      // 全屏选项
+      const enlarge = '<div style="width: 50px; height: 20px; color: #999">全屏</div>'
+      const shrink = '<div style="width: 100px; height: 20px; color: #999">关闭全屏</div>'
       let isFullscreen = false
       const fullscreenBtn = this.createBtn(enlarge)
       this.toolbar.appendChild(fullscreenBtn)
@@ -153,6 +150,37 @@ export default {
         },
         false
       )
+
+      // // 首行缩进选项
+      // const indentNormal = '<div tabindex="-1">缩</a>'
+      // const indentSelected = '<div style="color: blue" tabindex="-1">缩</a>'
+      // let isIndent = false
+      // const indentBtn = this.createBtn(indentNormal)
+      // this.toolbar.appendChild(indentBtn)
+      // // 菜单正常状态下，点击将触发该事件
+      // indentBtn.addEventListener(
+      //   'click',
+      //   e => {
+      //     // 找到当前选区所在的 p 元素
+      //     var elem = this.editor.getRangeElem()
+      //     var p = this.editor.getSelfOrParentByName(elem, 'p')
+      //     var $p
+      //     if (!p) {
+      //       // 未找到 p 元素，则忽略
+      //       return e.preventDefault()
+      //     }
+      //     $p = $(p)
+      //     // 使用自定义命令
+      //     function commandFn () {
+      //       $p.css('text-indent', '2em')
+      //     }
+      //     this.editor.customCommand(e, commandFn)
+
+      //     indentBtn.innerHTML = isIndent ? indentSelected : indentNormal
+      //     isIndent = !isIndent
+      //   },
+      //   false
+      // )
     },
     createBtn (btnHtml) {
       const btn = document.createElement('div')
@@ -202,7 +230,7 @@ export default {
       files.forEach(item => {
         const filename = item.name
         // lrz用于在前端压缩图片
-        lrz(item, { width: 400 })
+        lrz(item, { quality: 1 })
           .then(rst => {
             // 处理成功会执行
             item = rst.file
