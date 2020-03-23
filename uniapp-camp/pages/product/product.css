@@ -72,7 +72,7 @@
 	padding-top: 50upx;
 	display: flex;
 	justify-content: center;
-	background: black;
+	/* background: black; */
 }
 .prod-img {
 	width: 100%;
