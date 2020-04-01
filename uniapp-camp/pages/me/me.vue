@@ -103,7 +103,7 @@
 			popCopyright() {
 				uni.showToast({
 					icon: 'none',
-					title: 'Version 1.0.6 Copyright 2007-2020 柏科数据技术（深圳）股份有限公司',
+					title: 'Version 1.1.0 Copyright 2007-2020 柏科数据技术（深圳）股份有限公司',
 					duration: 3000
 				})
 			}
