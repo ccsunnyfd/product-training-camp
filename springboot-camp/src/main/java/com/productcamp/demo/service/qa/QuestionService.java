@@ -53,7 +53,12 @@ public class QuestionService {
 //            x.remove("_id");
 //        }
         Long totalScore = 0L;
-        List<Question> sampleList = sampleDocumentList.stream().map(x -> JSON.parseObject(x.toJson(JsonWriterSettings.builder().build()), Question.class)).collect(Collectors.toList());
+//        List<Question> sampleList = sampleDocumentList.stream().map(x -> JSON.parseObject(x.toJson(JsonWriterSettings.builder().build()), Question.class)).collect(Collectors.toList());
+        List<Question> sampleList = sampleDocumentList.stream().map(x -> {
+            x.replace("createTime", null);
+            x.replace("updateTime", null);
+            return JSON.parseObject(x.toJson(JsonWriterSettings.builder().build()), Question.class);
+        }).collect(Collectors.toList());
         for (Question q: sampleList
              ) {
             totalScore += q.getPoints();
